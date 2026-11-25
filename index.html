@@ -158,12 +158,20 @@ button:active{transform:scale(0.92);}
 #intro input{font:inherit;padding:0.65em 0.85em;border-radius:0.8em;border:1.5px solid rgba(167, 139, 250, 0.5);background:rgba(0, 0, 0, 0.4);color:#fff;width:100%;margin-top:0.45em;outline:none;user-select:text;-webkit-user-select:text;}
 #err{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#fff;font-size:1.5em;text-align:center;padding:2em;background:#0d0a1c;z-index:20;}
 @media (max-width: 768px) { #chat-box { width: 16.5em; bottom: 4.4em; } #chat-feed { height: 5.5em; } #skills { display: none; } #joy { bottom: 16.5em; left: 1.5em; } }
+
+#dim-pill{background:linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(19, 16, 38, 0.85));border-color:rgba(196, 181, 253, 0.55);cursor:pointer;}
+#dim-pill:hover{background:linear-gradient(135deg, rgba(139, 92, 246, 0.55), rgba(19, 16, 38, 0.95));}
+#warp-fx{position:absolute;inset:0;background:radial-gradient(circle at center, rgba(139,92,246,0.9), #090617);opacity:0;pointer-events:none;z-index:15;transition:opacity 0.28s ease-out;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:2em;font-weight:700;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,0.8);}
+#warp-fx.show{opacity:1;}
+.portal-sign{background:rgba(15, 23, 42, 0.88);border-width:2px;padding:0.35em 0.95em 0.35em 0.45em;font-size:0.92em;box-shadow:0 0 18px rgba(139, 92, 246, 0.55);}
+.portal-sign u{width:1.7em;height:1.7em;font-size:0.95em;}
 </style>
 </head>
 <body>
 <div id="app">
 <div id="stage">
 <canvas id="cv"></canvas>
+<div id="warp-fx">🌀 Warping...</div>
 <div class="hud glass-card" id="me">
 <div id="av-wrap">
 <div id="av">
@@ -196,6 +204,7 @@ button:active{transform:scale(0.92);}
 </div>
 <div class="hud" id="tr">
 <div id="top-pills">
+<button class="glass-card stat-pill" id="dim-pill" title="Dimension Selector">🌐 <span id="dim-name">Main Plaza</span></button>
 <div class="glass-card stat-pill stars">⭐ <span id="tot">0</span>/36</div>
 <button class="glass-card stat-pill online-btn" id="online-btn" aria-label="Online Players">
 <span class="pulse-green"></span>
@@ -210,7 +219,7 @@ button:active{transform:scale(0.92);}
 <div class="glass-card" id="players-drawer">
 <div class="drawer-hdr">
 <span>🌐 Live Explorers</span>
-<span id="drawer-sub">Click to teleport/walk</span>
+<span id="drawer-sub">Click to follow/warp</span>
 </div>
 <div id="players-list"></div>
 </div>
@@ -241,7 +250,7 @@ button:active{transform:scale(0.92);}
 <button id="chat-toggle" type="button">−</button>
 </div>
 <div id="chat-feed">
-<div class="msg-line sys">Welcome to Inquiry World Live! Say hi to nearby explorers.</div>
+<div class="msg-line sys">Welcome to Inquiry World! Step into a Dimension Portal or talk to Gatekeepers!</div>
 </div>
 <div id="emote-row">
 <button class="em-btn" type="button" data-em="👋">👋</button>
@@ -259,7 +268,7 @@ button:active{transform:scale(0.92);}
 <button class="ic" id="i1" title="Quest Progress" aria-label="Stars"><span>🏆</span><em id="badge">0</em></button>
 <button class="ic" id="i2" title="Screenshot" aria-label="Screenshot"><span>📷</span></button>
 <button class="ic" id="i3" title="Next Clue" aria-label="Hint"><span>🧭</span></button>
-<button class="ic" id="i4" title="Science Journal" aria-label="Journal"><span>📖</span></button>
+<button class="ic" id="i4" title="Dimension Guide" aria-label="Journal"><span>📖</span></button>
 <button class="ic" id="i5" title="Reset Progress" aria-label="Reset"><span>♻️</span></button>
 </div>
 <div class="hud glass-card" id="skills"></div>
@@ -274,7 +283,7 @@ button:active{transform:scale(0.92);}
 <div id="intro">
 <div class="panel" style="max-width:29em">
 <h2>Welcome to Inquiry World!</h2>
-<p style="color:#cbd5e1;line-height:1.45">Roam the open world, fly drones with other live explorers, and solve 12 quests across <b>Science</b>, <b>Math</b>, and <b>English</b> with characters marked with <b>!</b> above their heads.</p>
+<p style="color:#cbd5e1;line-height:1.45">Explore the <b>Main Plaza</b>, fly drones with live players, and enter the <b>Math</b>, <b>Science</b>, and <b>English</b> Dimensions to solve 12 interactive quests!</p>
 <label style="font-weight:700;font-size:0.92em">Your Explorer Nickname:
 <input id="ni" maxlength="14" placeholder="Explorer">
 </label>
@@ -289,6 +298,7 @@ button:active{transform:scale(0.92);}
 const RTDB_URL = 'https://schoolblox-e6b0f-default-rtdb.asia-southeast1.firebasedatabase.app';
 const $ = s => document.querySelector(s);
 if (!window.THREE) { $('#err').style.display = 'flex'; }
+
 const OUTFITS = [
 { shirt: 0x7b4fd0, pants: 0x2c2f4a, hair: 0xdfe3ee, hex: '#8b5cf6' },
 { shirt: 0x0ea5e9, pants: 0x1e293b, hair: 0xfde047, hex: '#38bdf8' },
@@ -297,6 +307,14 @@ const OUTFITS = [
 { shirt: 0xf59e0b, pants: 0x334155, hair: 0x1e1b4b, hex: '#fbbf24' },
 { shirt: 0xef4444, pants: 0x111827, hair: 0xe2e8f0, hex: '#f87171' }
 ];
+
+const DIMS = {
+hub: { name: 'Main Plaza', icon: '🌐', color: '#a78bfa' },
+math: { name: 'Math Dimension', icon: '📐', color: '#38bdf8' },
+science: { name: 'Science Dimension', icon: '🔬', color: '#fbbf24' },
+english: { name: 'English Dimension', icon: '📚', color: '#f472b6' }
+};
+
 let S = {
 name: '',
 xp: 0,
@@ -309,6 +327,7 @@ Object.assign(S, JSON.parse(localStorage.getItem('iw1') || '{}'));
 } catch (e) {}
 while (S.stars.length < 12) S.stars.push(0);
 if (typeof S.outfit !== 'number' || !OUTFITS[S.outfit]) S.outfit = 0;
+
 let myId = '';
 try { myId = sessionStorage.getItem('iw_uid') || ''; } catch (e) {}
 if (!myId) {
@@ -320,6 +339,7 @@ try { localStorage.setItem('iw1', JSON.stringify(S)); } catch (e) {}
 };
 const lvl = () => 1 + Math.floor(S.xp / 60);
 const totalStars = () => S.stars.reduce((a, b) => a + b, 0);
+
 function hud() {
 $('#nm').textContent = S.name || 'Explorer';
 $('#lv').textContent = lvl();
@@ -331,141 +351,164 @@ $('#xp-txt').textContent = xpMod + '/60';
 $('#tot').textContent = totalStars();
 $('#badge').textContent = S.stars.filter(x => x > 0).length;
 $('#av-shirt').setAttribute('fill', OUTFITS[S.outfit].hex);
+const dm = DIMS[currentDim] || DIMS.hub;
+$('#dim-name').textContent = dm.icon + ' ' + dm.name;
+$('#dim-pill').style.borderColor = dm.color;
 }
+
+// 12 Quests partitioned across Math (4), Science (4), and English (4) Dimensions
 const C = [
+// --- MATH DIMENSION (indices 0..3) ---
 {
-sub: 'Science', icon: '🔬',
-n: 'Master Forge', sg: 'RAMP RACE', p: [0, -2.6], a: [0, 1], hair: 0xe8643c, sh: 0xefe3c8, pa: 0x6b4a2b, t: 'Ramp Race',
-story: 'A robot car rolls down a ramp. Sometimes it rolls far, sometimes only a little. Why?',
-o: ['The ramp height is different on each run', 'The car is red', 'The forge is noisy'],
-q: ['How does ramp height affect how far the car rolls?', 'How cool does the robot car look?', 'Who built the ramp?'],
-h: ['The higher the ramp, the farther the car will roll', 'The higher the ramp, the shorter the roll', 'The ramp has no effect'],
-v: { n: 'Ramp height', u: 'cm', L: [5, 10, 15, 20, 25], R: [28, 52, 83, 108, 139], ru: 'cm' },
-c: ['Distance increases as ramp height increases', 'Distance decreases as ramp height increases', 'Distance stays the same'],
-tip: 'Fair test: change only one thing (the height). Keep the same car and floor.'
-},
-{
-sub: 'Science', icon: '🔬',
-n: 'Tech Mira', sg: 'LIGHT LAB', p: [-16, 3], a: [-13.8, 5.6], hair: 0xf0a030, sh: 0xb86a4a, pa: 0x3a3a52, t: 'Light Sensor',
-story: 'A robot reads light with a sensor. When the lamp is moved away, the reading changes.',
-o: ['The reading changes when the lamp distance changes', 'The lamp is heavy', 'The wire is blue'],
-q: ['How does lamp distance affect the light reading?', 'How much does the sensor cost?', 'Why do I like the lamp?'],
-h: ['The farther the lamp, the lower the reading', 'The farther the lamp, the higher the reading', 'The reading stays the same anywhere'],
-v: { n: 'Lamp distance', u: 'cm', L: [10, 20, 30, 40, 50], R: [90, 60, 35, 20, 10], ru: '%' },
-c: ['The reading drops as the lamp moves away', 'The reading rises as the lamp moves away', 'The reading never changes'],
-tip: 'Test in a dark room so the test stays fair.'
-},
-{
-sub: 'Science', icon: '🔬',
-n: 'Dr. Volt', sg: 'BATTERY LAB', p: [16, 4], a: [13.8, 6.6], hair: 0x8a6be8, sh: 0xf2f2f2, pa: 0x5a8fe8, t: 'Battery Power',
-story: 'A robot has a motor. Dr. Volt added more batteries and it seemed to spin faster.',
-o: ['The motor seems faster with more batteries', 'The lab coat is big', 'The lab is warm'],
-q: ['How does the number of batteries affect motor speed?', 'What color is the motor?', 'Who bought the batteries?'],
-h: ['More batteries will make the motor faster', 'More batteries will make the motor slower', 'Batteries have no effect'],
-v: { n: 'Batteries', u: 'pcs', L: [1, 2, 3, 4, 5], R: [40, 85, 120, 165, 200], ru: 'rpm' },
-c: ['Motor speed rises as batteries increase', 'Motor speed falls as batteries increase', 'Motor speed stays the same'],
-tip: 'Use the same motor and the same load each time.'
-},
-{
-sub: 'Science', icon: '🔬',
-n: 'Captain Swing', sg: 'PENDULUM PIER', p: [-34, -18], a: [-31.8, -15.4], hair: 0x2b2b2b, sh: 0x2c5fa8, pa: 0xf2f2f2, t: 'Pendulum Pier',
-story: 'Swings on the pier take different amounts of time to go back and forth. Does the rope length matter?',
-o: ['Swings with different rope lengths take different times', 'The pier is made of wood', 'The seagulls are loud'],
-q: ['How does pendulum length affect the time of one swing?', 'How tall is the captain?', 'Which swing looks prettiest?'],
-h: ['The longer the pendulum, the longer one swing takes', 'The longer the pendulum, the shorter one swing takes', 'Length has no effect on swing time'],
-v: { n: 'Pendulum length', u: 'cm', L: [20, 40, 60, 80, 100], R: [0.9, 1.3, 1.6, 1.8, 2.0], ru: 's' },
-c: ['Longer pendulums take longer for each swing', 'Longer pendulums swing faster', 'All pendulums swing in the same time'],
-tip: 'Release from the same angle each time and use the same weight.'
-},
-{
-sub: 'Science', icon: '🔬',
-n: 'Gardener Fern', sg: 'GARDEN LAB', p: [30, -18], a: [27.8, -15.4], hair: 0x6b4a2b, sh: 0x3fa84a, pa: 0x8a6b3a, t: 'Garden Growth',
-story: 'Identical bean plants got different amounts of water for two weeks. Now their heights are not the same.',
-o: ['The plants got different amounts of water', 'The pots are round', 'The gardener wears a hat'],
-q: ['How does the amount of water affect plant height?', 'Which plant smells nicest?', 'Who planted the beans?'],
-h: ['More water will make the plant grow taller', 'Water will make the plant shrink', 'Water has no effect on growth'],
-v: { n: 'Water per day', u: 'ml', L: [0, 10, 20, 30, 40], R: [3, 8, 14, 18, 19], ru: 'cm' },
-c: ['More water helped growth, but extra water gave less and less benefit', 'Water had no effect', 'Plants grew best with no water'],
-tip: 'Same soil, same light, same seeds. Only the water changes.'
-},
-{
-sub: 'Science', icon: '🔬',
-n: 'Prof. Magnus', sg: 'MAGNET MOUNTAIN', p: [3, -36], a: [0.8, -33.4], hair: 0xcfcfcf, sh: 0xd04a4a, pa: 0x333a4a, t: 'Electromagnet',
-story: 'Prof. Magnus wraps wire around a nail and connects a battery. The nail becomes a magnet and picks up paper clips.',
-o: ['Different numbers of coils pick up different numbers of clips', 'The nail is long', 'The mountain is big'],
-q: ['How does the number of wire coils affect how many paper clips the nail picks up?', 'Is the nail shiny?', 'What brand is the battery?'],
-h: ['More coils will pick up more paper clips', 'More coils will pick up fewer paper clips', 'Coils have no effect'],
-v: { n: 'Wire coils', u: 'coils', L: [5, 10, 15, 20, 25], R: [2, 4, 7, 9, 12], ru: 'clips' },
-c: ['More coils picked up more paper clips', 'More coils picked up fewer paper clips', 'The number of clips stayed the same'],
-tip: 'Use the same nail and the same battery every time.'
-},
-{
-sub: 'Science', icon: '🔬',
-n: 'Dr. Nova', sg: 'SOLAR OBSERVATORY', p: [-10, -24], a: [-10, -21.4], hair: 0x38bdf8, sh: 0x1e3a8a, pa: 0x0f172a, t: 'Solar Panel Tilt',
-story: 'Dr. Nova tilts a solar panel toward the sun at different angles and measures the electricity produced.',
-o: ['Different panel tilt angles produce different amounts of power', 'The observatory roof is blue', 'The clouds look fluffy'],
-q: ['How does solar panel tilt angle affect electrical power output?', 'What time did Dr. Nova wake up?', 'Is the solar panel heavy?'],
-h: ['Facing closer to 45° toward the sun produces more power', 'Tilting the panel away produces more power', 'Tilt angle has no effect on power'],
-v: { n: 'Tilt angle', u: 'deg', L: [0, 15, 30, 45, 60], R: [32, 58, 84, 98, 76], ru: 'W' },
-c: ['Power peaked at 45° when facing the sun directly', 'Flat 0° always gives maximum power', 'Angle never changes power'],
-tip: 'Keep the sunlight brightness constant while testing each angle.'
-},
-{
-sub: 'Science', icon: '🔬',
-n: 'Chef Boyle', sg: 'THERMAL KITCHEN', p: [14, -22], a: [14, -19.4], hair: 0xf97316, sh: 0xffffff, pa: 0x374151, t: 'Melting Ice',
-story: 'Chef Boyle adds different amounts of salt to crushed ice and records how fast the ice melts.',
-o: ['Ice with more salt melts in fewer minutes', 'The bowl is made of glass', 'The kitchen smells like soup'],
-q: ['How does the amount of salt affect how fast ice melts?', 'Who bought the ice cubes?', 'What color is the spoon?'],
-h: ['Adding more salt will make the ice melt faster', 'Adding salt will keep ice frozen forever', 'Salt has no effect on melting'],
-v: { n: 'Salt added', u: 'g', L: [0, 5, 10, 15, 20], R: [24, 18, 13, 9, 6], ru: 'min' },
-c: ['More salt lowered the freezing point and melted the ice faster', 'More salt made melting take longer', 'All bowls melted at the exact same time'],
-tip: 'Use the exact same mass of ice and room temperature for each bowl.'
-},
-{
-sub: 'Math', icon: '📐',
-n: 'Archimedes Jr.', sg: 'MATH PLAZA', p: [-24, 24], a: [-22, 21.6], hair: 0xfde047, sh: 0x0284c7, pa: 0x1e293b, t: 'Ratio & Speed',
-story: 'A delivery drone flies at a steady speed. Archimedes Jr. tracks how far it travels over different numbers of minutes.',
-o: ['Distance grows proportionally as flight minutes increase', 'The drone has four propellers', 'The sky is clear today'],
+idx: 0, dim: 'math', sub: 'Math', icon: '📐',
+n: 'Archimedes Jr.', sg: 'RATIO & SPEED', p: [-14, -6], a: [-12, -3.5], hair: 0xfde047, sh: 0x0284c7, pa: 0x1e293b, t: 'Constant Rate (d = r·t)',
+story: 'A delivery drone flies at a steady speed of 120 m/min. Archimedes Jr. tracks total distance over different numbers of minutes.',
+o: ['Distance grows proportionally as flight minutes increase (d = 120t)', 'The drone has four propellers', 'The grid floor glows blue'],
 q: ['How does flight time affect total distance at constant speed?', 'What brand is the remote controller?', 'Why is the drone painted blue?'],
 h: ['Every extra minute adds 120 meters of distance', 'More minutes reduce the distance traveled', 'Distance stays at 120 meters forever'],
-v: { n: 'Flight time', u: 'min', L: [1, 2, 3, 4, 5], R: [120, 240, 360, 480, 600], ru: 'm' },
-c: ['Distance = 120 × minutes (a constant rate of 120 m/min)', 'Distance grows randomly each minute', 'Time and distance are unrelated'],
-tip: 'Divide distance by minutes (R ÷ L) to verify the constant unit rate!'
+v: { n: 'Flight time (t)', u: 'min', L: [1, 2, 3, 4, 5], R: [120, 240, 360, 480, 600], ru: 'm' },
+c: ['Distance = 120 × minutes (a constant unit rate of 120 m/min)', 'Distance grows randomly each minute', 'Time and distance are unrelated'],
+tip: 'Formula: d = r × t. Divide distance by minutes (R ÷ L) to verify the constant rate!'
 },
 {
-sub: 'Math', icon: '📐',
-n: 'Prof. Euler', sg: 'GEOMETRY GARDEN', p: [0, 28], a: [0, 25.4], hair: 0xa855f7, sh: 0x6d28d9, pa: 0x1f2937, t: 'Square Area Scaling',
-story: 'Prof. Euler builds square flower beds. When he increases the side length, the area grows much faster than expected!',
-o: ['Doubling the side length makes the area four times bigger', 'The garden fence is brown', 'The flowers are yellow'],
-q: ['How does the side length of a square affect its total area?', 'Who watered the flowers?', 'How many bricks are in the wall?'],
-h: ['Area equals side length squared (Area = s²)', 'Area equals side length plus 2', 'Area stays the same for every square'],
-v: { n: 'Side length', u: 'm', L: [1, 2, 3, 4, 5], R: [1, 4, 9, 16, 25], ru: 'm²' },
-c: ['Square area grows quadratically (s × s = s²)', 'Area grows by only 1 m² per meter', 'Larger sides have smaller areas'],
-tip: 'Test at least 3 side lengths and check the pattern: 1×1, 2×2, 3×3...'
+idx: 1, dim: 'math', sub: 'Math', icon: '📐',
+n: 'Prof. Euler', sg: 'QUADRATIC AREA', p: [14, -6], a: [12, -3.5], hair: 0xa855f7, sh: 0x6d28d9, pa: 0x1f2937, t: 'Square Area (A = s²)',
+story: 'Prof. Euler constructs glowing square platforms. Doubling the side length makes the area four times bigger!',
+o: ['Area grows by the square of the side length (A = s²)', 'The platform edges are cyan', 'Squares have four corners'],
+q: ['How does the side length (s) of a square affect its area (A)?', 'Who built the math dimension?', 'How bright are the neon lines?'],
+h: ['Area equals side length squared (A = s × s = s²)', 'Area equals side length plus 2', 'Area stays the same for every square'],
+v: { n: 'Side length (s)', u: 'm', L: [1, 2, 3, 4, 5], R: [1, 4, 9, 16, 25], ru: 'm²' },
+c: ['Square area grows quadratically: A = s² (1, 4, 9, 16, 25)', 'Area grows by only 1 m² per meter', 'Larger sides have smaller areas'],
+tip: 'Formula: A = s². Test at least 3 side lengths and check 1², 2², 3², 4², 5²!'
 },
 {
-sub: 'English', icon: '📚',
-n: 'Lady Sonnet', sg: 'ENGLISH LIBRARY', p: [22, 26], a: [20, 23.6], hair: 0xf43f5e, sh: 0xbe123c, pa: 0x312e81, t: 'Context Clues',
-story: '"Although the ancient bridge looked fragile, it withstood the violent storm." Readers use surrounding words to unlock unfamiliar vocabulary.',
-o: ['The contrast word "Although" shows fragile means delicate or easily broken', 'The story mentions a bridge', 'Sentences end with a period'],
-q: ['How do contrast clues help determine the meaning of "fragile"?', 'How many books are on the shelf?', 'Who built the ancient bridge?'],
+idx: 2, dim: 'math', sub: 'Math', icon: '📐',
+n: 'Lady Hypatia', sg: 'LINEAR ALGEBRA', p: [-14, 14], a: [-12, 11.5], hair: 0x38bdf8, sh: 0x0369a1, pa: 0x0f172a, t: 'Linear Function (y = 3x + 5)',
+story: 'A number machine takes an input x, multiplies it by 3, and adds 5 to produce output y = 3x + 5.',
+o: ['Each +1 increase in x increases output y by a constant slope of 3', 'The machine hums softly', 'Numbers float in the sky'],
+q: ['How does changing input x affect output y in y = 3x + 5?', 'What color is the equation sign?', 'Who invented the letter x?'],
+h: ['Output y increases by 3 for every +1 step in x (slope m = 3)', 'Output y decreases when x grows', 'Output y is always 5'],
+v: { n: 'Input (x)', u: 'units', L: [0, 1, 2, 3, 4], R: [5, 8, 11, 14, 17], ru: 'y' },
+c: ['Linear growth with slope m = 3 and y-intercept b = 5 (y = 3x + 5)', 'The output doubles each step', 'There is no pattern between x and y'],
+tip: 'Formula: y = mx + b. Notice when x = 0, y = 5 (the y-intercept)!'
+},
+{
+idx: 3, dim: 'math', sub: 'Math', icon: '📐',
+n: 'Sir Pythagoras', sg: 'TRIANGLE LAB', p: [14, 14], a: [12, 11.5], hair: 0xf43f5e, sh: 0x1d4ed8, pa: 0x1e293b, t: 'Pythagorean Theorem (a²+b²=c²)',
+story: 'Sir Pythagoras scales right triangles with base a = 3k and height b = 4k, measuring the hypotenuse c.',
+o: ['The hypotenuse c always follows c = √(a² + b²) = 5k', 'Triangles have three sides', 'The pyramid rotates slowly'],
+q: ['How does scaling legs a and b affect hypotenuse c in a 3-4-5 right triangle?', 'Why is it called a right triangle?', 'Which side looks longest?'],
+h: ['Hypotenuse c scales proportionally: c = 5 × scale factor k', 'Hypotenuse c equals a + b', 'Hypotenuse c never changes'],
+v: { n: 'Scale factor (k)', u: '×', L: [1, 2, 3, 4, 5], R: [5, 10, 15, 20, 25], ru: 'c' },
+c: ['Since (3k)² + (4k)² = (5k)², hypotenuse c = 5, 10, 15, 20, 25', 'c is always equal to a × b', 'Right triangles do not follow a formula'],
+tip: 'Formula: a² + b² = c². For k = 1: 3² + 4² = 9 + 16 = 25, so c = √25 = 5!'
+},
+
+// --- SCIENCE DIMENSION (indices 4..7) ---
+{
+idx: 4, dim: 'science', sub: 'Science', icon: '🔬',
+n: 'Master Forge', sg: 'RAMP RACE', p: [-14, -6], a: [-12, -3.5], hair: 0xe8643c, sh: 0xefe3c8, pa: 0x6b4a2b, t: 'Potential Energy & Ramps',
+story: 'A test rover rolls down a frictionless ramp from different release heights. Higher ramps give more gravitational energy!',
+o: ['The rover rolls farther when released from higher ramp heights', 'The rover is painted orange', 'The lab floor is smooth'],
+q: ['How does ramp height affect how far the rover rolls?', 'How cool does the rover look?', 'Who built the ramp?'],
+h: ['The higher the ramp, the farther the rover will roll', 'The higher the ramp, the shorter the roll', 'Ramp height has no effect'],
+v: { n: 'Ramp height', u: 'cm', L: [5, 10, 15, 20, 25], R: [28, 52, 83, 108, 139], ru: 'cm' },
+c: ['Rolling distance increases as ramp height (potential energy) increases', 'Distance decreases as ramp height increases', 'Distance stays the same'],
+tip: 'Fair test: change only the ramp height while keeping the same rover and track.'
+},
+{
+idx: 5, dim: 'science', sub: 'Science', icon: '🔬',
+n: 'Tech Mira', sg: 'LIGHT SENSOR', p: [14, -6], a: [12, -3.5], hair: 0xf0a030, sh: 0xb86a4a, pa: 0x3a3a52, t: 'Light Intensity & Distance',
+story: 'Tech Mira moves an optical sensor away from a plasma lamp and records how light intensity drops.',
+o: ['Light reading drops rapidly as the sensor moves farther from the lamp', 'The lamp stand is metal', 'The wire is blue'],
+q: ['How does lamp distance affect the light sensor reading?', 'How much does the sensor cost?', 'Why is the lab dark?'],
+h: ['The farther the lamp, the lower the light reading', 'The farther the lamp, the higher the reading', 'The reading stays the same anywhere'],
+v: { n: 'Lamp distance', u: 'cm', L: [10, 20, 30, 40, 50], R: [90, 60, 35, 20, 10], ru: '%' },
+c: ['Light intensity drops as distance from the source increases', 'The reading rises as the lamp moves away', 'The reading never changes'],
+tip: 'Keep ambient room light constant so only lamp distance changes.'
+},
+{
+idx: 6, dim: 'science', sub: 'Science', icon: '🔬',
+n: 'Dr. Volt', sg: 'BATTERY LAB', p: [-14, 14], a: [-12, 11.5], hair: 0x8a6be8, sh: 0xf2f2f2, pa: 0x5a8fe8, t: 'Voltage & Motor RPM',
+story: 'Dr. Volt connects 1 to 5 batteries in series to an electric turbine and measures its spin speed in RPM.',
+o: ['Adding more batteries in series makes the turbine spin faster', 'The lab coat is white', 'The turbine hums'],
+q: ['How does the number of batteries affect motor speed (RPM)?', 'What color is the motor?', 'Who bought the batteries?'],
+h: ['More batteries increase voltage and make the motor spin faster', 'More batteries will make the motor slower', 'Batteries have no effect'],
+v: { n: 'Batteries', u: 'pcs', L: [1, 2, 3, 4, 5], R: [40, 85, 120, 165, 200], ru: 'rpm' },
+c: ['Motor speed rises steadily as more batteries are connected', 'Motor speed falls as batteries increase', 'Motor speed stays the same'],
+tip: 'Use the exact same motor and propeller load for every trial.'
+},
+{
+idx: 7, dim: 'science', sub: 'Science', icon: '🔬',
+n: 'Prof. Magnus', sg: 'MAGNET CORE', p: [14, 14], a: [12, 11.5], hair: 0xcfcfcf, sh: 0xd04a4a, pa: 0x333a4a, t: 'Electromagnet Coils',
+story: 'Prof. Magnus wraps copper wire around an iron core and tests how many steel clips the electromagnet lifts.',
+o: ['More wire coils around the core pick up more steel paper clips', 'The iron core is heavy', 'Copper wire is shiny'],
+q: ['How does the number of wire coils affect how many clips are lifted?', 'Is the nail shiny?', 'What brand is the battery?'],
+h: ['More coils strengthen the magnetic field and pick up more clips', 'More coils will pick up fewer clips', 'Coils have no effect'],
+v: { n: 'Wire coils', u: 'coils', L: [5, 10, 15, 20, 25], R: [2, 4, 7, 9, 12], ru: 'clips' },
+c: ['More wire coils created a stronger electromagnet and lifted more clips', 'More coils picked up fewer clips', 'The number of clips stayed the same'],
+tip: 'Keep the battery voltage and iron core identical across all runs.'
+},
+
+// --- ENGLISH DIMENSION (indices 8..11) ---
+{
+idx: 8, dim: 'english', sub: 'English', icon: '📚',
+n: 'Lady Sonnet', sg: 'CONTEXT CLUES', p: [-14, -6], a: [-12, -3.5], hair: 0xf43f5e, sh: 0xbe123c, pa: 0x312e81, t: 'Decoding Vocabulary',
+story: '"Although the ancient bridge looked fragile, it withstood the violent storm." Readers use contrast clues to unlock new words.',
+o: ['The contrast word "Although" shows fragile means delicate or easily broken', 'The sentence mentions a bridge', 'Sentences end with a period'],
+q: ['How do contrast clues help determine the meaning of "fragile"?', 'How many books are floating?', 'Who built the ancient bridge?'],
 h: ['Contrast words like "although" signal the opposite of withstanding a storm', 'Fragile must mean indestructible', 'Context clues never help with vocabulary'],
 v: { n: 'Clue Level', u: 'pts', L: [1, 2, 3, 4, 5], R: [20, 40, 60, 80, 100], ru: '% mastery' },
 c: ['Contrast context clues reveal that "fragile" means delicate or easily damaged', 'Fragile means made of solid steel', 'Reading surrounding words is unnecessary'],
 tip: 'Look for signal words like "although", "however", and "unlike" when decoding new words.'
 },
 {
-sub: 'English', icon: '📚',
-n: 'Bard Shakespeare', sg: 'STORY STAGE', p: [-36, 4], a: [-33.6, 4], hair: 0x10b981, sh: 0x047857, pa: 0x1e1b4b, t: 'Main Idea & Evidence',
-story: 'A well-crafted paragraph opens with a clear topic sentence, followed by supporting details that prove the central message.',
-o: ['Supporting details connect directly back to one central main idea', 'The stage curtains are red', 'Stories always happen at night'],
-q: ['How do supporting details strengthen a paragraph’s main idea?', 'How loud is the audience clapping?', 'What color is the quill pen?'],
+idx: 9, dim: 'english', sub: 'English', icon: '📚',
+n: 'Bard Shakespeare', sg: 'MAIN IDEA', p: [14, -6], a: [12, -3.5], hair: 0x10b981, sh: 0x047857, pa: 0x1e1b4b, t: 'Main Idea & Evidence',
+story: 'A strong paragraph opens with a clear topic sentence, followed by specific supporting details that prove the central message.',
+o: ['Supporting details connect directly back to one central main idea', 'The library has tall arches', 'Stories always happen at night'],
+q: ['How do supporting details strengthen a paragraph’s main idea?', 'How loud is the applause?', 'What color is the quill pen?'],
 h: ['Specific facts and examples make the main idea clear and convincing', 'Random off-topic sentences make a paragraph stronger', 'A paragraph needs no main idea'],
 v: { n: 'Details used', u: 'facts', L: [1, 2, 3, 4, 5], R: [30, 50, 75, 90, 100], ru: '% clarity' },
 c: ['Relevant supporting evidence makes the central main idea clear and persuasive', 'Adding unrelated facts improves clarity', 'One word is enough for an essay'],
 tip: 'Ask yourself: "What is the single big point all these sentences support?"'
+},
+{
+idx: 10, dim: 'english', sub: 'English', icon: '📚',
+n: 'Countess Syntax', sg: 'GRAMMAR FORGE', p: [-14, 14], a: [-12, 11.5], hair: 0xfbbf24, sh: 0x9d174d, pa: 0x1f2937, t: 'Subject-Verb Agreement',
+story: 'In English grammar, singular subjects take singular verbs ("The explorer walks"), while plural subjects take plural verbs ("The explorers walk").',
+o: ['Matching singular/plural subjects with the right verb form keeps sentences clear', 'Verbs are action words', 'Books have paper pages'],
+q: ['How does subject number (singular vs. plural) affect the verb in a sentence?', 'How many letters are in the alphabet?', 'Who wrote the grammar book?'],
+h: ['Singular subjects pair with singular verbs, and plural subjects pair with plural verbs', 'Every verb must end in -ing', 'Subjects and verbs never need to match'],
+v: { n: 'Sentences fixed', u: 'items', L: [1, 2, 3, 4, 5], R: [20, 40, 60, 80, 100], ru: '% accuracy' },
+c: ['Proper subject-verb agreement eliminates confusion and improves writing accuracy', 'Plural subjects always take "is" or "was"', 'Grammar rules do not affect meaning'],
+tip: 'Find the true subject first—ignore prepositional phrases in between!'
+},
+{
+idx: 11, dim: 'english', sub: 'English', icon: '📚',
+n: 'Sage Metaphor', sg: 'FIGURATIVE SKY', p: [14, 14], a: [12, 11.5], hair: 0xc4b5fd, sh: 0x6b21a8, pa: 0x0f172a, t: 'Simile & Metaphor',
+story: '"Her mind was a glowing lighthouse in the fog." Writers use similes and metaphors to paint vivid pictures for readers.',
+o: ['Comparing two unlike things creates vivid imagery and deeper emotion', 'Lighthouses stand near the ocean', 'Poems often rhyme'],
+q: ['How does figurative language (similes and metaphors) improve creative writing?', 'How tall is a lighthouse?', 'Which word is longest?'],
+h: ['Vivid comparisons help readers visualize abstract ideas and feelings', 'Figurative language makes stories harder to picture', 'Literal facts are the only way to describe feelings'],
+v: { n: 'Imagery layers', u: 'devices', L: [1, 2, 3, 4, 5], R: [25, 50, 70, 88, 100], ru: '% vividness' },
+c: ['Similes (like/as) and metaphors create memorable, vivid mental images', 'Metaphors should never be used in stories', 'All comparisons must be literal'],
+tip: 'Remember: Similes use "like" or "as"; metaphors make a direct comparison!'
 }
 ];
+
+// Hub World Portals (when currentDim === 'hub') & Return Portal (when inside a dimension)
+const HUB_PORTALS = [
+{ target: 'math', n: 'MATH PORTAL', icon: '📐', color: '#38bdf8', hex: 0x0284c7, p: [-14, -6], a: [-12, -3] },
+{ target: 'science', n: 'SCIENCE PORTAL', icon: '🔬', color: '#fbbf24', hex: 0xd97706, p: [0, -10], a: [0, -7] },
+{ target: 'english', n: 'ENGLISH PORTAL', icon: '📚', color: '#f472b6', hex: 0xdb2777, p: [14, -6], a: [12, -3] }
+];
+const RETURN_PORTAL = { target: 'hub', n: 'MAIN PLAZA', icon: '🌐', color: '#a78bfa', hex: 0x7c3aed, p: [0, -18], a: [0, -15] };
+
+let currentDim = 'hub';
+let activeQuests = [];
+let activePortals = [];
+
 const ST = ['Observe', 'Question', 'Hypothesis', 'Experiment', 'Conclusion'];
 const QS = ['What do you notice?', 'Which question can be tested?', 'What is your prediction?', 'Try the levels below. Test at least 3.', 'What did you find out?'];
 const DEF = [
@@ -477,6 +520,7 @@ const DEF = [
 ];
 const shuf = a => a.map((t, i) => ({ t, ok: i == 0 })).sort(() => Math.random() - 0.5);
 let cs = null;
+
 function say(t, ms = 3500) {
 const c = $('#cap');
 c.textContent = t;
@@ -489,14 +533,17 @@ S.hp = Math.max(30, S.hp - 10);
 hud();
 save();
 }
-function openCase(i) {
-cs = { i, s: 0, m: 0, tested: {} };
+
+function openCase(qObj) {
+cs = { i: qObj.idx, qObj, s: 0, m: 0, tested: {} };
 $('#dlg').style.display = 'flex';
 render();
 }
+
 function render() {
-const c = C[cs.i], pn = $('#pn');
-let h = '<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#38bdf8;margin-bottom:0.2em">' + c.icon + ' ' + c.sub + ' Quest</div><h2>' + c.n + ': ' + c.t + '</h2><div class="steps">' +
+const c = cs.qObj, pn = $('#pn');
+const badgeCol = c.sub === 'Math' ? '#38bdf8' : c.sub === 'English' ? '#f472b6' : '#fbbf24';
+let h = '<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:' + badgeCol + ';margin-bottom:0.2em">' + c.icon + ' ' + c.sub + ' Dimension Quest</div><h2>' + c.n + ': ' + c.t + '</h2><div class="steps">' +
 ST.map((_, k) => '<i class="' + (k < cs.s ? 'ok' : k == cs.s ? 'on' : '') + '"></i>').join('') + '</div>';
 if (cs.s < 5) h += '<div class="story">' + c.story + '</div><div class="q">' + ST[cs.s] + ': ' + QS[cs.s] + '</div>';
 if (cs.s == 3) {
@@ -532,7 +579,7 @@ render();
 b.classList.add('bad');
 cs.m++;
 dmg();
-$('#fb').textContent = 'Not quite. Re-read the story and try again!';
+$('#fb').textContent = 'Not quite. Re-read the problem and try again!';
 }
 });
 return;
@@ -544,17 +591,18 @@ S.hp = 100;
 hud();
 save();
 pushState(true);
-sendChat('⭐ Solved ' + c.t + ' (' + st + '/3 stars)!', true);
+sendChat('⭐ Solved ' + c.t + ' in ' + c.sub + ' Dimension (' + st + '/3 stars)!', true);
 pn.innerHTML = '<h2>' + c.sub + ' Quest Complete!</h2><div>' + star(st) + '</div><p>You mastered <b>' + c.t +
-'</b> (' + c.sub + '). +40 XP. Wrong answers: ' + cs.m + '.</p><button class="btn" id="cl">Back to the world</button>';
+'</b> (' + c.sub + '). +40 XP. Wrong answers: ' + cs.m + '.</p><button class="btn" id="cl">Continue Exploring</button>';
 $('#cl').onclick = () => {
 $('#dlg').style.display = 'none';
 cs = null;
-if (S.stars.every(x => x > 0)) say('Amazing, ' + S.name + '! You solved every mystery!', 5000);
+if (S.stars.every(x => x > 0)) say('Legendary, ' + S.name + '! You conquered all 3 Dimensions!', 5000);
 };
 }
+
 function chart() {
-const c = C[cs.i], v = c.v, mx = Math.max(...v.R);
+const c = cs.qObj, v = c.v, mx = Math.max(...v.R);
 $('#ch').innerHTML = Object.keys(cs.tested).sort().map(k =>
 '<div><b>' + v.n + ' ' + v.L[k] + '</b><s style="width:' + v.R[k] / mx * 52 + '%"></s><span>' + v.R[k] + ' ' + v.ru + '</span></div>'
 ).join('');
@@ -571,6 +619,7 @@ render();
 };
 }
 }
+
 function infoPanel(h) {
 $('#pn').innerHTML = h + '<br><button class="btn" id="cl">Close</button>';
 $('#dlg').style.display = 'flex';
@@ -578,6 +627,7 @@ cs = null;
 $('#cl').onclick = () => $('#dlg').style.display = 'none';
 }
 const star = n => [1, 2, 3].map(k => '<span class="star ' + (k <= n ? 'on' : '') + '">★</span>').join('');
+
 ['👁️', '❓', '💡', '🧪', '✅'].forEach((ic, k) => {
 const b = document.createElement('button');
 b.className = 'sk';
@@ -585,29 +635,70 @@ b.innerHTML = '<b>' + (k + 1) + '</b><span>' + ic + '</span><small>' + ST[k].sli
 b.onclick = () => say(DEF[k], 5000);
 $('#skills').appendChild(b);
 });
+
+// Dimension Quick-Switch Modal on top pill click
+$('#dim-pill').onclick = () => {
+const dimBtns = Object.entries(DIMS).map(([key, d]) => {
+const isCur = currentDim === key;
+const subStars = key === 'hub'
+? totalStars() + '/36 ⭐'
+: C.filter(q => q.dim === key).reduce((acc, q) => acc + S.stars[q.idx], 0) + '/12 ⭐';
+return '<button class="opt ' + (isCur ? 'good' : '') + '" data-dim="' + key + '" style="display:flex;justify-content:space-between;align-items:center">' +
+'<span><b>' + d.icon + ' ' + d.name + '</b>' + (isCur ? ' (Current)' : '') + '</span>' +
+'<span style="color:#fbbf24;font-weight:800">' + subStars + '</span></button>';
+}).join('');
+infoPanel('<h2>🌐 Dimension Teleporter</h2><p style="color:#cbd5e1;font-size:0.92em">Walk into a glowing 3D Portal in the plaza or select a dimension below to warp instantly:</p>' + dimBtns);
+$('#pn').querySelectorAll('button[data-dim]').forEach(btn => {
+btn.onclick = () => {
+$('#dlg').style.display = 'none';
+enterDimension(btn.dataset.dim);
+};
+});
+};
+
 $('#i1').onclick = () => {
-const groups = ['Science', 'Math', 'English'].map(sub => {
-const rows = C.map((c, i) => ({ c, i })).filter(x => x.c.sub === sub)
-.map(({ c, i }) => '<p style="display:flex;justify-content:space-between;align-items:center;margin:0.28em 0;font-size:0.94em"><span>' + c.icon + ' ' + c.t + ' <small style="color:#94a3b8">(' + c.n + ')</small></span><span>' + star(S.stars[i]) + '</span></p>').join('');
-return '<h3 style="margin:0.7em 0 0.25em;color:#38bdf8;font-size:1em;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.2em">' + sub + '</h3>' + rows;
+const groups = [
+{ key: 'math', label: '📐 Math Dimension', col: '#38bdf8' },
+{ key: 'science', label: '🔬 Science Dimension', col: '#fbbf24' },
+{ key: 'english', label: '📚 English Dimension', col: '#f472b6' }
+].map(g => {
+const rows = C.filter(c => c.dim === g.key)
+.map(c => '<p style="display:flex;justify-content:space-between;align-items:center;margin:0.28em 0;font-size:0.94em"><span>' + c.icon + ' ' + c.t + ' <small style="color:#94a3b8">(' + c.n + ')</small></span><span>' + star(S.stars[c.idx]) + '</span></p>').join('');
+return '<h3 style="margin:0.7em 0 0.25em;color:' + g.col + ';font-size:1em;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.2em">' + g.label + '</h3>' + rows;
 }).join('');
 infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + ' (' + totalStars() + '/36 ⭐)</h2>' + groups + '<p style="color:#a5b4fc;margin-top:0.6em">Total XP: ' + S.xp + '</p>');
 };
+
 $('#i2').onclick = () => {
 R.render(sc, cam);
 const a = document.createElement('a');
 a.href = cv.toDataURL('image/png');
-a.download = 'inquiry-world.png';
+a.download = 'inquiry-world-' + currentDim + '.png';
 a.click();
 say('Screenshot saved!', 2500);
 };
+
 $('#i3').onclick = () => {
-const k = S.stars.findIndex(x => x == 0);
-say(k < 0 ? 'All quests done! Replay any quest to earn 3 stars.' : 'Find ' + C[k].n + ' (look for the !). Check the radar.', 4500);
+const unDoneInDim = activeQuests.find(q => S.stars[q.idx] === 0);
+if (unDoneInDim) {
+say('Talk to ' + unDoneInDim.n + ' (' + unDoneInDim.sg + ') in this dimension!', 4500);
+return;
+}
+const nextAny = C.find(q => S.stars[q.idx] === 0);
+if (!nextAny) {
+say('All 12 quests across all dimensions solved! Replay any to get 3 stars.', 4500);
+} else {
+say('All quests here are done! Warp to ' + DIMS[nextAny.dim].name + ' for ' + nextAny.n + '.', 4500);
+}
 };
-$('#i4').onclick = () => infoPanel('<h2>Science Journal</h2><p><b>Inquiry steps:</b> Observe → Question → Hypothesis → Experiment → Conclusion.</p>' +
-'<p><b>Fair test:</b> <i>Change only one variable at a time.</i></p>' +
-'<p><b>Flight & Move Controls:</b> WASD / Arrow keys, virtual joystick, or tap the ground. Press <b>F</b> or tap <b>🚁 Drone</b> to fly! Use Space/Shift to climb/descend and Q/E to yaw.</p>');
+
+$('#i4').onclick = () => infoPanel('<h2>Dimension Explorer Guide</h2>' +
+'<p><b>🌐 Main Plaza:</b> Step into the glowing <b>Math</b>, <b>Science</b>, or <b>English</b> Portals (or click the top dimension pill) to teleport to specialized worlds!</p>' +
+'<p><b>📐 Math Dimension:</b> Surrounded by floating formulas, numbers, and geometric monuments with 4 Math NPCs.</p>' +
+'<p><b>🔬 Science Dimension:</b> High-tech orbital research station with 4 Science NPCs.</p>' +
+'<p><b>📚 English Dimension:</b> Floating sky library with giant books, letters, and 4 English NPCs.</p>' +
+'<p><b>🚁 Drone Flight:</b> Press <b>F</b> or tap <b>Drone</b> anytime to fly around any dimension!</p>');
+
 $('#i5').onclick = () => {
 infoPanel('<h2>Reset progress?</h2><p>This erases your stars and XP on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
 $('#rs').onclick = () => {
@@ -618,37 +709,68 @@ pushState(true);
 $('#dlg').style.display = 'none';
 };
 };
-$('#rf').onclick = () => { P.tx = P.x; P.tz = P.z; P.pend = -1; };
-const near = () => {
-let b = 0, bd = 1e9;
-C.forEach((c, i) => {
-const d = Math.hypot(c.p[0] - P.x, c.p[1] - P.z);
-if (d < bd) { bd = d; b = i; }
+
+$('#rf').onclick = () => { P.tx = P.x; P.tz = P.z; P.pend = null; };
+
+const nearestInteractable = () => {
+let best = null, bd = 1e9;
+activeQuests.forEach(q => {
+const d = Math.hypot(q.p[0] - P.x, q.p[1] - P.z);
+if (d < bd) { bd = d; best = { type: 'quest', item: q, dist: d }; }
 });
-return [b, bd];
+activePortals.forEach(pt => {
+const d = Math.hypot(pt.p[0] - P.x, pt.p[1] - P.z);
+if (d < bd) { bd = d; best = { type: 'portal', item: pt, dist: d }; }
+});
+return best;
 };
-$('#tg').onclick = () => goNpc(near()[0]);
+
+$('#tg').onclick = () => {
+const near = nearestInteractable();
+if (!near) return;
+if (near.type === 'quest') goNpc(near.item);
+else goPortal(near.item);
+};
+
 $('#auto').onclick = () => {
-let k = S.stars.findIndex(x => x == 0);
-if (k < 0) k = S.stars.indexOf(Math.min(...S.stars));
-goNpc(k);
-};
-$('#atk').onclick = () => {
-const [b, d] = near();
-if (d < 5.2) openCase(b);
-else say('Walk up to a character with a !', 2500);
-};
-function goNpc(i) {
-if (P.flying) toggleDrone(false);
-P.tx = C[i].a[0];
-P.tz = C[i].a[1];
-P.pend = i;
+const unDoneInDim = activeQuests.find(q => S.stars[q.idx] === 0);
+if (unDoneInDim) return goNpc(unDoneInDim);
+const nextAny = C.find(q => S.stars[q.idx] === 0);
+if (nextAny && nextAny.dim !== currentDim) {
+const portal = activePortals.find(pt => pt.target === nextAny.dim) || activePortals[0];
+if (portal) return goPortal(portal);
 }
+if (activeQuests.length > 0) goNpc(activeQuests[0]);
+};
+
+$('#atk').onclick = () => {
+const near = nearestInteractable();
+if (!near || near.dist > 5.2) {
+say('Walk up to an NPC (!) or glowing Portal!', 2500);
+return;
+}
+if (near.type === 'quest') openCase(near.item);
+else enterDimension(near.item.target);
+};
+
+function goNpc(qObj) {
+if (P.flying) toggleDrone(false);
+P.tx = qObj.a[0];
+P.tz = qObj.a[1];
+P.pend = { type: 'quest', item: qObj };
+}
+function goPortal(ptObj) {
+if (P.flying) toggleDrone(false);
+P.tx = ptObj.a[0];
+P.tz = ptObj.a[1];
+P.pend = { type: 'portal', item: ptObj };
+}
+
 function toggleDrone(forceState) {
 const next = typeof forceState === 'boolean' ? forceState : !P.flying;
 if (P.flying === next) return;
 P.flying = next;
-P.pend = -1;
+P.pend = null;
 P.tx = P.x;
 P.tz = P.z;
 const btn = $('#drone-btn');
@@ -690,6 +812,7 @@ btn.textContent = P.fpv ? '🎥 3rd-Person' : '📹 FPV View';
 $('#fpv-reticle').classList.toggle('active', P.fpv);
 say(P.fpv ? '📹 FPV Cockpit Camera active' : '🎥 3rd-Person Chase Camera', 2000);
 };
+
 const holdKeys = { up: false, down: false, yawL: false, yawR: false };
 function bindHoldBtn(id, prop) {
 const el = $(id);
@@ -704,32 +827,38 @@ bindHoldBtn('#btn-asc', 'up');
 bindHoldBtn('#btn-dsc', 'down');
 bindHoldBtn('#btn-yaw-l', 'yawL');
 bindHoldBtn('#btn-yaw-r', 'yawR');
+
 const remotePlayers = {};
 let lastPushTime = 0;
 let myEmote = '';
 let myEmoteAt = 0;
 let myTagEl = null;
+
 function setSyncBadge(text, isLive) {
 const st = $('#sync-status');
 st.textContent = text;
 st.classList.toggle('connecting', !isLive);
 }
+
 $('#online-btn').onclick = () => {
 $('#players-drawer').classList.toggle('open');
 renderPlayersList();
 };
+
 function renderPlayersList() {
 const list = $('#players-list');
 const now = Date.now();
 const active = Object.entries(remotePlayers).filter(([, d]) => d && now - (d.ts || 0) < 20000);
 $('#online-cnt').textContent = 1 + active.length;
+const myDimInfo = DIMS[currentDim] || DIMS.hub;
 let html = '<div class="pl-item" style="border-color:rgba(251,191,36,0.4)">' +
-'<span><i class="pl-swatch" style="background:' + OUTFITS[S.outfit].hex + '"></i><b>' + esc(S.name || 'Explorer') + '</b> (You)</span>' +
+'<span><i class="pl-swatch" style="background:' + OUTFITS[S.outfit].hex + '"></i><b>' + esc(S.name || 'Explorer') + '</b> <small style="color:#94a3b8">(' + myDimInfo.icon + ')</small></span>' +
 '<span style="color:#fbbf24;font-weight:800">' + (P.flying ? '🚁 ' : '') + 'Lv.' + lvl() + '</span></div>';
 active.forEach(([uid, d]) => {
 const col = OUTFITS[d.color % OUTFITS.length]?.hex || '#38bdf8';
+const rDim = DIMS[d.dim || 'hub'] || DIMS.hub;
 html += '<button class="pl-item" data-uid="' + uid + '">' +
-'<span><i class="pl-swatch" style="background:' + col + '"></i>' + esc(d.name || 'Explorer') + '</span>' +
+'<span><i class="pl-swatch" style="background:' + col + '"></i>' + esc(d.name || 'Explorer') + ' <small style="color:#94a3b8">(' + rDim.icon + ')</small></span>' +
 '<span style="color:#38bdf8;font-weight:700">' + (d.flying ? '🚁 ' : '') + 'Lv.' + (d.lv || 1) + ' →</span></button>';
 });
 list.innerHTML = html;
@@ -737,17 +866,28 @@ list.querySelectorAll('button.pl-item').forEach(btn => {
 btn.onclick = () => {
 const target = remotePlayers[btn.dataset.uid];
 if (target) {
+const tDim = target.dim || 'hub';
+if (tDim !== currentDim) {
+enterDimension(tDim, () => {
+P.tx = target.x;
+P.tz = target.z + 1.8;
+if (target.flying && !P.flying) toggleDrone(true);
+if (P.flying) P.y = Math.max(1.8, target.y || 2);
+});
+} else {
 if (target.flying && !P.flying) toggleDrone(true);
 P.tx = target.x;
 P.tz = target.z + 1.8;
 if (P.flying) P.y = Math.max(1.8, target.y || 2);
-P.pend = -1;
+P.pend = null;
+}
 $('#players-drawer').classList.remove('open');
-say((P.flying ? 'Flying' : 'Walking') + ' to ' + (target.name || 'Explorer') + '...', 2200);
+say('Joining ' + (target.name || 'Explorer') + ' in ' + (DIMS[tDim]?.name || 'Main Plaza') + '...', 2400);
 }
 };
 });
 }
+
 const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 const seenMsgs = new Set();
 function appendChatLine(id, name, text, isMe, isSys) {
@@ -763,6 +903,7 @@ feed.appendChild(div);
 while (feed.children.length > 45) feed.removeChild(feed.firstChild);
 feed.scrollTop = feed.scrollHeight;
 }
+
 $('#chat-toggle').onclick = () => {
 const box = $('#chat-box');
 const min = box.classList.toggle('minimized');
@@ -780,6 +921,7 @@ inp.value = '';
 inp.blur();
 sendChat(txt);
 };
+
 function sendChat(text, isEvent = false) {
 const now = Date.now();
 const cleanText = text.slice(0, 60);
@@ -801,13 +943,14 @@ ts: now
 })
 }).catch(() => {});
 }
+
 const cv = $('#cv'), stg = $('#stage');
 const P = {
-x: 0, y: 0, z: 9,
-tx: 0, tz: 9,
+x: 0, y: 0, z: 12,
+tx: 0, tz: 12,
 vx: 0, vy: 0, vz: 0,
 ry: Math.PI, rx: 0, rz: 0,
-pend: -1, amp: 0,
+pend: null, amp: 0,
 flying: false, fpv: false, flightStart: 0
 };
 const J = { x: 0, z: 0 }, K = {};
@@ -829,6 +972,7 @@ const up = () => { on = false; J.x = J.z = 0; k.style.transform = ''; };
 j.addEventListener('pointerup', up);
 j.addEventListener('pointercancel', up);
 })();
+
 addEventListener('keydown', e => {
 if (document.activeElement && (document.activeElement.id === 'chat-in' || document.activeElement.id === 'ni')) return;
 const k = e.key.toLowerCase();
@@ -839,39 +983,78 @@ K[k] = 1;
 if (e.key.startsWith('Arrow') || e.key === ' ') e.preventDefault();
 });
 addEventListener('keyup', e => { K[e.key.toLowerCase()] = 0; });
-let R, sc, cam, pl, signs = [], porings = [], npcs = [], pends = [];
+
+let R, sc, cam, pl, worldGroup;
+let questSigns = [], portalSigns = [], porings = [], npcs = [], portalRings = [], floaters = [];
 const OB = [];
 let buildCharacterFn = null;
-function init() {
-R = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
-sc = new THREE.Scene();
-sc.background = new THREE.Color(0xa8d4ff);
-sc.fog = new THREE.Fog(0xa8d4ff, 48, 125);
-cam = new THREE.PerspectiveCamera(42, 16 / 9, 0.1, 220);
-const fit = () => {
-const w = stg.clientWidth, h = stg.clientHeight;
-R.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
-R.setSize(w, h, false);
-cam.aspect = w / h;
-cam.updateProjectionMatrix();
-};
-addEventListener('resize', fit);
-fit();
-sc.add(new THREE.HemisphereLight(0xffffff, 0x8a9a7a, 0.95));
-const dl = new THREE.DirectionalLight(0xfff1d6, 0.72);
-dl.position.set(-8, 14, 10);
-sc.add(dl);
+
+function makeTextSprite(text, bg, fg, w = 512, h = 128, font = 'bold 54px Inter, sans-serif') {
+const c = document.createElement('canvas');
+c.width = w;
+c.height = h;
+const ctx = c.getContext('2d');
+if (bg) {
+ctx.fillStyle = bg;
+ctx.beginPath();
+ctx.roundRect(8, 8, w - 16, h - 16, 24);
+ctx.fill();
+ctx.strokeStyle = fg;
+ctx.lineWidth = 5;
+ctx.stroke();
+}
+ctx.fillStyle = fg;
+ctx.font = font;
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillText(text, w / 2, h / 2);
+const tex = new THREE.CanvasTexture(c);
+const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+const sp = new THREE.Sprite(mat);
+sp.scale.set(w / 95, h / 95, 1);
+return sp;
+}
+
+function buildWorldForDimension(dim) {
+// Clear previous dimension geometry & signs
+while (worldGroup.children.length > 0) {
+worldGroup.remove(worldGroup.children[0]);
+}
+questSigns.forEach(s => s.remove());
+portalSigns.forEach(s => s.remove());
+questSigns = [];
+portalSigns = [];
+porings = [];
+npcs = [];
+portalRings = [];
+floaters = [];
+OB.length = 0;
+
 const M = c => new THREE.MeshLambertMaterial({ color: c });
 const box = (w, h, d, c, x, y, z, rx) => {
 const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), M(c));
 m.position.set(x, y, z);
 if (rx) m.rotation.x = rx;
-sc.add(m);
+worldGroup.add(m);
 return m;
 };
+const cyl = (r1, r2, h, c, x, y, z) => {
+const m = new THREE.Mesh(new THREE.CylinderGeometry(r1, r2, h, 12), M(c));
+m.position.set(x, y, z);
+worldGroup.add(m);
+return m;
+};
+
+if (dim === 'hub') {
+// --- MAIN PLAZA HUB WORLD ---
+sc.background = new THREE.Color(0xa8d4ff);
+sc.fog = new THREE.Fog(0xa8d4ff, 48, 125);
+
 const gr = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), M(0x7fbf5a));
 gr.rotation.x = -Math.PI / 2;
-sc.add(gr);
+worldGroup.add(gr);
+
+// Cobblestone Plaza
 const tc = document.createElement('canvas');
 tc.width = tc.height = 256;
 const tx = tc.getContext('2d');
@@ -884,57 +1067,29 @@ tx.beginPath();
 tx.ellipse(i * 32 + o + 16, j * 32 + 16, 14.5, 14.5, 0, 0, 7);
 tx.fill();
 }
-const patch = (cx, cz, w, d) => {
 const t = new THREE.CanvasTexture(tc);
 t.wrapS = t.wrapT = THREE.RepeatWrapping;
-t.repeat.set(w / 5.6, d / 5.6);
-const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshLambertMaterial({ map: t }));
-m.rotation.x = -Math.PI / 2;
-m.position.set(cx, 0.02, cz);
-sc.add(m);
-};
-patch(0, 3, 46, 40);
-C.slice(3).forEach(c => patch(c.p[0] + 2, c.p[1] - 2, 16, 16));
-patch(3, -36, 16, 14);
-const cyl = (r1, r2, h, c, x, y, z) => {
-const m = new THREE.Mesh(new THREE.CylinderGeometry(r1, r2, h, 10), M(c));
-m.position.set(x, y, z);
-sc.add(m);
-return m;
-};
-box(8.4, 4.4, 0.4, 0xf08a3c, 0, 2.2, -4.9);
-box(0.9, 5.2, 5.2, 0x5a6aa0, -4.3, 2.6, -2.4);
-box(0.9, 5.2, 5.2, 0x5a6aa0, 4.3, 2.6, -2.4);
-box(8.4, 0.6, 0.5, 0x46395f, 0, 4.9, 0);
-box(7.6, 0.8, 5, 0x3d4a78, 0, 0.4, -2.4);
-box(10.6, 0.35, 3.7, 0xd0503c, 0, 5.95, -3.75, -0.75);
-box(10.6, 0.35, 3.7, 0xc24a38, 0, 5.95, -1.25, 0.75);
-box(10.6, 0.5, 0.5, 0x7a4a2b, 0, 7.15, -2.5);
-OB.push([-5, 5, -5.5, 0.3]);
-const lab = (t, w, h, f, bg, fg) => {
-const c = document.createElement('canvas');
-c.width = 512;
-c.height = Math.round(512 * h / w);
-const x = c.getContext('2d');
-x.fillStyle = bg;
-x.fillRect(0, 0, c.width, c.height);
-x.fillStyle = fg;
-x.font = 'bold ' + f + 'px Georgia';
-x.textAlign = 'center';
-x.textBaseline = 'middle';
-x.fillText(t, 256, c.height / 2);
-return new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c) }));
-};
-box(5.6, 1.5, 0.4, 0x7a4a2b, 0, 6.2, 0.5);
-const sb = lab('FORGE', 5, 1.2, 150, '#46395f', '#ffe27a');
-sb.position.set(0, 6.2, 0.72);
-sc.add(sb);
-const fire = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.5, 1.2), new THREE.MeshBasicMaterial({ color: 0xff7a1a }));
-fire.position.set(2.2, 1, -3.2);
-sc.add(fire);
-box(2.4, 0.7, 1.4, 0x6b4a2b, 2.2, 0.55, -3.2);
-box(0.9, 0.7, 0.6, 0x30343c, -2.2, 0.6, -2.6);
-const poring = (x, y, z, s) => {
+t.repeat.set(8, 7);
+const plaza = new THREE.Mesh(new THREE.PlaneGeometry(46, 38), new THREE.MeshLambertMaterial({ map: t }));
+plaza.rotation.x = -Math.PI / 2;
+plaza.position.set(0, 0.02, -2);
+worldGroup.add(plaza);
+
+// Central Academy Archway
+box(8.4, 4.4, 0.4, 0xf08a3c, 0, 2.2, -16.9);
+box(0.9, 5.2, 5.2, 0x5a6aa0, -4.3, 2.6, -14.4);
+box(0.9, 5.2, 5.2, 0x5a6aa0, 4.3, 2.6, -14.4);
+box(10.6, 0.35, 3.7, 0xd0503c, 0, 5.95, -15.75, -0.75);
+box(10.6, 0.35, 3.7, 0xc24a38, 0, 5.95, -13.25, 0.75);
+box(10.6, 0.5, 0.5, 0x7a4a2b, 0, 7.15, -14.5);
+OB.push([-5, 5, -17.5, -11.7]);
+
+const banner = makeTextSprite('INQUIRY PLAZA', '#46395f', '#ffe27a', 512, 128, 'bold 54px Georgia');
+banner.position.set(0, 6.6, -11.5);
+worldGroup.add(banner);
+
+// Cute Porings on the roof
+[[-1.8, 7.9, -14.6, 1], [0.3, 7.7, -14.2, 0.7]].forEach(([x, y, z, s]) => {
 const g = new THREE.Group();
 const b = new THREE.Mesh(new THREE.SphereGeometry(0.9, 18, 14), M(0xff9fb8));
 b.scale.y = 0.85;
@@ -947,119 +1102,267 @@ g.add(m);
 g.position.set(x, y, z);
 g.scale.setScalar(s);
 g.userData.y = y;
-sc.add(g);
+worldGroup.add(g);
 porings.push(g);
-};
-poring(-1.8, 7.9, -2.6, 1);
-poring(0.3, 7.7, -2.2, 0.7);
-box(5, 10, 5, 0x8c919c, -14, 5, -6);
-box(5.4, 0.4, 5.4, 0x6b4a3a, -14, 10.2, -6);
-const rc = new THREE.Mesh(new THREE.ConeGeometry(4.2, 3.2, 4), M(0x7a4a3a));
-rc.position.set(-14, 12, -6);
-rc.rotation.y = Math.PI / 4;
-sc.add(rc);
-box(1.2, 1.6, 0.1, 0xbcd8ee, -14, 6.5, -3.45);
-OB.push([-16.5, -11.5, -8.5, -3.5]);
-[10, 11.8].forEach(x => {
-box(0.12, 3.4, 0.12, 0x5a3a22, x, 1.7, -1.5);
-cyl(0.5, 0.7, 1.6, 0xaab3c2, x, 2.2, -1.5);
-const h = new THREE.Mesh(new THREE.SphereGeometry(0.45, 10, 8), M(0xc4ccd8));
-h.position.set(x, 3.4, -1.5);
-sc.add(h);
 });
+
+// Decorative Village Houses
 const house = (x, z, c) => {
 box(6, 3.4, 5, c, x, 1.7, z);
 box(7, 0.3, 3.2, 0xb5503c, x, 4.2, z - 1.2, -0.7);
 box(7, 0.3, 3.2, 0xa84636, x, 4.2, z + 1.2, 0.7);
-box(1.2, 2, 0.1, 0x5a3a22, x, 1, z + 2.55);
-box(1.2, 1, 0.1, 0xbcd8ee, x + 1.8, 2, z + 2.55);
 OB.push([x - 3, x + 3, z - 2.5, z + 2.5]);
 };
 house(24, -4, 0xe8dcc0);
-house(-27, 12, 0xd8c9a8);
-house(26, 19, 0xe0d0b0);
-house(-22, -26, 0xd0c0a0);
-house(20, -34, 0xe8dcc0);
-const bench = (x, z) => box(3, 1, 1.4, 0x7a5a3a, x, 0.5, z);
-bench(-19, 2);
-cyl(0.08, 0.08, 2.4, 0x555b66, -19, 2.2, 2);
-const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.4, 12, 10), new THREE.MeshBasicMaterial({ color: 0xffe27a }));
-lamp.position.set(-19, 3.5, 2);
-sc.add(lamp);
-bench(19, 3);
-const orb = new THREE.Mesh(new THREE.SphereGeometry(0.35, 12, 10), new THREE.MeshBasicMaterial({ color: 0x7be8ff }));
-orb.position.set(19, 1.5, 3);
-sc.add(orb);
-box(10, 0.4, 6, 0x9a6b3a, -34, 0.2, -22);
-[-37, -31].forEach(x => box(0.3, 5, 0.3, 0x5a3a22, x, 2.5, -22));
-box(6.6, 0.3, 0.3, 0x5a3a22, -34, 5, -22);
-[[-35.4, 3], [-32.6, 1.8]].forEach(([x, L]) => {
-const g = new THREE.Group();
-g.position.set(x, 5, -22);
-const ln = cyl(0.04, 0.04, L, 0x333333, 0, -L / 2, 0);
-sc.remove(ln);
-g.add(ln);
-const bob = new THREE.Mesh(new THREE.SphereGeometry(0.5, 14, 12), M(0xd04a4a));
-bob.position.y = -L;
-g.add(bob);
-g.userData.L = L;
-sc.add(g);
-pends.push(g);
-});
-[26, 29.5, 33].forEach((x, i) => {
-box(2.6, 0.5, 2.6, 0x6b4a2b, x, 0.25, -23);
-[0, 1, 2, 3].forEach(k => {
-const h = [0.5, 1, 1.5, 1.9][i % 4] + k * 0.05;
-const pc = new THREE.Mesh(new THREE.ConeGeometry(0.3, h + 0.4, 6), M(0x3fa84a));
-pc.position.set(x - 0.8 + (k % 2) * 1.6, 0.5 + h / 2, -23.8 + Math.floor(k / 2) * 1.6);
-sc.add(pc);
-});
-});
-const mt = new THREE.Mesh(new THREE.ConeGeometry(9, 12, 7), M(0x7a7f8a));
-mt.position.set(3, 6, -44);
-sc.add(mt);
-bench(3, -39);
-const nl = cyl(0.12, 0.12, 2.2, 0x9aa0aa, 3, 1.3, -39);
-nl.rotation.z = Math.PI / 2;
-const cl = cyl(0.3, 0.3, 1.2, 0xc87533, 3, 1.3, -39);
-cl.rotation.z = Math.PI / 2;
-[0, 1, 2].forEach(i => box(0.25, 0.08, 0.12, 0xdddddd, 4.8 + i * 0.4, 1.05, -38.7));
+house(-26, 8, 0xd8c9a8);
+house(26, 16, 0xe0d0b0);
+house(-22, -22, 0xd0c0a0);
 
-// Solar Observatory Pedestal (-10, -26)
-box(3.4, 0.6, 3.4, 0x1e3a8a, -10, 0.3, -26.5);
-const solPanel = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.12, 2.2), new THREE.MeshBasicMaterial({ color: 0x38bdf8 }));
-solPanel.position.set(-10, 1.4, -26.5);
-solPanel.rotation.x = 0.65;
-sc.add(solPanel);
-// Thermal Kitchen Counter (14, -24.5)
-bench(14, -24.5);
-const iceCube = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), new THREE.MeshBasicMaterial({ color: 0xbae6fd }));
-iceCube.position.set(14, 1.4, -24.5);
-sc.add(iceCube);
-// Math Plaza & Geometry Garden Landmarks (-24, 26.5) & (0, 30.5)
-box(4.5, 0.4, 4.5, 0x0284c7, -24, 0.2, 26.8);
-const mathPyr = new THREE.Mesh(new THREE.ConeGeometry(1.6, 2.6, 4), M(0xfde047));
-mathPyr.position.set(-24, 1.7, 26.8);
-sc.add(mathPyr);
-box(5, 0.35, 5, 0x6d28d9, 0, 0.18, 30.8);
-box(2.5, 0.45, 2.5, 0xa855f7, 0, 0.5, 30.8);
-// English Library & Story Stage Landmarks (22, 28.5) & (-38.5, 4)
-box(4.6, 3.2, 1.4, 0x7c2d12, 22, 1.6, 28.8);
-box(4.2, 0.3, 1.5, 0xfbbf24, 22, 1.2, 28.8);
-box(4.2, 0.3, 1.5, 0xf43f5e, 22, 2.2, 28.8);
-box(2.4, 0.5, 6, 0x9f1239, -38.8, 0.25, 4);
+// Surrounding Trees
 let sd = 7;
 const rnd = () => (sd = (sd * 9301 + 49297) % 233280) / 233280;
-for (let i = 0; i < 110; i++) {
+for (let i = 0; i < 85; i++) {
 const x = rnd() * 92 - 46, z = rnd() * 88 - 44;
-if (Math.abs(x) < 24 && z > -20 && z < 24) continue;
-if (C.some(c => Math.hypot(c.p[0] - x, c.p[1] - z) < 9) || Math.hypot(x - 3, z + 40) < 14 || OB.some(o => x > o[0] - 4 && x < o[1] + 4 && z > o[2] - 4 && z < o[3] + 4)) continue;
+if (Math.abs(x) < 25 && z > -22 && z < 22) continue;
+if (OB.some(o => x > o[0] - 4 && x < o[1] + 4 && z > o[2] - 4 && z < o[3] + 4)) continue;
 const s = 0.8 + rnd() * 0.7;
 cyl(0.3 * s, 0.4 * s, 1.6 * s, 0x7a5a3a, x, 0.8 * s, z);
 const f = new THREE.Mesh(new THREE.ConeGeometry(1.6 * s, 3.6 * s, 8), M(0x3f8f45));
 f.position.set(x, 3.2 * s, z);
-sc.add(f);
+worldGroup.add(f);
 }
+} else if (dim === 'math') {
+// --- MATH DIMENSION: Neon Matrix Grid, Floating Numbers & Formulas ---
+sc.background = new THREE.Color(0x071326);
+sc.fog = new THREE.Fog(0x071326, 42, 115);
+
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), new THREE.MeshLambertMaterial({ color: 0x0b1f3a }));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+
+const grid = new THREE.GridHelper(110, 55, 0x38bdf8, 0x1e3a8a);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+// Central Glowing Geometric Pyramid Monument
+const pyr = new THREE.Mesh(
+new THREE.OctahedronGeometry(3.2, 0),
+new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true })
+);
+pyr.position.set(0, 4.5, -2);
+worldGroup.add(pyr);
+floaters.push({ mesh: pyr, baseY: 4.5, spd: 1.2, rot: true });
+
+const core = new THREE.Mesh(new THREE.OctahedronGeometry(1.6, 0), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
+core.position.set(0, 4.5, -2);
+worldGroup.add(core);
+floaters.push({ mesh: core, baseY: 4.5, spd: -1.8, rot: true });
+
+// Formula Pillars & Floating Numbers/Equations everywhere!
+const formulas = [
+'a² + b² = c²', 'y = mx + b', 'π ≈ 3.14159', 'A = s²',
+'d = r × t', '∑ (n = 1..∞)', '√144 = 12', 'E = mc²',
+'2x + 5 = 17', 'sin²θ + cos²θ = 1', '1, 1, 2, 3, 5, 8...', 'V = πr²h'
+];
+formulas.forEach((txt, idx) => {
+const ang = (idx / formulas.length) * Math.PI * 2;
+const rad = 22 + (idx % 3) * 7;
+const fx = Math.cos(ang) * rad;
+const fz = Math.sin(ang) * rad;
+const fy = 4.5 + (idx % 4) * 1.8;
+const sp = makeTextSprite(txt, 'rgba(15, 23, 42, 0.85)', idx % 2 === 0 ? '#38bdf8' : '#fde047', 512, 128, 'bold 50px monospace');
+sp.position.set(fx, fy, fz);
+worldGroup.add(sp);
+floaters.push({ mesh: sp, baseY: fy, spd: 0.8 + (idx % 3) * 0.3, rot: false });
+
+if (idx % 2 === 0) {
+cyl(0.6, 0.8, 3.2, 0x1e293b, fx, 1.6, fz);
+}
+});
+} else if (dim === 'science') {
+// --- SCIENCE DIMENSION: Cosmic Orbital Lab & Atoms ---
+sc.background = new THREE.Color(0x0b0f29);
+sc.fog = new THREE.Fog(0x0b0f29, 42, 115);
+
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x16213e));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+
+const grid = new THREE.GridHelper(110, 44, 0xfbbf24, 0x1e293b);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+// Central Floating Atom Nucleus & Electron Rings
+const nuc = new THREE.Mesh(new THREE.IcosahedronGeometry(1.8, 1), new THREE.MeshBasicMaterial({ color: 0xfbbf24 }));
+nuc.position.set(0, 4.8, -2);
+worldGroup.add(nuc);
+floaters.push({ mesh: nuc, baseY: 4.8, spd: 1.4, rot: true });
+
+[0.5, -0.5, 1.2].forEach((tilt, idx) => {
+const ring = new THREE.Mesh(
+new THREE.TorusGeometry(4.2, 0.09, 10, 48),
+new THREE.MeshBasicMaterial({ color: idx === 0 ? 0x38bdf8 : idx === 1 ? 0x34d399 : 0xf472b6 })
+);
+ring.position.set(0, 4.8, -2);
+ring.rotation.set(tilt, idx * 0.8, 0);
+worldGroup.add(ring);
+floaters.push({ mesh: ring, baseY: 4.8, spd: 0.9 + idx * 0.2, rot: true });
+});
+
+const sciTags = ['H₂O · H₂SO₄', 'F = m × a', 'V = I × R', 'KE = ½mv²', '9.8 m/s²', 'DNA · ATGC', 'SOLAR FLUX', 'MAGNETISM'];
+sciTags.forEach((txt, idx) => {
+const ang = (idx / sciTags.length) * Math.PI * 2;
+const rad = 24 + (idx % 2) * 6;
+const fx = Math.cos(ang) * rad;
+const fz = Math.sin(ang) * rad;
+const fy = 5 + (idx % 3) * 1.6;
+const sp = makeTextSprite(txt, 'rgba(15, 23, 42, 0.85)', '#fbbf24', 512, 128, 'bold 48px Inter, sans-serif');
+sp.position.set(fx, fy, fz);
+worldGroup.add(sp);
+floaters.push({ mesh: sp, baseY: fy, spd: 0.9, rot: false });
+});
+} else if (dim === 'english') {
+// --- ENGLISH DIMENSION: Sky Library, Giant Books & Floating Words ---
+sc.background = new THREE.Color(0x23112b);
+sc.fog = new THREE.Fog(0x23112b, 42, 115);
+
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x361d32));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+
+const grid = new THREE.GridHelper(110, 44, 0xf472b6, 0x4c1d95);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+// Central Floating Story Crystal & Book Pedestal
+box(5.5, 0.7, 4.2, 0x7c2d12, 0, 0.35, -2);
+const tome = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.45, 2.0), new THREE.MeshBasicMaterial({ color: 0xf472b6 }));
+tome.position.set(0, 3.6, -2);
+worldGroup.add(tome);
+floaters.push({ mesh: tome, baseY: 3.6, spd: 1.1, rot: true });
+
+const litWords = [
+'"Once upon a time..."', 'METAPHOR', 'SIMILE', 'CONTEXT CLUES',
+'PROTAGONIST', 'MAIN IDEA', 'SYNTAX & GRAMMAR', 'A · B · C · Z'
+];
+litWords.forEach((txt, idx) => {
+const ang = (idx / litWords.length) * Math.PI * 2;
+const rad = 24 + (idx % 2) * 6;
+const fx = Math.cos(ang) * rad;
+const fz = Math.sin(ang) * rad;
+const fy = 4.8 + (idx % 3) * 1.7;
+const sp = makeTextSprite(txt, 'rgba(30, 16, 46, 0.88)', '#f472b6', 512, 128, 'bold 46px Georgia, serif');
+sp.position.set(fx, fy, fz);
+worldGroup.add(sp);
+floaters.push({ mesh: sp, baseY: fy, spd: 0.85, rot: false });
+});
+}
+
+// Spawn Dimension Portals (either 3 Subject Portals in Hub, or 1 Return Portal inside a Dimension)
+activePortals = dim === 'hub' ? HUB_PORTALS : [RETURN_PORTAL];
+activePortals.forEach(pt => {
+const pGroup = new THREE.Group();
+pGroup.position.set(pt.p[0], 0, pt.p[1]);
+
+const base = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 2.4, 0.35, 24), M(0x1e293b));
+base.position.y = 0.18;
+pGroup.add(base);
+
+const torus = new THREE.Mesh(
+new THREE.TorusGeometry(1.85, 0.18, 14, 36),
+new THREE.MeshBasicMaterial({ color: pt.hex })
+);
+torus.position.y = 2.35;
+pGroup.add(torus);
+
+const vortex = new THREE.Mesh(
+new THREE.CircleGeometry(1.72, 28),
+new THREE.MeshBasicMaterial({ color: pt.hex, transparent: true, opacity: 0.36, side: THREE.DoubleSide })
+);
+vortex.position.y = 2.35;
+pGroup.add(vortex);
+
+worldGroup.add(pGroup);
+portalRings.push({ torus, vortex, baseY: 2.35 });
+
+const s = document.createElement('div');
+s.className = 'sign portal-sign';
+s.style.borderColor = pt.color;
+s.innerHTML = '<u style="background:' + pt.color + '">' + pt.icon + '</u>' + pt.n;
+stg.appendChild(s);
+portalSigns.push(s);
+});
+
+// Spawn Quests/NPCs belonging to this dimension
+activeQuests = C.filter(q => q.dim === dim);
+activeQuests.forEach(q => {
+const g = buildCharacterFn(q.sh, q.pa, q.hair, null);
+g.position.set(q.p[0], 0, q.p[1]);
+worldGroup.add(g);
+npcs.push(g);
+
+const s = document.createElement('div');
+s.className = 'sign';
+const subCol = q.sub === 'Math' ? '#38bdf8' : q.sub === 'English' ? '#f472b6' : '#fbbf24';
+s.style.borderColor = subCol;
+s.innerHTML = '<u style="background:' + subCol + '">' + q.icon + '</u>' + q.sg + '<div class="mk">!</div>';
+stg.appendChild(s);
+questSigns.push(s);
+});
+}
+
+function enterDimension(dimKey, afterWarpFn) {
+if (!DIMS[dimKey]) dimKey = 'hub';
+const fx = $('#warp-fx');
+const info = DIMS[dimKey];
+fx.textContent = info.icon + ' Warping to ' + info.name + '...';
+fx.classList.add('show');
+
+setTimeout(() => {
+currentDim = dimKey;
+buildWorldForDimension(dimKey);
+P.x = 0;
+P.y = 0;
+P.z = 11;
+P.tx = 0;
+P.tz = 11;
+P.vx = P.vy = P.vz = 0;
+P.ry = Math.PI;
+P.pend = null;
+if (P.flying) toggleDrone(false);
+if (afterWarpFn) afterWarpFn();
+hud();
+renderPlayersList();
+pushState(true);
+setTimeout(() => fx.classList.remove('show'), 220);
+say(info.icon + ' Entered ' + info.name + '!', 3200);
+}, 240);
+}
+
+function init() {
+R = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+sc = new THREE.Scene();
+cam = new THREE.PerspectiveCamera(42, 16 / 9, 0.1, 220);
+const fit = () => {
+const w = stg.clientWidth, h = stg.clientHeight;
+R.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+R.setSize(w, h, false);
+cam.aspect = w / h;
+cam.updateProjectionMatrix();
+};
+addEventListener('resize', fit);
+fit();
+
+sc.add(new THREE.HemisphereLight(0xffffff, 0x8a9a7a, 0.95));
+const dl = new THREE.DirectionalLight(0xfff1d6, 0.72);
+dl.position.set(-8, 14, 10);
+sc.add(dl);
+
+worldGroup = new THREE.Group();
+sc.add(worldGroup);
+
+const M = c => new THREE.MeshLambertMaterial({ color: c });
+
 const buildDroneRig = accentHex => {
 const dGroup = new THREE.Group();
 dGroup.position.set(0, 3.35, 0);
@@ -1099,6 +1402,7 @@ dGroup.userData.rotors = rotors;
 dGroup.visible = false;
 return dGroup;
 };
+
 buildCharacterFn = (shirt, pants, hair, ringColor) => {
 const g = new THREE.Group(), Y = 0xf5cd30;
 const fc = document.createElement('canvas');
@@ -1159,9 +1463,9 @@ r.position.y = 0.05;
 g.add(r);
 g.userData.ring = r;
 }
-sc.add(g);
 return g;
 };
+
 const anim = (g, ph, a, isFlying) => {
 const u = g.userData;
 if (isFlying) {
@@ -1187,24 +1491,21 @@ if (u.drone) u.drone.visible = false;
 if (u.ring) u.ring.visible = true;
 }
 };
+
 const myOut = OUTFITS[S.outfit];
 pl = buildCharacterFn(myOut.shirt, myOut.pants, myOut.hair, 0x8bf05a);
+sc.add(pl);
 pl.position.set(P.x, 0, P.z);
 pl.rotation.y = Math.PI;
+
 myTagEl = document.createElement('div');
 myTagEl.className = 'player-tag';
 myTagEl.innerHTML = '<div class="chat-bubble" style="display:none"></div>';
 stg.appendChild(myTagEl);
-C.forEach(c => {
-const g = buildCharacterFn(c.sh, c.pa, c.hair, null);
-g.position.set(c.p[0], 0, c.p[1]);
-npcs.push(g);
-const s = document.createElement('div');
-s.className = 'sign';
-const subCol = c.sub === 'Math' ? '#38bdf8' : c.sub === 'English' ? '#f472b6' : '#fbbf24';s.style.borderColor = subCol;s.innerHTML = '<u style="background:' + subCol + '">' + c.icon + '</u>' + c.sg + '<div class="mk">!</div>';
-stg.appendChild(s);
-signs.push(s);
-});
+
+// Build initial Main Plaza hub world
+buildWorldForDimension('hub');
+
 const RC = new THREE.Raycaster(), PL = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 cv.addEventListener('pointerdown', e => {
 if (cs || $('#intro').style.display == 'flex') return;
@@ -1212,39 +1513,63 @@ $('#players-drawer').classList.remove('open');
 const r = cv.getBoundingClientRect();
 const nx = (e.clientX - r.left) / r.width * 2 - 1;
 const ny = -((e.clientY - r.top) / r.height) * 2 + 1;
-const i = C.findIndex(c => {
-const v = new THREE.Vector3(c.p[0], 1.4, c.p[1]).project(cam);
+
+// Check if user clicked on an active Quest NPC in current dimension
+const qHit = activeQuests.find(q => {
+const v = new THREE.Vector3(q.p[0], 1.4, q.p[1]).project(cam);
 return Math.hypot((v.x - nx) * r.width / 2, (v.y - ny) * r.height / 2) < r.width * 0.06;
 });
-if (i >= 0) return goNpc(i);
+if (qHit) return goNpc(qHit);
+
+// Check if user clicked on a Dimension Portal
+const pHit = activePortals.find(pt => {
+const v = new THREE.Vector3(pt.p[0], 2.2, pt.p[1]).project(cam);
+return Math.hypot((v.x - nx) * r.width / 2, (v.y - ny) * r.height / 2) < r.width * 0.075;
+});
+if (pHit) return goPortal(pHit);
+
 RC.setFromCamera({ x: nx, y: ny }, cam);
 const pt = new THREE.Vector3();
 if (RC.ray.intersectPlane(PL, pt)) {
 P.tx = Math.max(-47, Math.min(47, pt.x));
 P.tz = Math.max(-45, Math.min(45, pt.z));
-P.pend = -1;
+P.pend = null;
 }
 });
+
 const mm = $('#mm').getContext('2d');
 function drawMM() {
-mm.fillStyle = '#1e3a2f';
+mm.fillStyle = currentDim === 'math' ? '#0b1f3a' : currentDim === 'science' ? '#16213e' : currentDim === 'english' ? '#361d32' : '#1e3a2f';
 mm.fillRect(0, 0, 140, 140);
-mm.strokeStyle = 'rgba(255,255,255,0.12)';
+mm.strokeStyle = 'rgba(255,255,255,0.14)';
 mm.lineWidth = 1;
 mm.beginPath();
 mm.arc(70, 70, 35, 0, 7);
 mm.stroke();
-mm.fillStyle = 'rgba(184, 165, 138, 0.55)';
-mm.fillRect(25 * 1.45, 26 * 1.45, 46 * 1.45, 40 * 1.45);
-C.forEach((c, i) => {
-mm.fillStyle = S.stars[i] > 0 ? '#34d399' : (c.sub === 'Math' ? '#38bdf8' : c.sub === 'English' ? '#f472b6' : '#fbbf24');
+
+// Portals on Radar
+activePortals.forEach(pt => {
+mm.fillStyle = pt.color;
+mm.strokeStyle = '#fff';
+mm.lineWidth = 1.5;
 mm.beginPath();
-mm.arc((c.p[0] + 48) * 1.45, (c.p[1] + 46) * 1.45, 4, 0, 7);
+mm.arc((pt.p[0] + 48) * 1.45, (pt.p[1] + 46) * 1.45, 5.2, 0, 7);
+mm.fill();
+mm.stroke();
+});
+
+// Active Quests on Radar
+activeQuests.forEach(q => {
+mm.fillStyle = S.stars[q.idx] > 0 ? '#34d399' : '#fbbf24';
+mm.beginPath();
+mm.arc((q.p[0] + 48) * 1.45, (q.p[1] + 46) * 1.45, 4.2, 0, 7);
 mm.fill();
 });
+
+// Remote Players in same dimension
 const now = Date.now();
 Object.values(remotePlayers).forEach(rp => {
-if (!rp || now - (rp.ts || 0) > 20000) return;
+if (!rp || now - (rp.ts || 0) > 20000 || (rp.dim || 'hub') !== currentDim) return;
 mm.fillStyle = '#38bdf8';
 mm.strokeStyle = '#fff';
 mm.lineWidth = 1.5;
@@ -1253,6 +1578,8 @@ mm.arc((rp.x + 48) * 1.45, (rp.z + 46) * 1.45, 4.2, 0, 7);
 mm.fill();
 mm.stroke();
 });
+
+// Local Player
 mm.fillStyle = '#fff';
 mm.strokeStyle = '#8b5cf6';
 mm.lineWidth = 2.5;
@@ -1261,6 +1588,7 @@ mm.arc((P.x + 48) * 1.45, (P.z + 46) * 1.45, 4.5, 0, 7);
 mm.fill();
 mm.stroke();
 }
+
 let last = performance.now();
 const cp = new THREE.Vector3(0, 9, 22), V = new THREE.Vector3();
 function loop(t) {
@@ -1272,6 +1600,7 @@ let ix = (K.d || K.arrowright ? 1 : 0) - (K.a || K.arrowleft ? 1 : 0);
 let iz = (K.s || K.arrowdown ? 1 : 0) - (K.w || K.arrowup ? 1 : 0);
 if (Math.hypot(J.x, J.z) > 0.15) { ix = J.x; iz = J.z; }
 let mv = false;
+
 if (P.flying) {
 const yawIn = (K.q || holdKeys.yawL ? 1 : 0) - (K.e || holdKeys.yawR ? 1 : 0);
 if (!busy && yawIn !== 0) P.ry += yawIn * 2.2 * d;
@@ -1279,6 +1608,7 @@ const climbIn = (!busy && (K[' '] || holdKeys.up) ? 1 : 0) - (!busy && (K.shift 
 if (climbIn > 0) P.vy += 24 * d;
 else if (climbIn < 0) P.vy -= 24 * d;
 else P.vy *= Math.pow(0.06, d);
+
 let ax = 0, az = 0;
 if (!busy && Math.hypot(ix, iz) > 0.1) {
 const m = Math.hypot(ix, iz), k = Math.min(1, m);
@@ -1302,6 +1632,7 @@ P.vz *= drag;
 P.x += P.vx * d;
 P.y += P.vy * d;
 P.z += P.vz * d;
+
 if (P.y > 42) { P.y = 42; P.vy = 0; }
 if (P.y <= 0.15 && climbIn < 0) {
 P.y = 0;
@@ -1310,12 +1641,15 @@ toggleDrone(false);
 P.y = 0.8;
 if (P.vy < 0) P.vy = 0;
 }
+
 const targetPitch = Math.max(-0.45, Math.min(0.45, (P.vz * Math.cos(P.ry) + P.vx * Math.sin(P.ry)) * 0.035));
 const targetRoll = Math.max(-0.45, Math.min(0.45, (-P.vx * Math.cos(P.ry) + P.vz * Math.sin(P.ry)) * 0.035));
 P.rx += (targetPitch - P.rx) * 0.16;
 P.rz += (targetRoll - P.rz) * 0.16;
+
 pl.rotation.set(P.rx, P.ry, P.rz, 'YXZ');
 pl.position.set(P.x, P.y + Math.sin(t / 180) * 0.06, P.z);
+
 const spdKmh = Math.hypot(P.vx, P.vy, P.vz) * 3.6;
 const thrPct = Math.min(100, Math.max(0, Math.round(50 + climbIn * 45 + Math.hypot(P.vx, P.vz) * 1.8)));
 $('#osd-spd').textContent = spdKmh.toFixed(1) + ' km/h';
@@ -1334,7 +1668,7 @@ P.x += ix / m * k * d * 8.5;
 P.z += iz / m * k * d * 8.5;
 P.tx = P.x;
 P.tz = P.z;
-P.pend = -1;
+P.pend = null;
 P.ry = Math.atan2(ix, iz);
 mv = true;
 } else if (!busy) {
@@ -1346,19 +1680,30 @@ P.z += dz / di * s;
 P.ry = Math.atan2(dx, dz);
 mv = true;
 }
-if (P.pend >= 0) {
-const c = C[P.pend], nd = Math.hypot(c.p[0] - P.x, c.p[1] - P.z);
+if (P.pend) {
+const targetPos = P.pend.item.p;
+const nd = Math.hypot(targetPos[0] - P.x, targetPos[1] - P.z);
 if (di <= 0.35 || nd < 3.2) {
-const i = P.pend;
-P.pend = -1;
-P.ry = Math.atan2(c.p[0] - P.x, c.p[1] - P.z);
+const act = P.pend;
+P.pend = null;
+P.ry = Math.atan2(targetPos[0] - P.x, targetPos[1] - P.z);
 P.tx = P.x;
 P.tz = P.z;
 mv = false;
-openCase(i);
+if (act.type === 'quest') openCase(act.item);
+else if (act.type === 'portal') enterDimension(act.item.target);
 }
 }
 }
+
+// Auto-trigger portal when walking directly into its ring center
+if (!busy && !P.pend) {
+const hitPortal = activePortals.find(pt => Math.hypot(pt.p[0] - P.x, pt.p[1] - P.z) < 1.85);
+if (hitPortal) {
+enterDimension(hitPortal.target);
+}
+}
+
 OB.forEach(o => {
 const x0 = o[0] - 0.6, x1 = o[1] + 0.6, z0 = o[2] - 0.6, z1 = o[3] + 0.6;
 if (P.x > x0 && P.x < x1 && P.z > z0 && P.z < z1) {
@@ -1372,10 +1717,12 @@ else P.z = z1;
 pl.rotation.set(0, P.ry, 0);
 pl.position.set(P.x, mv ? Math.abs(Math.sin(t / 95)) * 0.08 : 0, P.z);
 }
+
 P.x = Math.max(-47, Math.min(47, P.x));
 P.z = Math.max(-45, Math.min(45, P.z));
 P.amp += ((mv ? 0.9 : 0) - P.amp) * 0.2;
 anim(pl, t / 95, P.amp, P.flying);
+
 if (P.flying && P.fpv) {
 pl.visible = false;
 const fpvPos = V.set(P.x + Math.sin(P.ry) * 0.55, P.y + 3.45, P.z + Math.cos(P.ry) * 0.55);
@@ -1394,6 +1741,7 @@ cp.lerp(V.set(P.x * 0.88, camH, camZ), 0.09);
 cam.position.copy(cp);
 cam.lookAt(P.x * 0.88, P.y + 1.4, P.z - 2);
 }
+
 if (myTagEl) {
 const bub = myTagEl.querySelector('.chat-bubble');
 if (myEmote && Date.now() - myEmoteAt < 5000 && !(P.flying && P.fpv)) {
@@ -1410,20 +1758,25 @@ bub.style.display = 'none';
 bub.style.display = 'none';
 }
 }
+
 const now = Date.now();
 Object.entries(remotePlayers).forEach(([uid, rp]) => {
 if (!rp) return;
 const stale = now - (rp.ts || 0) > 20000;
-if (stale) {
+const sameDim = (rp.dim || 'hub') === currentDim;
+if (stale || !sameDim) {
 if (rp.mesh) { sc.remove(rp.mesh); rp.mesh = null; }
 if (rp.tag) { rp.tag.remove(); rp.tag = null; }
+if (stale) {
 delete remotePlayers[uid];
 renderPlayersList();
+}
 return;
 }
 if (!rp.mesh) {
 const out = OUTFITS[(rp.color || 0) % OUTFITS.length];
 rp.mesh = buildCharacterFn(out.shirt, out.pants, out.hair, 0x38bdf8);
+sc.add(rp.mesh);
 rp.cx = rp.x;
 rp.cy = rp.y || 0;
 rp.cz = rp.z;
@@ -1458,6 +1811,7 @@ rp.cx,
 rp.flying ? rp.cy + Math.sin(t / 180) * 0.06 : (remoteMoving ? Math.abs(Math.sin(t / 95)) * 0.08 : 0),
 rp.cz
 );
+
 if (rp.tag) {
 const vp = V.set(rp.cx, rp.cy + (rp.flying ? 4.35 : 3.25), rp.cz).project(cam);
 const dist = Math.hypot(rp.cx - P.x, rp.cz - P.z);
@@ -1479,18 +1833,41 @@ bub.style.display = 'none';
 }
 }
 });
+
+// Animate dimension props & signs
 porings.forEach((p, i) => p.position.y = p.userData.y + Math.sin(t / 400 + i * 2) * 0.15);
-pends.forEach(g => g.rotation.z = 0.6 * Math.sin(t / 1000 * (3.4 / Math.sqrt(g.userData.L))));
+floaters.forEach((fl, i) => {
+fl.mesh.position.y = fl.baseY + Math.sin(t / 550 * fl.spd + i) * 0.35;
+if (fl.rot) {
+fl.mesh.rotation.y += 0.012 * fl.spd;
+fl.mesh.rotation.x += 0.005 * fl.spd;
+}
+});
+portalRings.forEach((pr, i) => {
+pr.torus.rotation.z = t / 700 + i;
+pr.vortex.scale.setScalar(0.95 + Math.sin(t / 300 + i) * 0.05);
+});
 npcs.forEach((n, i) => anim(n, t / 500 + i, 0.12, false));
-C.forEach((c, i) => {
-const v = V.set(c.p[0], 3.4, c.p[1]).project(cam), s = signs[i], dist = Math.hypot(c.p[0] - P.x, c.p[1] - P.z);
+
+activeQuests.forEach((q, i) => {
+const v = V.set(q.p[0], 3.4, q.p[1]).project(cam), s = questSigns[i], dist = Math.hypot(q.p[0] - P.x, q.p[1] - P.z);
+if (!s) return;
 s.style.left = (v.x * 0.5 + 0.5) * 100 + '%';
 s.style.top = (-v.y * 0.5 + 0.5) * 100 + '%';
-s.style.display = (v.z > 1 || dist > 42) ? 'none' : 'flex';
-const m = s.querySelector('.mk'), ok = S.stars[i] > 0;
+s.style.display = (v.z > 1 || dist > 48) ? 'none' : 'flex';
+const m = s.querySelector('.mk'), ok = S.stars[q.idx] > 0;
 m.textContent = ok ? '✓' : '!';
 m.className = 'mk' + (ok ? ' ok' : '');
 });
+
+activePortals.forEach((pt, i) => {
+const v = V.set(pt.p[0], 4.6, pt.p[1]).project(cam), s = portalSigns[i], dist = Math.hypot(pt.p[0] - P.x, pt.p[1] - P.z);
+if (!s) return;
+s.style.left = (v.x * 0.5 + 0.5) * 100 + '%';
+s.style.top = (-v.y * 0.5 + 0.5) * 100 + '%';
+s.style.display = (v.z > 1 || dist > 55) ? 'none' : 'flex';
+});
+
 const interval = (mv || P.flying) ? 150 : 2000;
 if (now - lastPushTime > interval) {
 pushState(false);
@@ -1501,6 +1878,7 @@ requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
 }
+
 function pushState(force = false) {
 if (!S.name) return;
 const now = Date.now();
@@ -1508,6 +1886,7 @@ if (!force && now - lastPushTime < 140) return;
 lastPushTime = now;
 const payload = {
 name: S.name,
+dim: currentDim,
 x: Math.round(P.x * 100) / 100,
 y: Math.round(P.y * 100) / 100,
 z: Math.round(P.z * 100) / 100,
@@ -1529,6 +1908,7 @@ body: JSON.stringify(payload)
 if (r.ok) setSyncBadge('Live DB', true);
 }).catch(() => {});
 }
+
 function applyPlayerSnapshot(uid, data) {
 if (!uid || uid === myId) return;
 if (!data) {
@@ -1542,6 +1922,7 @@ return;
 if (!remotePlayers[uid]) remotePlayers[uid] = {};
 Object.assign(remotePlayers[uid], data);
 }
+
 function startRealtimeSync() {
 pushState(true);
 const cleanup = () => {
@@ -1551,6 +1932,7 @@ fetch(RTDB_URL + '/players/' + myId + '.json', { method: 'DELETE', keepalive: tr
 };
 addEventListener('beforeunload', cleanup);
 addEventListener('pagehide', cleanup);
+
 let playerSseOk = false;
 try {
 const esPlayers = new EventSource(RTDB_URL + '/players.json');
@@ -1592,6 +1974,7 @@ renderPlayersList();
 esPlayers.addEventListener('put', handlePlayerEvent);
 esPlayers.addEventListener('patch', handlePlayerEvent);
 } catch (e) {}
+
 setInterval(() => {
 if (playerSseOk && Object.keys(remotePlayers).length > 0) return;
 fetch(RTDB_URL + '/players.json')
@@ -1604,6 +1987,7 @@ renderPlayersList();
 })
 .catch(() => {});
 }, 1200);
+
 try {
 const esChat = new EventSource(RTDB_URL + '/chat.json?orderBy=%22ts%22&limitToLast=20');
 const handleChatEvent = e => {
@@ -1633,12 +2017,14 @@ esChat.addEventListener('put', handleChatEvent);
 esChat.addEventListener('patch', handleChatEvent);
 } catch (e) {}
 }
+
 function begin() {
 hud();
 renderPlayersList();
 startRealtimeSync();
-say('Welcome ' + S.name + '! Walk with WASD/Joystick or press F / 🚁 Drone to fly!', 5500);
+say('Welcome ' + S.name + '! Step into a glowing Portal to enter Math, Science, or English Dimension!', 5500);
 }
+
 if (window.THREE) {
 init();
 if (S.name) {
