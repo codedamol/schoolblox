@@ -1,3 +1,4 @@
+<!-- Developer: johnicebourne@gmail.com | Inquiry World v6 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -205,7 +206,7 @@ button:active{transform:scale(0.92);}
 <div class="hud" id="tr">
 <div id="top-pills">
 <button class="glass-card stat-pill" id="dim-pill" title="Dimension Selector">🌐 <span id="dim-name">Main Plaza</span></button>
-<div class="glass-card stat-pill stars">⭐ <span id="tot">0</span>/36</div>
+<div class="glass-card stat-pill stars">⭐ <span id="tot">0</span>/48</div>
 <button class="glass-card stat-pill online-btn" id="online-btn" aria-label="Online Players">
 <span class="pulse-green"></span>
 <span id="online-cnt">1</span> Online
@@ -263,6 +264,7 @@ button:active{transform:scale(0.92);}
 <input id="chat-in" maxlength="60" placeholder="Type message..." autocomplete="off">
 <button id="chat-send" type="submit">Send</button>
 </form>
+<div style="font-size:0.68em;color:#94a3b8;text-align:right;padding-right:0.2em;">Dev: johnicebourne@gmail.com</div>
 </div>
 <div class="hud glass-card" id="bl">
 <button class="ic" id="i1" title="Quest Progress" aria-label="Stars"><span>🏆</span><em id="badge">0</em></button>
@@ -283,11 +285,12 @@ button:active{transform:scale(0.92);}
 <div id="intro">
 <div class="panel" style="max-width:29em">
 <h2>Welcome to Inquiry World!</h2>
-<p style="color:#cbd5e1;line-height:1.45">Explore the <b>Main Plaza</b>, fly drones with live players, and enter the <b>Math</b>, <b>Science</b>, and <b>English</b> Dimensions to solve 12 interactive quests!</p>
+<p style="color:#cbd5e1;line-height:1.45">Explore the <b>Main Plaza</b>, fly drones with live players, and enter the <b>Math</b>, <b>Science</b>, <b>English</b>, and <b>Thai Language</b> Dimensions to solve 16 interactive quests!</p>
 <label style="font-weight:700;font-size:0.92em">Your Explorer Nickname:
 <input id="ni" maxlength="14" placeholder="Explorer">
 </label>
 <button class="btn" id="go">Enter Live World</button>
+<div style="margin-top:0.85em;font-size:0.78em;color:#94a3b8;text-align:center;">Developer: <span style="color:#c4b5fd;font-weight:700;">johnicebourne@gmail.com</span></div>
 </div>
 </div>
 <div id="err">Internet connection is required to load 3D engine (three.js). Please refresh the page.</div>
@@ -312,20 +315,21 @@ const DIMS = {
 hub: { name: 'Main Plaza', icon: '🌐', color: '#a78bfa' },
 math: { name: 'Math Dimension', icon: '📐', color: '#38bdf8' },
 science: { name: 'Science Dimension', icon: '🔬', color: '#fbbf24' },
-english: { name: 'English Dimension', icon: '📚', color: '#f472b6' }
+english: { name: 'English Dimension', icon: '📚', color: '#f472b6' },
+thai: { name: 'Thai Language Dimension', icon: '🇹🇭', color: '#2dd4bf' }
 };
 
 let S = {
 name: '',
 xp: 0,
-stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 hp: 100,
 outfit: Math.floor(Math.random() * OUTFITS.length)
 };
 try {
 Object.assign(S, JSON.parse(localStorage.getItem('iw1') || '{}'));
 } catch (e) {}
-while (S.stars.length < 12) S.stars.push(0);
+while (S.stars.length < 16) S.stars.push(0);
 if (typeof S.outfit !== 'number' || !OUTFITS[S.outfit]) S.outfit = 0;
 
 let myId = '';
@@ -494,14 +498,61 @@ h: ['Vivid comparisons help readers visualize abstract ideas and feelings', 'Fig
 v: { n: 'Imagery layers', u: 'devices', L: [1, 2, 3, 4, 5], R: [25, 50, 70, 88, 100], ru: '% vividness' },
 c: ['Similes (like/as) and metaphors create memorable, vivid mental images', 'Metaphors should never be used in stories', 'All comparisons must be literal'],
 tip: 'Remember: Similes use "like" or "as"; metaphors make a direct comparison!'
+},
+
+// --- THAI LANGUAGE DIMENSION (indices 12..15) ---
+{
+idx: 12, dim: 'thai', sub: 'Thai', icon: '🇹🇭',
+n: 'Kru Somchai', sg: 'SAWADEE GREETINGS', p: [-14, -6], a: [-12, -3.5], hair: 0x1e293b, sh: 0x0d9488, pa: 0x1e1b4b, t: 'Polite Particles (ครับ / ค่ะ)',
+story: 'In Thai, speakers end sentences with polite particles: male speakers say "ครับ" (khráp) and female speakers say "ค่ะ" (khâ) when saying "สวัสดี" (Sawàtdii - Hello).',
+o: ['Polite particles match the speaker’s gender and show respect in Thai', 'The temple roof shines gold', 'Thai has 44 consonants'],
+q: ['How does adding "ครับ" (khráp) or "ค่ะ" (khâ) affect a Thai greeting?', 'How many elephants are in the plaza?', 'What color is the lotus flower?'],
+h: ['Adding khráp (male) or khâ (female) makes greetings polite and respectful', 'Polite particles change the meaning to goodbye', 'Polite particles are only used at night'],
+v: { n: 'Polite phrases', u: 'phrases', L: [1, 2, 3, 4, 5], R: [20, 40, 60, 80, 100], ru: '% respect' },
+c: ['Using "สวัสดีครับ" or "สวัสดีค่ะ" shows warmth and politeness in Thai culture', 'Polite particles are never spoken aloud', 'Everyone uses the exact same ending word'],
+tip: 'Remember: Sawàtdii khráp (male) / Sawàtdii khâ (female), and Khòp khun (Thank you)!'
+},
+{
+idx: 13, dim: 'thai', sub: 'Thai', icon: '🇹🇭',
+n: 'Ajarn Mali', sg: 'THAI NUMBERS', p: [14, -6], a: [12, -3.5], hair: 0xfbbf24, sh: 0x0f766e, pa: 0x312e81, t: 'Counting 1–5 (๑ ๒ ๓ ๔ ๕)',
+story: 'At the floating market, Ajarn Mali counts mangoes using Thai digits and words: หนึ่ง (1 - nùeng), สอง (2 - sǎwng), สาม (3 - sǎam), สี่ (4 - sìi), ห้า (5 - hâa).',
+o: ['Thai has its own unique numeral script (๑, ๒, ๓, ๔, ๕) alongside spoken number words', 'Mangoes are sweet and yellow', 'The market boat floats on water'],
+q: ['How do Thai numbers 1 to 5 correspond to their spoken Thai words?', 'How much does one boat cost?', 'Why is the river wide?'],
+h: ['๑ = nùeng (1), ๒ = sǎwng (2), ๓ = sǎam (3), ๔ = sìi (4), ๕ = hâa (5)', 'All Thai numbers sound the same', 'Thai numerals start at 10'],
+v: { n: 'Thai Number', u: 'digit', L: [1, 2, 3, 4, 5], R: [1, 2, 3, 4, 5], ru: '๑–๕' },
+c: ['Mastering ๑–๕ (nùeng, sǎwng, sǎam, sìi, hâa) unlocks everyday market counting!', 'Thai numbers cannot be used for prices', 'Number 5 (ห้า / hâa) means zero'],
+tip: 'Fun fact: "555" in Thai text chat is pronounced "ha-ha-ha" (ห้า ห้า ห้า)!'
+},
+{
+idx: 14, dim: 'thai', sub: 'Thai', icon: '🇹🇭',
+n: 'Nong Fah', sg: 'TONE MASTER', p: [-14, 14], a: [-12, 11.5], hair: 0xf43f5e, sh: 0x115e59, pa: 0x1f2937, t: '5 Thai Tones (เสียงวรรณยุกต์)',
+story: 'Thai is a tonal language with 5 tones (Mid, Low, Falling, High, Rising). Changing the pitch of "ไหม / ไม้ / ใหม่" changes the entire meaning of the word!',
+o: ['Changing the vocal pitch/tone changes a Thai syllable’s dictionary meaning', 'The lantern glows teal', 'Songs have melodies'],
+q: ['How does vocal tone affect word meaning in the Thai language?', 'How many lanterns hang above?', 'Who built the golden stupa?'],
+h: ['Each of the 5 tones gives the same consonant-vowel sound a distinct meaning', 'Tone only shows whether you are happy or angry', 'Thai only has 1 flat tone'],
+v: { n: 'Tones mastered', u: 'tones', L: [1, 2, 3, 4, 5], R: [20, 40, 60, 80, 100], ru: '% fluency' },
+c: ['Distinguishing all 5 Thai tones is essential for clear pronunciation and listening', 'Tones never affect meaning in Thai', 'Only written Thai uses tones'],
+tip: 'Classic example: "Mái" (high tone) = question word/wood, while "Mài" (low tone) = new!'
+},
+{
+idx: 15, dim: 'thai', sub: 'Thai', icon: '🇹🇭',
+n: 'Chef Kinnaree', sg: 'STREET FOOD THAI', p: [14, 14], a: [12, 11.5], hair: 0xf97316, sh: 0xb45309, pa: 0x0f172a, t: 'Ordering Food (ไม่เผ็ด / อร่อย)',
+story: 'At Bangkok’s night market, Chef Kinnaree teaches key food phrases: "อร่อย" (aròi = delicious), "ไม่เผ็ด" (mâi phèt = not spicy), and "เผ็ดมาก" (phèt mâak = very spicy).',
+o: ['Combining "ไม่" (mâi = not) before an adjective negates it, like "ไม่เผ็ด" (not spicy)', 'Pad Thai has noodles and lime', 'The wok sizzles loudly'],
+q: ['How does placing "ไม่" (mâi) before "เผ็ด" (phèt) change your food order?', 'How many chilies are in the bowl?', 'What time does the market close?'],
+h: ['"ไม่" (mâi) means "not", turning "spicy" (เผ็ด) into "not spicy" (ไม่เผ็ด)', '"ไม่" makes the dish twice as spicy', '"อร่อย" means too salty'],
+v: { n: 'Phrases used', u: 'orders', L: [1, 2, 3, 4, 5], R: [25, 50, 75, 90, 100], ru: '% tasty' },
+c: ['Saying "ไม่เผ็ดครับ/ค่ะ" (mâi phèt) lets you customize spice levels like a local!', 'Adding "ไม่" means extra chili', 'Thai food has no spice words'],
+tip: 'Say "อร่อยมาก" (aròi mâak) to tell the chef the food is super delicious!'
 }
 ];
 
 // Hub World Portals (when currentDim === 'hub') & Return Portal (when inside a dimension)
 const HUB_PORTALS = [
-{ target: 'math', n: 'MATH PORTAL', icon: '📐', color: '#38bdf8', hex: 0x0284c7, p: [-14, -6], a: [-12, -3] },
-{ target: 'science', n: 'SCIENCE PORTAL', icon: '🔬', color: '#fbbf24', hex: 0xd97706, p: [0, -10], a: [0, -7] },
-{ target: 'english', n: 'ENGLISH PORTAL', icon: '📚', color: '#f472b6', hex: 0xdb2777, p: [14, -6], a: [12, -3] }
+{ target: 'math', n: 'MATH PORTAL', icon: '📐', color: '#38bdf8', hex: 0x0284c7, p: [-16, -6], a: [-14, -3] },
+{ target: 'science', n: 'SCIENCE PORTAL', icon: '🔬', color: '#fbbf24', hex: 0xd97706, p: [-5.5, -10], a: [-5.5, -7] },
+{ target: 'english', n: 'ENGLISH PORTAL', icon: '📚', color: '#f472b6', hex: 0x5.5, a: [5.5, -7] },
+{ target: 'thai', n: 'THAI PORTAL', icon: '🇹🇭', color: '#2dd4bf', hex: 0x0d9488, p: [16, -6], a: [14, -3] }
 ];
 const RETURN_PORTAL = { target: 'hub', n: 'MAIN PLAZA', icon: '🌐', color: '#a78bfa', hex: 0x7c3aed, p: [0, -18], a: [0, -15] };
 
@@ -542,7 +593,7 @@ render();
 
 function render() {
 const c = cs.qObj, pn = $('#pn');
-const badgeCol = c.sub === 'Math' ? '#38bdf8' : c.sub === 'English' ? '#f472b6' : '#fbbf24';
+const badgeCol = c.sub === 'Math' ? '#38bdf8' : c.sub === 'English' ? '#f472b6' : c.sub === 'Thai' ? '#2dd4bf' : '#fbbf24';
 let h = '<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:' + badgeCol + ';margin-bottom:0.2em">' + c.icon + ' ' + c.sub + ' Dimension Quest</div><h2>' + c.n + ': ' + c.t + '</h2><div class="steps">' +
 ST.map((_, k) => '<i class="' + (k < cs.s ? 'ok' : k == cs.s ? 'on' : '') + '"></i>').join('') + '</div>';
 if (cs.s < 5) h += '<div class="story">' + c.story + '</div><div class="q">' + ST[cs.s] + ': ' + QS[cs.s] + '</div>';
@@ -597,7 +648,7 @@ pn.innerHTML = '<h2>' + c.sub + ' Quest Complete!</h2><div>' + star(st) + '</div
 $('#cl').onclick = () => {
 $('#dlg').style.display = 'none';
 cs = null;
-if (S.stars.every(x => x > 0)) say('Legendary, ' + S.name + '! You conquered all 3 Dimensions!', 5000);
+if (S.stars.every(x => x > 0)) say('สุดยอด (Sùt yâwt), ' + S.name + '! You conquered all 4 Dimensions!', 5000);
 };
 }
 
@@ -641,7 +692,7 @@ $('#dim-pill').onclick = () => {
 const dimBtns = Object.entries(DIMS).map(([key, d]) => {
 const isCur = currentDim === key;
 const subStars = key === 'hub'
-? totalStars() + '/36 ⭐'
+? totalStars() + '/48 ⭐'
 : C.filter(q => q.dim === key).reduce((acc, q) => acc + S.stars[q.idx], 0) + '/12 ⭐';
 return '<button class="opt ' + (isCur ? 'good' : '') + '" data-dim="' + key + '" style="display:flex;justify-content:space-between;align-items:center">' +
 '<span><b>' + d.icon + ' ' + d.name + '</b>' + (isCur ? ' (Current)' : '') + '</span>' +
@@ -660,13 +711,14 @@ $('#i1').onclick = () => {
 const groups = [
 { key: 'math', label: '📐 Math Dimension', col: '#38bdf8' },
 { key: 'science', label: '🔬 Science Dimension', col: '#fbbf24' },
-{ key: 'english', label: '📚 English Dimension', col: '#f472b6' }
+{ key: 'english', label: '📚 English Dimension', col: '#f472b6' },
+{ key: 'thai', label: '🇹🇭 Thai Language Dimension', col: '#2dd4bf' }
 ].map(g => {
 const rows = C.filter(c => c.dim === g.key)
 .map(c => '<p style="display:flex;justify-content:space-between;align-items:center;margin:0.28em 0;font-size:0.94em"><span>' + c.icon + ' ' + c.t + ' <small style="color:#94a3b8">(' + c.n + ')</small></span><span>' + star(S.stars[c.idx]) + '</span></p>').join('');
 return '<h3 style="margin:0.7em 0 0.25em;color:' + g.col + ';font-size:1em;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.2em">' + g.label + '</h3>' + rows;
 }).join('');
-infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + ' (' + totalStars() + '/36 ⭐)</h2>' + groups + '<p style="color:#a5b4fc;margin-top:0.6em">Total XP: ' + S.xp + '</p>');
+infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + ' (' + totalStars() + '/48 ⭐)</h2>' + groups + '<p style="color:#a5b4fc;margin-top:0.6em">Total XP: ' + S.xp + '</p>');
 };
 
 $('#i2').onclick = () => {
@@ -697,12 +749,15 @@ $('#i4').onclick = () => infoPanel('<h2>Dimension Explorer Guide</h2>' +
 '<p><b>📐 Math Dimension:</b> Surrounded by floating formulas, numbers, and geometric monuments with 4 Math NPCs.</p>' +
 '<p><b>🔬 Science Dimension:</b> High-tech orbital research station with 4 Science NPCs.</p>' +
 '<p><b>📚 English Dimension:</b> Floating sky library with giant books, letters, and 4 English NPCs.</p>' +
-'<p><b>🚁 Drone Flight:</b> Press <b>F</b> or tap <b>Drone</b> anytime to fly around any dimension!</p>');
+'<p><b>🇹🇭 Thai Language Dimension:</b> Golden temple sanctuary with floating Thai script, numerals (๑–๕), and 4 Thai NPCs.</p>' +
+'<p><b>🚁 Drone Flight:</b> Press <b>F</b> or tap <b>Drone</b> anytime to fly around any dimension!</p>' +
+'<hr style="border:0;border-top:1px solid rgba(255,255,255,0.15);margin:0.8em 0;">' +
+'<p style="font-size:0.85em;color:#c4b5fd;text-align:center;margin:0;">💻 <b>Developer:</b> johnicebourne@gmail.com</p>');
 
 $('#i5').onclick = () => {
 infoPanel('<h2>Reset progress?</h2><p>This erases your stars and XP on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
 $('#rs').onclick = () => {
-S = { name: S.name, xp: 0, stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hp: 100, outfit: S.outfit };
+S = { name: S.name, xp: 0, stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hp: 100, outfit: S.outfit };
 save();
 hud();
 pushState(true);
@@ -1256,6 +1311,56 @@ sp.position.set(fx, fy, fz);
 worldGroup.add(sp);
 floaters.push({ mesh: sp, baseY: fy, spd: 0.85, rot: false });
 });
+} else if (dim === 'thai') {
+// --- THAI LANGUAGE DIMENSION: Golden Temple Sanctuary, Thai Script & Numerals ---
+sc.background = new THREE.Color(0x0b2928);
+sc.fog = new THREE.Fog(0x0b2928, 42, 115);
+
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x133836));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+
+const grid = new THREE.GridHelper(110, 44, 0x2dd4bf, 0x115e59);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+// Central Golden Thai Chedi / Stupa Spire Monument
+cyl(2.6, 3.2, 0.8, 0xf59e0b, 0, 0.4, -2);
+cyl(1.8, 2.3, 1.4, 0xfbbf24, 0, 1.5, -2);
+const spire = new THREE.Mesh(new THREE.ConeGeometry(1.5, 4.2, 12), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
+spire.position.set(0, 4.3, -2);
+worldGroup.add(spire);
+floaters.push({ mesh: spire, baseY: 4.3, spd: 0.9, rot: true });
+
+const halo = new THREE.Mesh(
+new THREE.TorusGeometry(2.8, 0.1, 10, 40),
+new THREE.MeshBasicMaterial({ color: 0x2dd4bf })
+);
+halo.position.set(0, 4.8, -2);
+halo.rotation.x = Math.PI / 2;
+worldGroup.add(halo);
+floaters.push({ mesh: halo, baseY: 4.8, spd: -1.1, rot: true });
+
+// Floating Thai Phrases, Script & Thai Numerals (๑-๕)
+const thaiWords = [
+'สวัสดีครับ / ค่ะ', 'ขอบคุณ (Khòp khun)', '๑ ๒ ๓ ๔ ๕', 'อร่อยมาก (Aròi mâak)',
+'ไม่เป็นไร (Mâi pen rai)', 'ก ข ฃ ค ฅ ฆ ง', 'รักภาษาไทย 🇹🇭', '๕๕๕ (Ha-Ha-Ha)'
+];
+thaiWords.forEach((txt, idx) => {
+const ang = (idx / thaiWords.length) * Math.PI * 2;
+const rad = 24 + (idx % 2) * 6;
+const fx = Math.cos(ang) * rad;
+const fz = Math.sin(ang) * rad;
+const fy = 4.9 + (idx % 3) * 1.6;
+const sp = makeTextSprite(txt, 'rgba(13, 42, 40, 0.9)', idx % 2 === 0 ? '#2dd4bf' : '#fde047', 560, 128, 'bold 44px Inter, sans-serif');
+sp.position.set(fx, fy, fz);
+worldGroup.add(sp);
+floaters.push({ mesh: sp, baseY: fy, spd: 0.85, rot: false });
+
+if (idx % 2 === 0) {
+cyl(0.55, 0.75, 3.0, 0xb45309, fx, 1.5, fz);
+}
+});
 }
 
 // Spawn Dimension Portals (either 3 Subject Portals in Hub, or 1 Return Portal inside a Dimension)
@@ -1303,7 +1408,7 @@ npcs.push(g);
 
 const s = document.createElement('div');
 s.className = 'sign';
-const subCol = q.sub === 'Math' ? '#38bdf8' : q.sub === 'English' ? '#f472b6' : '#fbbf24';
+const subCol = q.sub === 'Math' ? '#38bdf8' : q.sub === 'English' ? '#f472b6' : q.sub === 'Thai' ? '#2dd4bf' : '#fbbf24';
 s.style.borderColor = subCol;
 s.innerHTML = '<u style="background:' + subCol + '">' + q.icon + '</u>' + q.sg + '<div class="mk">!</div>';
 stg.appendChild(s);
@@ -1539,7 +1644,7 @@ P.pend = null;
 
 const mm = $('#mm').getContext('2d');
 function drawMM() {
-mm.fillStyle = currentDim === 'math' ? '#0b1f3a' : currentDim === 'science' ? '#16213e' : currentDim === 'english' ? '#361d32' : '#1e3a2f';
+mm.fillStyle = currentDim === 'math' ? '#0b1f3a' : currentDim === 'science' ? '#16213e' : currentDim === 'english' ? '#361d32' : currentDim === 'thai' ? '#133836' : '#1e3a2f';
 mm.fillRect(0, 0, 140, 140);
 mm.strokeStyle = 'rgba(255,255,255,0.14)';
 mm.lineWidth = 1;
@@ -2022,7 +2127,7 @@ function begin() {
 hud();
 renderPlayersList();
 startRealtimeSync();
-say('Welcome ' + S.name + '! Step into a glowing Portal to enter Math, Science, or English Dimension!', 5500);
+say('Sawàtdii ' + S.name + '! Step into a glowing Portal to enter Math, Science, English, or Thai Dimension!', 5500);
 }
 
 if (window.THREE) {
