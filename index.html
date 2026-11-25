@@ -1,4 +1,4 @@
-<!-- Developer: johnicebourne@gmail.com | Inquiry World v9 -->
+<!-- Developer: johnicebourne@gmail.com | Inquiry World v11 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,6 +54,9 @@ button:active{transform:scale(0.92);}
 #mmw{position:relative;width:9.2em;height:9.2em;border-radius:50%;border:2.5px solid rgba(255, 255, 255, 0.55);overflow:hidden;box-shadow:0 8px 24px rgba(0, 0, 0, 0.55), inset 0 0 14px rgba(0, 0, 0, 0.6);background:#1b2838;}
 #mmw canvas{width:100%;height:100%;display:block;}
 #mm-compass{position:absolute;top:0.25em;left:50%;transform:translateX(-50%);font-size:0.62em;font-weight:900;color:rgba(255, 255, 255, 0.85);text-shadow:0 1px 2px #000;pointer-events:none;}
+#fs-btn{position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);width:3.2em;height:3.2em;border-radius:50%;background:rgba(19, 16, 38, 0.58);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border:1.5px solid rgba(255, 255, 255, 0.35);color:#fff;font-size:1.25em;font-weight:800;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 2px 10px rgba(0, 0, 0, 0.45);z-index:2;}
+#fs-btn:hover{background:rgba(139, 92, 246, 0.45);border-color:#fff;}
+#fs-btn:active{transform:translate(-50%, -50%) scale(0.92);}
 #players-drawer{position:absolute;right:1.2em;top:4.3em;width:18em;max-height:20em;border-radius:1.1em;padding:0.85em;display:none;flex-direction:column;gap:0.5em;z-index:6;}
 #players-drawer.open{display:flex;animation:popIn 0.18s ease-out;}
 .drawer-hdr{display:flex;align-items:center;justify-content:space-between;font-size:0.86em;font-weight:800;color:var(--accent-secondary);border-bottom:1px solid rgba(255, 255, 255, 0.12);padding-bottom:0.4em;}
@@ -166,6 +169,21 @@ button:active{transform:scale(0.92);}
 #dim-pill:hover{background:linear-gradient(135deg, rgba(139, 92, 246, 0.55), rgba(19, 16, 38, 0.95));}
 #warp-fx{position:absolute;inset:0;background:radial-gradient(circle at center, rgba(139,92,246,0.9), #090617);opacity:0;pointer-events:none;z-index:15;transition:opacity 0.28s ease-out;display:flex;align-items:center;justify-content:center;font-family:'Fredoka',sans-serif;font-size:2em;font-weight:700;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,0.8);}
 #warp-fx.show{opacity:1;}
+#detention-banner{position:absolute;top:5.6em;left:50%;transform:translateX(-50%);background:linear-gradient(135deg, rgba(185, 28, 28, 0.92), rgba(69, 10, 10, 0.95));border:2px solid #fca5a5;border-radius:99px;padding:0.45em 1.3em;font-family:'Fredoka',sans-serif;font-size:1.05em;font-weight:700;color:#fff;box-shadow:0 8px 24px rgba(220, 38, 38, 0.55);display:none;align-items:center;gap:0.55em;z-index:8;}
+#detention-banner.show{display:flex;animation:popIn 0.2s ease-out;}
+.shop-tabs{display:flex;gap:0.45em;margin-bottom:0.8em;}
+.shop-tab{flex:1;padding:0.55em;border-radius:0.8em;border:1.5px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.06);color:#cbd5e1;font-weight:800;}
+.shop-tab.active{background:linear-gradient(135deg, #8b5cf6, #6366f1);border-color:#fff;color:#fff;}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(12.5em, 1fr));gap:0.65em;}
+.shop-card{background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.14);border-radius:1em;padding:0.75em;display:flex;flex-direction:column;justify-content:space-between;gap:0.45em;}
+.shop-card.equipped{border-color:#34d399;background:rgba(52,211,153,0.12);}
+.shop-card.lv100{border-color:#fbbf24;background:linear-gradient(145deg, rgba(251,191,36,0.16), rgba(139,92,246,0.16));}
+.shop-card h4{margin:0;font-size:0.95em;color:#fff;display:flex;align-items:center;gap:0.35em;}
+.shop-card p{margin:0;font-size:0.78em;color:#cbd5e1;line-height:1.35;}
+.shop-buy{width:100%;padding:0.45em;border-radius:0.7em;border:0;font-weight:800;font-size:0.82em;color:#fff;background:linear-gradient(135deg, #f59e0b, #d97706);}
+.shop-buy.equip{background:linear-gradient(135deg, #0ea5e9, #6366f1);}
+.shop-buy.done{background:rgba(52,211,153,0.25);color:#6ee7b7;border:1px solid #34d399;}
+.shop-buy:disabled{opacity:0.48;cursor:not-allowed;}
 .portal-sign{background:rgba(15, 23, 42, 0.88);border-width:2px;padding:0.35em 0.95em 0.35em 0.45em;font-size:0.92em;box-shadow:0 0 18px rgba(139, 92, 246, 0.55);}
 .portal-sign u{width:1.7em;height:1.7em;font-size:0.95em;}
 </style>
@@ -175,6 +193,7 @@ button:active{transform:scale(0.92);}
 <div id="stage">
 <canvas id="cv"></canvas>
 <div id="warp-fx">🌀 Warping...</div>
+<div id="detention-banner">🚨 DETENTION ROOM · Anti-Rapid-Guess Cooldown: <span id="det-timer">60s</span></div>
 <div class="hud glass-card" id="me">
 <div id="av-wrap">
 <div id="av">
@@ -213,11 +232,11 @@ button:active{transform:scale(0.92);}
 <span class="pulse-green"></span>
 <span id="online-cnt">1</span> Online
 </button>
-<button class="glass-card stat-pill" id="fs-btn" title="Toggle Fullscreen" aria-label="Fullscreen" style="padding:0.45em 0.7em;">⛶</button>
 </div>
 <div id="mmw">
 <canvas id="mm" width="140" height="140"></canvas>
 <div id="mm-compass">N</div>
+<button id="fs-btn" type="button" title="Toggle Fullscreen" aria-label="Fullscreen">⛶</button>
 </div>
 </div>
 <div class="glass-card" id="players-drawer">
@@ -271,6 +290,7 @@ button:active{transform:scale(0.92);}
 </div>
 <div class="hud glass-card" id="bl">
 <button class="ic" id="i1" title="Quest Progress" aria-label="Stars"><span>🏆</span><em id="badge">0</em></button>
+<button class="ic" id="i-shop" title="Star Shop: Fashions & Drones" aria-label="Star Shop"><span>🛍️</span></button>
 <button class="ic" id="i2" title="Screenshot" aria-label="Screenshot"><span>📷</span></button>
 <button class="ic" id="i3" title="Next Clue" aria-label="Hint"><span>🧭</span></button>
 <button class="ic" id="i4" title="Dimension Guide" aria-label="Journal"><span>📖</span></button>
@@ -306,12 +326,20 @@ const $ = s => document.querySelector(s);
 if (!window.THREE) { $('#err').style.display = 'flex'; }
 
 const OUTFITS = [
-{ shirt: 0x7b4fd0, pants: 0x2c2f4a, hair: 0xdfe3ee, hex: '#8b5cf6' },
-{ shirt: 0x0ea5e9, pants: 0x1e293b, hair: 0xfde047, hex: '#38bdf8' },
-{ shirt: 0xec4899, pants: 0x312e81, hair: 0xf97316, hex: '#f472b6' },
-{ shirt: 0x10b981, pants: 0x1f2937, hair: 0x78350f, hex: '#34d399' },
-{ shirt: 0xf59e0b, pants: 0x334155, hair: 0x1e1b4b, hex: '#fbbf24' },
-{ shirt: 0xef4444, pants: 0x111827, hair: 0xe2e8f0, hex: '#f87171' }
+{ id: 0, name: 'Violet Cadet', icon: '👕', cost: 0, minLv: 1, shirt: 0x7b4fd0, pants: 0x2c2f4a, hair: 0xdfe3ee, hex: '#8b5cf6', desc: 'Classic Inquiry Explorer tunic.' },
+{ id: 1, name: 'Sky Aviator', icon: '🧥', cost: 4, minLv: 1, shirt: 0x0ea5e9, pants: 0x1e293b, hair: 0xfde047, hex: '#38bdf8', desc: 'Aerodynamic flight jacket with golden hair.' },
+{ id: 2, name: 'Sakura Cyber', icon: '👘', cost: 8, minLv: 1, shirt: 0xec4899, pants: 0x312e81, hair: 0xf97316, hex: '#f472b6', desc: 'Neon magenta street-tech ensemble.' },
+{ id: 3, name: 'Emerald Sage', icon: '🌿', cost: 12, minLv: 1, shirt: 0x10b981, pants: 0x1f2937, hair: 0x78350f, hex: '#34d399', desc: 'Scholar cloak of the Thai & Science temples.' },
+{ id: 4, name: 'Solar Paladin', icon: '🛡️', cost: 18, minLv: 1, shirt: 0xf59e0b, pants: 0x334155, hair: 0x1e1b4b, hex: '#fbbf24', desc: 'Gleaming amber armor for star collectors.' },
+{ id: 5, name: 'Crimson Ninja', icon: '🥷', cost: 24, minLv: 1, shirt: 0xef4444, pants: 0x111827, hair: 0xe2e8f0, hex: '#f87171', desc: 'Stealth red-and-obsidian shadow attire.' },
+{ id: 6, name: 'Lv.100 Sovereign Crown', icon: '👑', cost: 0, minLv: 100, royal: true, shirt: 0xfbbf24, pants: 0x312e81, hair: 0xffffff, hex: '#fde047', desc: 'Exclusive Level 100 Royal Gold Regalia + Floating 3D Crown & Aura!' }
+];
+
+const DRONES = [
+{ id: 0, name: 'Standard Quad', icon: '🚁', cost: 0, accent: 0x38bdf8, rotorCol: 0x38bdf8, speedMul: 1.0, desc: 'Reliable starter quadcopter.' },
+{ id: 1, name: 'Emerald Hornet', icon: '🐝', cost: 6, accent: 0x10b981, rotorCol: 0x34d399, speedMul: 1.2, desc: '+20% flight thrust & emerald LEDs.' },
+{ id: 2, name: 'Solar Falcon', icon: '🦅', cost: 14, accent: 0xf59e0b, rotorCol: 0xfde047, speedMul: 1.4, desc: '+40% flight speed & golden rotors.' },
+{ id: 3, name: 'Phantom Valkyrie', icon: '🛸', cost: 25, accent: 0xec4899, rotorCol: 0xf472b6, speedMul: 1.65, desc: '+65% hyper-speed & neon plasma rings.' }
 ];
 
 const DIMS = {
@@ -319,21 +347,34 @@ hub: { name: 'Main Plaza', icon: '🌐', color: '#a78bfa' },
 math: { name: 'Math Dimension', icon: '📐', color: '#38bdf8' },
 science: { name: 'Science Dimension', icon: '🔬', color: '#fbbf24' },
 english: { name: 'English Dimension', icon: '📚', color: '#f472b6' },
-thai: { name: 'Thai Language Dimension', icon: '🇹🇭', color: '#2dd4bf' }
+thai: { name: 'Thai Language Dimension', icon: '🇹🇭', color: '#2dd4bf' },
+detention: { name: 'Detention Room', icon: '🚨', color: '#f87171' }
 };
 
 let S = {
 name: '',
 xp: 0,
 stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+spentStars: 0,
+ownedOutfits: [0],
+ownedDrones: [0],
+droneModel: 0,
+detentionUntil: 0,
 hp: 100,
-outfit: Math.floor(Math.random() * OUTFITS.length)
+outfit: 0
 };
 try {
 Object.assign(S, JSON.parse(localStorage.getItem('iw1') || '{}'));
 } catch (e) {}
 while (S.stars.length < 16) S.stars.push(0);
+if (!Array.isArray(S.ownedOutfits)) S.ownedOutfits = [0];
+if (!S.ownedOutfits.includes(0)) S.ownedOutfits.push(0);
+if (!Array.isArray(S.ownedDrones)) S.ownedDrones = [0];
+if (!S.ownedDrones.includes(0)) S.ownedDrones.push(0);
+if (typeof S.spentStars !== 'number' || S.spentStars < 0) S.spentStars = 0;
 if (typeof S.outfit !== 'number' || !OUTFITS[S.outfit]) S.outfit = 0;
+if (typeof S.droneModel !== 'number' || !DRONES[S.droneModel]) S.droneModel = 0;
+if (typeof S.detentionUntil !== 'number') S.detentionUntil = 0;
 
 let myId = '';
 try { myId = sessionStorage.getItem('iw_uid') || ''; } catch (e) {}
@@ -346,16 +387,29 @@ try { localStorage.setItem('iw1', JSON.stringify(S)); } catch (e) {}
 };
 const lvl = () => 1 + Math.floor(S.xp / 60);
 const totalStars = () => S.stars.reduce((a, b) => a + b, 0);
+const availStars = () => Math.max(0, totalStars() - (S.spentStars || 0));
+
+function checkLevel100Fashion() {
+if (lvl() >= 100 && !S.ownedOutfits.includes(6)) {
+S.ownedOutfits.push(6);
+S.outfit = 6;
+save();
+if (typeof rebuildLocalAvatar === 'function') rebuildLocalAvatar();
+say('👑 LEVEL 100 REACHED! Exclusive Sovereign Crown Fashion Unlocked & Equipped!', 5500);
+sendChat('👑 Reached Level 100 and unlocked the Sovereign Crown Fashion!', true);
+}
+}
 
 function hud() {
-$('#nm').textContent = S.name || 'Explorer';
+checkLevel100Fashion();
+$('#nm').textContent = (lvl() >= 100 ? '👑 ' : '') + (S.name || 'Explorer');
 $('#lv').textContent = lvl();
 $('#hp i').style.width = S.hp + '%';
 $('#hp-txt').textContent = S.hp + '/100';
 const xpMod = S.xp % 60;
 $('#xp i').style.width = (xpMod / 60 * 100) + '%';
 $('#xp-txt').textContent = xpMod + '/60';
-$('#tot').textContent = totalStars();
+$('#tot').textContent = availStars();
 $('#badge').textContent = S.stars.filter(x => x > 0).length;
 $('#av-shirt').setAttribute('fill', OUTFITS[S.outfit].hex);
 const dm = DIMS[currentDim] || DIMS.hub;
@@ -588,8 +642,29 @@ hud();
 save();
 }
 
+let wrongClickTimes = [];
+function isInDetention() {
+return Date.now() < (S.detentionUntil || 0);
+}
+function triggerDetention() {
+S.detentionUntil = Date.now() + 60000;
+wrongClickTimes = [];
+save();
+$('#dlg').style.display = 'none';
+cs = null;
+enterDimension('detention');
+sendChat('🚨 Sent to Detention Room for 1 minute due to rapid guessing!', true);
+say('🚨 RAPID GUESS DETECTED! Sent to Detention Room for 1 minute. Read carefully next time!', 5500);
+}
+
 function openCase(qObj) {
-cs = { i: qObj.idx, qObj, s: 0, m: 0, tested: {} };
+if (isInDetention()) {
+const rem = Math.ceil((S.detentionUntil - Date.now()) / 1000);
+say('🚨 You are in Detention! Wait ' + rem + 's before attempting quests.', 3000);
+return;
+}
+wrongClickTimes = [];
+cs = { i: qObj.idx, qObj, s: 0, m: 0, tested: {}, stepShownAt: Date.now() };
 $('#dlg').style.display = 'flex';
 render();
 }
@@ -625,6 +700,7 @@ if (o.ok) {
 S.xp += 10;
 cs.s++;
 cs.opts = null;
+cs.stepShownAt = Date.now();
 hud();
 save();
 pushState(true);
@@ -633,7 +709,15 @@ render();
 b.classList.add('bad');
 cs.m++;
 dmg();
-$('#fb').textContent = 'Not quite. Re-read the problem and try again!';
+const nowClick = Date.now();
+wrongClickTimes.push(nowClick);
+wrongClickTimes = wrongClickTimes.filter(ts => nowClick - ts <= 4500);
+const ultraFast = (nowClick - (cs.stepShownAt || nowClick)) < 900 && cs.m >= 2;
+if (wrongClickTimes.length >= 3 || ultraFast) {
+triggerDetention();
+return;
+}
+$('#fb').textContent = '⚠️ Not quite (' + wrongClickTimes.length + '/3 rapid strikes). Read carefully before clicking!';
 }
 });
 return;
@@ -690,9 +774,122 @@ b.onclick = () => say(DEF[k], 5000);
 $('#skills').appendChild(b);
 });
 
+// Star Shop Modal (Fashions & Drones)
+let shopTab = 'fashion';
+function openStarShop() {
+const curLv = lvl();
+const starsLeft = availStars();
+let bodyHtml = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5em">' +
+'<h2 style="margin:0">🛍️ Star Fashion & Drone Shop</h2>' +
+'<span style="background:rgba(251,191,36,0.2);border:1px solid #fbbf24;padding:0.25em 0.75em;border-radius:99px;font-weight:800;color:#fde047">⭐ ' + starsLeft + ' Available</span></div>' +
+'<div class="shop-tabs">' +
+'<button class="shop-tab ' + (shopTab === 'fashion' ? 'active' : '') + '" id="tab-fash">👕 Fashions & Lv.100 Crown</button>' +
+'<button class="shop-tab ' + (shopTab === 'drone' ? 'active' : '') + '" id="tab-drone">🚁 Custom Drones</button>' +
+'</div><div class="shop-grid">';
+
+if (shopTab === 'fashion') {
+OUTFITS.forEach(o => {
+const owned = S.ownedOutfits.includes(o.id) || (o.minLv <= curLv && o.cost === 0);
+const equipped = S.outfit === o.id;
+const lockedLv = curLv < o.minLv;
+let btnHtml = '';
+if (equipped) btnHtml = '<button class="shop-buy done" disabled>✓ Equipped</button>';
+else if (owned) btnHtml = '<button class="shop-buy equip" data-equip-fash="' + o.id + '">Equip Outfit</button>';
+else if (lockedLv) btnHtml = '<button class="shop-buy" disabled>🔒 Requires Lv.' + o.minLv + ' (Now Lv.' + curLv + ')</button>';
+else btnHtml = '<button class="shop-buy" data-buy-fash="' + o.id + '" ' + (starsLeft < o.cost ? 'disabled' : '') + '>⭐ Buy (' + o.cost + ' Stars)</button>';
+
+bodyHtml += '<div class="shop-card ' + (equipped ? 'equipped ' : '') + (o.royal ? 'lv100' : '') + '">' +
+'<div><h4><span style="display:inline-block;width:0.9em;height:0.9em;border-radius:50%;background:' + o.hex + ';border:1px solid #fff"></span> ' + o.icon + ' ' + o.name + '</h4>' +
+'<p style="margin-top:0.3em">' + o.desc + '</p></div>' + btnHtml + '</div>';
+});
+} else {
+DRONES.forEach(d => {
+const owned = S.ownedDrones.includes(d.id);
+const equipped = S.droneModel === d.id;
+let btnHtml = '';
+if (equipped) btnHtml = '<button class="shop-buy done" disabled>✓ Active Drone</button>';
+else if (owned) btnHtml = '<button class="shop-buy equip" data-equip-drone="' + d.id + '">Equip Drone</button>';
+else btnHtml = '<button class="shop-buy" data-buy-drone="' + d.id + '" ' + (starsLeft < d.cost ? 'disabled' : '') + '>⭐ Buy (' + d.cost + ' Stars)</button>';
+
+const hexCol = '#' + d.accent.toString(16).padStart(6, '0');
+bodyHtml += '<div class="shop-card ' + (equipped ? 'equipped' : '') + '">' +
+'<div><h4><span style="display:inline-block;width:0.9em;height:0.9em;border-radius:50%;background:' + hexCol + ';border:1px solid #fff"></span> ' + d.icon + ' ' + d.name + '</h4>' +
+'<p style="margin-top:0.3em">' + d.desc + '</p></div>' + btnHtml + '</div>';
+});
+}
+bodyHtml += '</div>';
+infoPanel(bodyHtml);
+
+$('#tab-fash').onclick = () => { shopTab = 'fashion'; openStarShop(); };
+$('#tab-drone').onclick = () => { shopTab = 'drone'; openStarShop(); };
+
+$('#pn').querySelectorAll('[data-buy-fash]').forEach(btn => {
+btn.onclick = () => {
+const id = Number(btn.dataset.buyFash);
+const item = OUTFITS[id];
+if (!item || availStars() < item.cost || S.ownedOutfits.includes(id)) return;
+S.spentStars += item.cost;
+S.ownedOutfits.push(id);
+S.outfit = id;
+save();
+hud();
+rebuildLocalAvatar();
+pushState(true);
+say('👕 Purchased & equipped ' + item.name + '!', 3000);
+openStarShop();
+};
+});
+$('#pn').querySelectorAll('[data-equip-fash]').forEach(btn => {
+btn.onclick = () => {
+const id = Number(btn.dataset.equipFash);
+S.outfit = id;
+save();
+hud();
+rebuildLocalAvatar();
+pushState(true);
+say('👕 Equipped ' + OUTFITS[id].name + '!', 2500);
+openStarShop();
+};
+});
+$('#pn').querySelectorAll('[data-buy-drone]').forEach(btn => {
+btn.onclick = () => {
+const id = Number(btn.dataset.buyDrone);
+const item = DRONES[id];
+if (!item || availStars() < item.cost || S.ownedDrones.includes(id)) return;
+S.spentStars += item.cost;
+S.ownedDrones.push(id);
+S.droneModel = id;
+save();
+hud();
+rebuildLocalAvatar();
+pushState(true);
+say('🚁 Purchased & equipped ' + item.name + '!', 3000);
+openStarShop();
+};
+});
+$('#pn').querySelectorAll('[data-equip-drone]').forEach(btn => {
+btn.onclick = () => {
+const id = Number(btn.dataset.equipDrone);
+S.droneModel = id;
+save();
+hud();
+rebuildLocalAvatar();
+pushState(true);
+say('🚁 Equipped ' + DRONES[id].name + '!', 2500);
+openStarShop();
+};
+});
+}
+$('#i-shop').onclick = openStarShop;
+
 // Dimension Quick-Switch Modal on top pill click
 $('#dim-pill').onclick = () => {
-const dimBtns = Object.entries(DIMS).map(([key, d]) => {
+if (isInDetention()) {
+const rem = Math.ceil((S.detentionUntil - Date.now()) / 1000);
+say('🚨 Locked in Detention Room for ' + rem + 's!', 2500);
+return;
+}
+const dimBtns = Object.entries(DIMS).filter(([key]) => key !== 'detention').map(([key, d]) => {
 const isCur = currentDim === key;
 const subStars = key === 'hub'
 ? totalStars() + '/48 ⭐'
@@ -721,7 +918,7 @@ const rows = C.filter(c => c.dim === g.key)
 .map(c => '<p style="display:flex;justify-content:space-between;align-items:center;margin:0.28em 0;font-size:0.94em"><span>' + c.icon + ' ' + c.t + ' <small style="color:#94a3b8">(' + c.n + ')</small></span><span>' + star(S.stars[c.idx]) + '</span></p>').join('');
 return '<h3 style="margin:0.7em 0 0.25em;color:' + g.col + ';font-size:1em;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.2em">' + g.label + '</h3>' + rows;
 }).join('');
-infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + ' (' + totalStars() + '/48 ⭐)</h2>' + groups + '<p style="color:#a5b4fc;margin-top:0.6em">Total XP: ' + S.xp + '</p>');
+infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + ' (Earned: ' + totalStars() + '/48 ⭐ · Wallet: ' + availStars() + ' ⭐)</h2>' + groups + '<p style="color:#a5b4fc;margin-top:0.6em">Total XP: ' + S.xp + '</p>');
 };
 
 $('#i2').onclick = () => {
@@ -760,7 +957,8 @@ $('#i4').onclick = () => infoPanel('<h2>Dimension Explorer Guide</h2>' +
 $('#i5').onclick = () => {
 infoPanel('<h2>Reset progress?</h2><p>This erases your stars and XP on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
 $('#rs').onclick = () => {
-S = { name: S.name, xp: 0, stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hp: 100, outfit: S.outfit };
+S = { name: S.name, xp: 0, stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], spentStars: 0, ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0 };
+rebuildLocalAvatar();
 save();
 hud();
 pushState(true);
@@ -1364,10 +1562,37 @@ if (idx % 2 === 0) {
 cyl(0.55, 0.75, 3.0, 0xb45309, fx, 1.5, fz);
 }
 });
+} else if (dim === 'detention') {
+// --- DETENTION ROOM (1-minute Anti-Rapid-Guess Time-Out) ---
+sc.background = new THREE.Color(0x1f090d);
+sc.fog = new THREE.Fog(0x1f090d, 25, 75);
+
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), M(0x2d1117));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+
+const grid = new THREE.GridHelper(32, 16, 0xef4444, 0x450a0a);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+// Enclosed Detention Cell Walls & Iron Bars
+box(24, 6, 0.8, 0x3f151d, 0, 3, -12);
+box(24, 6, 0.8, 0x3f151d, 0, 3, 12);
+box(0.8, 6, 24, 0x3f151d, -12, 3, 0);
+box(0.8, 6, 24, 0x3f151d, 12, 3, 0);
+for (let bx = -10; bx <= 10; bx += 2) {
+cyl(0.12, 0.12, 5.5, 0x94a3b8, bx, 2.75, -11.4);
+cyl(0.12, 0.12, 5.5, 0x94a3b8, bx, 2.75, 11.4);
+}
+OB.push([-13, 13, -13, -11.2], [-13, 13, 11.2, 13], [-13, -11.2, -13, 13], [11.2, 13, -13, 13]);
+
+const signSp = makeTextSprite('🚨 DETENTION ROOM · THINK BEFORE GUESSING 🚨', 'rgba(69, 10, 10, 0.92)', '#fca5a5', 768, 128, 'bold 38px Inter, sans-serif');
+signSp.position.set(0, 4.6, -9.5);
+worldGroup.add(signSp);
 }
 
 // Spawn Dimension Portals (either 3 Subject Portals in Hub, or 1 Return Portal inside a Dimension)
-activePortals = dim === 'hub' ? HUB_PORTALS : [RETURN_PORTAL];
+activePortals = dim === 'detention' ? [] : (dim === 'hub' ? HUB_PORTALS : [RETURN_PORTAL]);
 activePortals.forEach(pt => {
 const pGroup = new THREE.Group();
 pGroup.position.set(pt.p[0], 0, pt.p[1]);
@@ -1420,6 +1645,11 @@ questSigns.push(s);
 }
 
 function enterDimension(dimKey, afterWarpFn) {
+if (dimKey !== 'detention' && isInDetention()) {
+const rem = Math.ceil((S.detentionUntil - Date.now()) / 1000);
+say('🚨 Cannot leave Detention Room yet! ' + rem + 's remaining.', 2500);
+return;
+}
 if (!DIMS[dimKey]) dimKey = 'hub';
 const fx = $('#warp-fx');
 const info = DIMS[dimKey];
@@ -1471,36 +1701,44 @@ sc.add(worldGroup);
 
 const M = c => new THREE.MeshLambertMaterial({ color: c });
 
-const buildDroneRig = accentHex => {
+const buildDroneRig = (accentHex, droneIdx = 0) => {
+const dSpec = DRONES[droneIdx] || DRONES[0];
+const dCol = dSpec.accent || accentHex || 0x38bdf8;
+const rCol = dSpec.rotorCol || 0x38bdf8;
 const dGroup = new THREE.Group();
 dGroup.position.set(0, 3.35, 0);
 const tether = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.75, 6), M(0x94a3b8));
 tether.position.y = -0.35;
 dGroup.add(tether);
-const body = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.22, 0.9), M(0x1e293b));
+const body = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.24, 0.94), M(droneIdx === 3 ? 0x1e1b4b : 0x1e293b));
 dGroup.add(body);
-const canopy = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.14, 0.55), new THREE.MeshBasicMaterial({ color: accentHex || 0x38bdf8 }));
-canopy.position.set(0, 0.14, 0.08);
+const canopy = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.15, 0.58), new THREE.MeshBasicMaterial({ color: dCol }));
+canopy.position.set(0, 0.15, 0.08);
 dGroup.add(canopy);
-const frontLed = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.08, 0.08), new THREE.MeshBasicMaterial({ color: 0x34d399 }));
-frontLed.position.set(0, 0, 0.46);
+if (droneIdx >= 2) {
+const wing = new THREE.Mesh(new THREE.BoxGeometry(1.65, 0.05, 0.25), new THREE.MeshBasicMaterial({ color: dCol }));
+wing.position.set(0, 0.05, -0.1);
+dGroup.add(wing);
+}
+const frontLed = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.09, 0.08), new THREE.MeshBasicMaterial({ color: rCol }));
+frontLed.position.set(0, 0, 0.48);
 dGroup.add(frontLed);
 const rotors = [];
-[[-0.75, 0.75], [0.75, 0.75], [-0.75, -0.75], [0.75, -0.75]].forEach(([ax, az]) => {
-const arm = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.07, 0.1), M(0x475569));
+[[-0.78, 0.78], [0.78, 0.78], [-0.78, -0.78], [0.78, -0.78]].forEach(([ax, az]) => {
+const arm = new THREE.Mesh(new THREE.BoxGeometry(0.98, 0.07, 0.1), M(0x475569));
 arm.position.set(ax * 0.5, 0, az * 0.5);
 arm.rotation.y = Math.atan2(ax, az);
 dGroup.add(arm);
 const motor = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.14, 10), M(0x0f172a));
 motor.position.set(ax, 0.08, az);
 dGroup.add(motor);
-const blade = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.02, 0.09), new THREE.MeshBasicMaterial({ color: 0xe2e8f0 }));
+const blade = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.02, 0.09), new THREE.MeshBasicMaterial({ color: 0xffffff }));
 blade.position.set(ax, 0.17, az);
 dGroup.add(blade);
 rotors.push(blade);
 const blurDisc = new THREE.Mesh(
-new THREE.RingGeometry(0.12, 0.38, 18),
-new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.28, side: THREE.DoubleSide })
+new THREE.RingGeometry(0.12, 0.42, 18),
+new THREE.MeshBasicMaterial({ color: rCol, transparent: true, opacity: 0.34, side: THREE.DoubleSide })
 );
 blurDisc.rotation.x = -Math.PI / 2;
 blurDisc.position.set(ax, 0.17, az);
@@ -1511,7 +1749,7 @@ dGroup.visible = false;
 return dGroup;
 };
 
-buildCharacterFn = (shirt, pants, hair, ringColor) => {
+buildCharacterFn = (shirt, pants, hair, ringColor, opts = {}) => {
 const g = new THREE.Group(), Y = 0xf5cd30;
 const fc = document.createElement('canvas');
 fc.width = fc.height = 64;
@@ -1552,7 +1790,25 @@ p.add(b);
 g.add(p);
 return p;
 };
-const droneRig = buildDroneRig(shirt);
+// Level 100 Royal Fashion Crown, Cape & Golden Halo!
+if (opts.isRoyal || opts.lv >= 100) {
+const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.34, 0.28, 8), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
+crown.position.y = 3.04;
+g.add(crown);
+const gem = new THREE.Mesh(new THREE.OctahedronGeometry(0.14, 0), new THREE.MeshBasicMaterial({ color: 0xec4899 }));
+gem.position.set(0, 3.06, 0.38);
+g.add(gem);
+const cape = new THREE.Mesh(new THREE.BoxGeometry(1.05, 1.35, 0.08), new THREE.MeshBasicMaterial({ color: 0x7c3aed }));
+cape.position.set(0, 1.35, -0.32);
+cape.rotation.x = 0.14;
+g.add(cape);
+const aura = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.05, 8, 32), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
+aura.rotation.x = Math.PI / 2;
+aura.position.y = 0.25;
+g.add(aura);
+}
+
+const droneRig = buildDroneRig(shirt, opts.droneIdx || 0);
 g.add(droneRig);
 g.userData = {
 la: limb(-0.75, 2, shirt, Y, 0.65),
@@ -1564,7 +1820,7 @@ drone: droneRig
 if (ringColor) {
 const r = new THREE.Mesh(
 new THREE.RingGeometry(1.05, 1.28, 36),
-new THREE.MeshBasicMaterial({ color: ringColor, side: THREE.DoubleSide })
+new THREE.MeshBasicMaterial({ color: (opts.isRoyal || opts.lv >= 100) ? 0xfde047 : ringColor, side: THREE.DoubleSide })
 );
 r.rotation.x = -Math.PI / 2;
 r.position.y = 0.05;
@@ -1600,11 +1856,20 @@ if (u.ring) u.ring.visible = true;
 }
 };
 
-const myOut = OUTFITS[S.outfit];
-pl = buildCharacterFn(myOut.shirt, myOut.pants, myOut.hair, 0x8bf05a);
+function rebuildLocalAvatar() {
+if (!sc || !buildCharacterFn) return;
+if (pl) sc.remove(pl);
+const myOut = OUTFITS[S.outfit] || OUTFITS[0];
+pl = buildCharacterFn(myOut.shirt, myOut.pants, myOut.hair, 0x8bf05a, {
+isRoyal: !!myOut.royal,
+lv: lvl(),
+droneIdx: S.droneModel || 0
+});
 sc.add(pl);
-pl.position.set(P.x, 0, P.z);
-pl.rotation.y = Math.PI;
+pl.position.set(P.x, P.y, P.z);
+pl.rotation.y = P.ry;
+}
+rebuildLocalAvatar();
 
 myTagEl = document.createElement('div');
 myTagEl.className = 'player-tag';
@@ -1702,6 +1967,20 @@ const cp = new THREE.Vector3(0, 9, 22), V = new THREE.Vector3();
 function loop(t) {
 const d = Math.min(0.05, (t - last) / 1000);
 last = t;
+const detBanner = $('#detention-banner');
+if (isInDetention()) {
+const remSec = Math.max(1, Math.ceil((S.detentionUntil - Date.now()) / 1000));
+$('#det-timer').textContent = remSec + 's';
+detBanner.classList.add('show');
+} else if (detBanner.classList.contains('show')) {
+detBanner.classList.remove('show');
+S.detentionUntil = 0;
+save();
+if (currentDim === 'detention') {
+say('✅ Detention finished! Returning to Main Plaza...', 3500);
+enterDimension('hub');
+}
+}
 const busy = cs || $('#intro').style.display == 'flex' ||
 (document.activeElement && document.activeElement.id === 'chat-in');
 let ix = (K.d || K.arrowright ? 1 : 0) - (K.a || K.arrowleft ? 1 : 0);
@@ -1732,8 +2011,9 @@ P.ry = Math.atan2(ax, az);
 }
 mv = true;
 }
-P.vx += ax * 36 * d;
-P.vz += az * 36 * d;
+const dMul = (DRONES[S.droneModel] || DRONES[0]).speedMul || 1.0;
+P.vx += ax * 36 * dMul * d;
+P.vz += az * 36 * dMul * d;
 const drag = Math.pow(0.14, d);
 P.vx *= drag;
 P.vz *= drag;
@@ -1881,9 +2161,20 @@ renderPlayersList();
 }
 return;
 }
+if (rp.mesh && (rp.renderedColor !== rp.color || rp.renderedDrone !== rp.droneModel || rp.renderedLv100 !== ((rp.lv || 1) >= 100))) {
+sc.remove(rp.mesh);
+rp.mesh = null;
+}
 if (!rp.mesh) {
 const out = OUTFITS[(rp.color || 0) % OUTFITS.length];
-rp.mesh = buildCharacterFn(out.shirt, out.pants, out.hair, 0x38bdf8);
+rp.renderedColor = rp.color;
+rp.renderedDrone = rp.droneModel;
+rp.renderedLv100 = (rp.lv || 1) >= 100;
+rp.mesh = buildCharacterFn(out.shirt, out.pants, out.hair, 0x38bdf8, {
+isRoyal: !!out.royal,
+lv: rp.lv || 1,
+droneIdx: rp.droneModel || 0
+});
 sc.add(rp.mesh);
 rp.cx = rp.x;
 rp.cy = rp.y || 0;
@@ -2004,6 +2295,7 @@ rz: Math.round(P.rz * 100) / 100,
 flying: P.flying ? 1 : 0,
 lv: lvl(),
 color: S.outfit,
+droneModel: S.droneModel || 0,
 emote: myEmote,
 emoteAt: myEmoteAt,
 ts: now
