@@ -1,4 +1,4 @@
-<!-- Developer: johnicebourne@gmail.com | Inquiry World v12 -->
+<!-- Developer: johnicebourne@gmail.com | Inquiry World v13 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -186,6 +186,74 @@ button:active{transform:scale(0.92);}
 .shop-buy:disabled{opacity:0.48;cursor:not-allowed;}
 .portal-sign{background:rgba(15, 23, 42, 0.88);border-width:2px;padding:0.35em 0.95em 0.35em 0.45em;font-size:0.92em;box-shadow:0 0 18px rgba(139, 92, 246, 0.55);}
 .portal-sign u{width:1.7em;height:1.7em;font-size:0.95em;}
+
+/* v13 PVP Arena & Minigame Styles */
+.pvp-hud-card {
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(253, 224, 71, 0.4);
+  border-radius: 0.9em;
+  padding: 0.7em;
+  margin: 0.45em 0;
+}
+.pvp-canvas {
+  width: 100%;
+  height: 205px;
+  background: #070b14;
+  border-radius: 0.7em;
+  border: 1px solid rgba(255,255,255,0.18);
+  display: block;
+}
+.pvp-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.5em;
+  margin-top: 0.55em;
+}
+.pvp-slider-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2em;
+  font-size: 0.82em;
+  color: #e2e8f0;
+  background: rgba(255,255,255,0.06);
+  padding: 0.45em 0.65em;
+  border-radius: 0.6em;
+}
+.pvp-slider-row input[type=range] {
+  width: 100%;
+  accent-color: #fde047;
+}
+.pvp-scorebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  font-size: 0.9em;
+  padding: 0.35em 0.7em;
+  border-radius: 0.6em;
+  background: rgba(253, 224, 71, 0.14);
+  border: 1px solid rgba(253, 224, 71, 0.35);
+  margin-bottom: 0.45em;
+}
+.drone-race-hud {
+  position: fixed;
+  top: 4.4em;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 25;
+  background: rgba(15, 23, 42, 0.92);
+  border: 2px solid #f472b6;
+  color: #fff;
+  padding: 0.45em 1.1em;
+  border-radius: 99px;
+  font-weight: 800;
+  font-size: 0.9em;
+  display: none;
+  align-items: center;
+  gap: 1em;
+  box-shadow: 0 6px 24px rgba(244, 114, 182, 0.35);
+}
+.drone-race-hud.active { display: flex; }
 </style>
 </head>
 <body>
@@ -194,6 +262,7 @@ button:active{transform:scale(0.92);}
 <canvas id="cv"></canvas>
 <div id="warp-fx">🌀 Warping...</div>
 <div id="detention-banner">🚨 DETENTION ROOM · Time-Out Remaining: <span id="det-timer">60s</span></div>
+<div id="drone-race-hud" class="drone-race-hud"><span>🚁 DRONE RACE</span><span id="race-cp">Ring 1/6</span><span id="race-tm">0.0s</span><button id="race-quit" style="background:#ef4444;border:0;color:#fff;border-radius:99px;padding:0.15em 0.65em;font-weight:800;cursor:pointer">Exit</button></div>
 <div class="hud glass-card" id="me">
 <div id="av-wrap">
 <div id="av">
@@ -227,7 +296,7 @@ button:active{transform:scale(0.92);}
 <div class="hud" id="tr">
 <div id="top-pills">
 <button class="glass-card stat-pill" id="dim-pill" title="Dimension Selector">🌐 <span id="dim-name">Main Plaza</span></button>
-<div class="glass-card stat-pill stars">⭐ <span id="tot">0</span>/48</div>
+<div class="glass-card stat-pill stars">⭐ <span id="tot">0</span>/96</div>
 <button class="glass-card stat-pill online-btn" id="online-btn" aria-label="Online Players">
 <span class="pulse-green"></span>
 <span id="online-cnt">1</span> Online
@@ -348,13 +417,19 @@ math: { name: 'Math Dimension', icon: '📐', color: '#38bdf8' },
 science: { name: 'Science Dimension', icon: '🔬', color: '#fbbf24' },
 english: { name: 'English Dimension', icon: '📚', color: '#f472b6' },
 thai: { name: 'Thai Language Dimension', icon: '🇹🇭', color: '#2dd4bf' },
+ict: { name: 'ICT & Robotics', icon: '🤖', color: '#60a5fa' },
+makerspace: { name: 'Makerspace', icon: '🛠️', color: '#fb923c' },
+arts: { name: 'Arts Dimension', icon: '🎨', color: '#e879f9' },
+design: { name: 'Digital Design', icon: '🖥️', color: '#34d399' },
+pvp: { name: 'Lv.100 PVP Arena', icon: '⚔️', color: '#fde047', minLv: 100 },
 detention: { name: 'Detention Room', icon: '🚨', color: '#f87171' }
 };
 
 let S = {
 name: '',
 xp: 0,
-stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+stars: Array(32).fill(0),
+pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 },
 spentStars: 0,
 ownedOutfits: [0],
 ownedDrones: [0],
@@ -366,7 +441,8 @@ outfit: 0
 try {
 Object.assign(S, JSON.parse(localStorage.getItem('iw1') || '{}'));
 } catch (e) {}
-while (S.stars.length < 16) S.stars.push(0);
+while (S.stars.length < 32) S.stars.push(0);
+if (!S.pvpWins || typeof S.pvpWins !== 'object') S.pvpWins = { graphwars: 0, football: 0, basketball: 0, dronerace: 0 };
 if (!Array.isArray(S.ownedOutfits)) S.ownedOutfits = [0];
 if (!S.ownedOutfits.includes(0)) S.ownedOutfits.push(0);
 if (!Array.isArray(S.ownedDrones)) S.ownedDrones = [0];
@@ -419,99 +495,99 @@ $('#dim-pill').style.borderColor = dm.color;
 
 // 12 Quests partitioned across Math (4), Science (4), and English (4) Dimensions
 const C = [
-// --- MATH DIMENSION (indices 0..3) ---
+// --- MATH DIMENSION: Arithmetics, Patterns & Algebra (0..3) ---
 {
-idx: 0, dim: 'math', sub: 'Math', icon: '📐',
-n: 'Archimedes Jr.', sg: 'RATIO & SPEED', p: [-14, -6], a: [-12, -3.5], hair: 0xfde047, sh: 0x0284c7, pa: 0x1e293b, t: 'Constant Rate (d = r·t)',
-story: 'A delivery drone flies at a steady speed of 120 m/min. Archimedes Jr. tracks total distance over different numbers of minutes.',
-o: ['Distance grows proportionally as flight minutes increase (d = 120t)', 'The drone has four propellers', 'The grid floor glows blue'],
-q: ['How does flight time affect total distance at constant speed?', 'What brand is the remote controller?', 'Why is the drone painted blue?'],
-h: ['Every extra minute adds 120 meters of distance', 'More minutes reduce the distance traveled', 'Distance stays at 120 meters forever'],
-v: { n: 'Flight time (t)', u: 'min', L: [1, 2, 3, 4, 5], R: [120, 240, 360, 480, 600], ru: 'm' },
-c: ['Distance = 120 × minutes (a constant unit rate of 120 m/min)', 'Distance grows randomly each minute', 'Time and distance are unrelated'],
-tip: 'Formula: d = r × t. Divide distance by minutes (R ÷ L) to verify the constant rate!'
+idx: 0, dim: 'math', sub: 'Math · Arithmetics', icon: '📐',
+n: 'Archimedes Jr.', sg: 'ARITHMETICS', p: [-14, -6], a: [-12, -3.5], hair: 0xfde047, sh: 0x0284c7, pa: 0x1e293b, t: 'Arithmetics: Order & Operations',
+story: 'Archimedes Jr. balances energy crates using arithmetic operations (PEMDAS/BODMAS): 4 × (3 + 5) − 2 = 30.',
+o: ['Parentheses are solved first before multiplication and subtraction', 'The crates glow cyan', 'Numbers float in the grid'],
+q: ['How does grouping numbers in parentheses affect an arithmetic expression?', 'What color is the calculator?', 'Who invented zero?'],
+h: ['Solving inside parentheses first changes the order and gives the exact result', 'Addition is always done before multiplication', 'Order of operations does not matter'],
+v: { n: 'Multiplier (k)', u: '×', L: [1, 2, 3, 4, 5], R: [15, 30, 45, 60, 75], ru: 'pts' },
+c: ['Arithmetic rules (PEMDAS) ensure every player calculates the exact same value', 'Multiplication and addition are interchangeable', 'Parentheses can be ignored'],
+tip: 'Arithmetics Rule: Parentheses → Exponents → Multiply/Divide → Add/Subtract!'
 },
 {
-idx: 1, dim: 'math', sub: 'Math', icon: '📐',
-n: 'Prof. Euler', sg: 'QUADRATIC AREA', p: [14, -6], a: [12, -3.5], hair: 0xa855f7, sh: 0x6d28d9, pa: 0x1f2937, t: 'Square Area (A = s²)',
-story: 'Prof. Euler constructs glowing square platforms. Doubling the side length makes the area four times bigger!',
-o: ['Area grows by the square of the side length (A = s²)', 'The platform edges are cyan', 'Squares have four corners'],
-q: ['How does the side length (s) of a square affect its area (A)?', 'Who built the math dimension?', 'How bright are the neon lines?'],
-h: ['Area equals side length squared (A = s × s = s²)', 'Area equals side length plus 2', 'Area stays the same for every square'],
-v: { n: 'Side length (s)', u: 'm', L: [1, 2, 3, 4, 5], R: [1, 4, 9, 16, 25], ru: 'm²' },
-c: ['Square area grows quadratically: A = s² (1, 4, 9, 16, 25)', 'Area grows by only 1 m² per meter', 'Larger sides have smaller areas'],
-tip: 'Formula: A = s². Test at least 3 side lengths and check 1², 2², 3², 4², 5²!'
+idx: 1, dim: 'math', sub: 'Math · Patterns', icon: '📐',
+n: 'Prof. Fibonacci', sg: 'PATTERNS', p: [14, -6], a: [12, -3.5], hair: 0xa855f7, sh: 0x6d28d9, pa: 0x1f2937, t: 'Number & Geometric Patterns',
+story: 'Prof. Fibonacci builds stairways where each step adds +4 tiles: 3, 7, 11, 15, 19... Recognizing patterns lets you predict any future term!',
+o: ['Each step increases by a constant common difference (+4)', 'Stairs lead upward', 'The tiles are purple'],
+q: ['How does identifying the common difference help predict future terms in a pattern?', 'How tall is the tower?', 'Which tile is brightest?'],
+h: ['Adding the constant rule (+4) predicts the next term accurately without counting one by one', 'Patterns change randomly every step', 'You can only guess the next number'],
+v: { n: 'Term Position (n)', u: 'step', L: [1, 2, 3, 4, 5], R: [3, 7, 11, 15, 19], ru: 'tiles' },
+c: ['Arithmetic sequences follow a predictable rule: Term(n) = 4n − 1 (3, 7, 11, 15, 19)', 'Patterns have no mathematical rule', 'Every term decreases by 4'],
+tip: 'Patterns Tip: Subtract consecutive terms (7 − 3 = 4, 11 − 7 = 4) to find the secret rule!'
 },
 {
-idx: 2, dim: 'math', sub: 'Math', icon: '📐',
-n: 'Lady Hypatia', sg: 'LINEAR ALGEBRA', p: [-14, 14], a: [-12, 11.5], hair: 0x38bdf8, sh: 0x0369a1, pa: 0x0f172a, t: 'Linear Function (y = 3x + 5)',
-story: 'A number machine takes an input x, multiplies it by 3, and adds 5 to produce output y = 3x + 5.',
-o: ['Each +1 increase in x increases output y by a constant slope of 3', 'The machine hums softly', 'Numbers float in the sky'],
-q: ['How does changing input x affect output y in y = 3x + 5?', 'What color is the equation sign?', 'Who invented the letter x?'],
-h: ['Output y increases by 3 for every +1 step in x (slope m = 3)', 'Output y decreases when x grows', 'Output y is always 5'],
-v: { n: 'Input (x)', u: 'units', L: [0, 1, 2, 3, 4], R: [5, 8, 11, 14, 17], ru: 'y' },
-c: ['Linear growth with slope m = 3 and y-intercept b = 5 (y = 3x + 5)', 'The output doubles each step', 'There is no pattern between x and y'],
-tip: 'Formula: y = mx + b. Notice when x = 0, y = 5 (the y-intercept)!'
+idx: 2, dim: 'math', sub: 'Math · Algebra', icon: '📐',
+n: 'Lady Hypatia', sg: 'ALGEBRA LAB', p: [-14, 14], a: [-12, 11.5], hair: 0x38bdf8, sh: 0x0369a1, pa: 0x0f172a, t: 'Algebra: Linear Equations (y = 3x + 5)',
+story: 'Lady Hypatia’s algebra decoder transforms variable x into output y = 3x + 5. Solving for x means balancing both sides of the equation!',
+o: ['Each +1 increase in variable x increases output y by a constant slope of 3', 'The machine hums softly', 'Variables use letters'],
+q: ['How does changing variable x affect output y in the algebraic equation y = 3x + 5?', 'What color is the equals sign?', 'Who wrote the symbol x?'],
+h: ['Output y increases by 3 for every +1 step in x (rate of change m = 3)', 'Output y shrinks when x grows', 'Output y stays 5 forever'],
+v: { n: 'Variable (x)', u: 'units', L: [0, 1, 2, 3, 4], R: [5, 8, 11, 14, 17], ru: 'y' },
+c: ['Algebraic functions model real growth: y = 3x + 5 (slope 3, y-intercept 5)', 'Variables always equal zero', 'Both sides of an equation do not need to balance'],
+tip: 'Algebra Tip: Whatever operation you do to one side of "=", do the exact same to the other!'
 },
 {
-idx: 3, dim: 'math', sub: 'Math', icon: '📐',
-n: 'Sir Pythagoras', sg: 'TRIANGLE LAB', p: [14, 14], a: [12, 11.5], hair: 0xf43f5e, sh: 0x1d4ed8, pa: 0x1e293b, t: 'Pythagorean Theorem (a²+b²=c²)',
-story: 'Sir Pythagoras scales right triangles with base a = 3k and height b = 4k, measuring the hypotenuse c.',
-o: ['The hypotenuse c always follows c = √(a² + b²) = 5k', 'Triangles have three sides', 'The pyramid rotates slowly'],
-q: ['How does scaling legs a and b affect hypotenuse c in a 3-4-5 right triangle?', 'Why is it called a right triangle?', 'Which side looks longest?'],
+idx: 3, dim: 'math', sub: 'Math · Algebra & Triangles', icon: '📐',
+n: 'Sir Pythagoras', sg: 'ALGEBRAIC SQUARES', p: [14, 14], a: [12, 11.5], hair: 0xf43f5e, sh: 0x1d4ed8, pa: 0x1e293b, t: 'Algebraic Squares (a² + b² = c²)',
+story: 'Sir Pythagoras scales right triangles with legs a = 3k and b = 4k, proving a² + b² = c² always gives hypotenuse c = 5k.',
+o: ['The hypotenuse c always follows c = √(a² + b²) = 5k', 'Triangles have three corners', 'The pyramid spins'],
+q: ['How does scaling legs a and b affect hypotenuse c in a 3-4-5 right triangle?', 'Why is a corner 90 degrees?', 'Which side looks thickest?'],
 h: ['Hypotenuse c scales proportionally: c = 5 × scale factor k', 'Hypotenuse c equals a + b', 'Hypotenuse c never changes'],
 v: { n: 'Scale factor (k)', u: '×', L: [1, 2, 3, 4, 5], R: [5, 10, 15, 20, 25], ru: 'c' },
-c: ['Since (3k)² + (4k)² = (5k)², hypotenuse c = 5, 10, 15, 20, 25', 'c is always equal to a × b', 'Right triangles do not follow a formula'],
-tip: 'Formula: a² + b² = c². For k = 1: 3² + 4² = 9 + 16 = 25, so c = √25 = 5!'
+c: ['Since (3k)² + (4k)² = (5k)², hypotenuse c = 5, 10, 15, 20, 25', 'c is always equal to a × b', 'Right triangles follow no formula'],
+tip: 'Formula: a² + b² = c². For k = 1: 3² + 4² = 9 + 16 = 25 → c = 5!'
 },
 
-// --- SCIENCE DIMENSION (indices 4..7) ---
+// --- SCIENCE DIMENSION: Biology & Chemistry (4..7) ---
 {
-idx: 4, dim: 'science', sub: 'Science', icon: '🔬',
-n: 'Master Forge', sg: 'RAMP RACE', p: [-14, -6], a: [-12, -3.5], hair: 0xe8643c, sh: 0xefe3c8, pa: 0x6b4a2b, t: 'Potential Energy & Ramps',
-story: 'A test rover rolls down a frictionless ramp from different release heights. Higher ramps give more gravitational energy!',
-o: ['The rover rolls farther when released from higher ramp heights', 'The rover is painted orange', 'The lab floor is smooth'],
-q: ['How does ramp height affect how far the rover rolls?', 'How cool does the rover look?', 'Who built the ramp?'],
-h: ['The higher the ramp, the farther the rover will roll', 'The higher the ramp, the shorter the roll', 'Ramp height has no effect'],
-v: { n: 'Ramp height', u: 'cm', L: [5, 10, 15, 20, 25], R: [28, 52, 83, 108, 139], ru: 'cm' },
-c: ['Rolling distance increases as ramp height (potential energy) increases', 'Distance decreases as ramp height increases', 'Distance stays the same'],
-tip: 'Fair test: change only the ramp height while keeping the same rover and track.'
+idx: 4, dim: 'science', sub: 'Science · Biology', icon: '🧬',
+n: 'Dr. Mendel', sg: 'BIOLOGY: PHOTOSYNTHESIS', p: [-14, -6], a: [-12, -3.5], hair: 0x34d399, sh: 0x059669, pa: 0x1e293b, t: 'Biology: Photosynthesis & Oxygen',
+story: 'Inside green chloroplasts, plants use sunlight, water (H₂O), and CO₂ to produce glucose and release oxygen bubbles (O₂).',
+o: ['Higher light intensity speeds up photosynthesis and releases more O₂ bubbles', 'Leaves are green', 'Water is in the beaker'],
+q: ['How does light intensity affect the rate of oxygen production in aquatic plants?', 'Why are leaves pretty?', 'Who watered the plant?'],
+h: ['More light energy drives faster photosynthesis and produces more O₂ bubbles per minute', 'More light stops plants from breathing', 'Light has zero effect on plants'],
+v: { n: 'Light Intensity', u: 'klx', L: [10, 20, 30, 40, 50], R: [6, 14, 23, 31, 38], ru: 'O₂/min' },
+c: ['Biology: Photosynthesis rate rises with light intensity, producing more oxygen', 'Plants release more oxygen in total darkness', 'Chloroplasts do not need light'],
+tip: 'Biology Equation: 6CO₂ + 6H₂O + Light → C₆H₁₂O₆ (Glucose) + 6O₂!'
 },
 {
-idx: 5, dim: 'science', sub: 'Science', icon: '🔬',
-n: 'Tech Mira', sg: 'LIGHT SENSOR', p: [14, -6], a: [12, -3.5], hair: 0xf0a030, sh: 0xb86a4a, pa: 0x3a3a52, t: 'Light Intensity & Distance',
-story: 'Tech Mira moves an optical sensor away from a plasma lamp and records how light intensity drops.',
-o: ['Light reading drops rapidly as the sensor moves farther from the lamp', 'The lamp stand is metal', 'The wire is blue'],
-q: ['How does lamp distance affect the light sensor reading?', 'How much does the sensor cost?', 'Why is the lab dark?'],
-h: ['The farther the lamp, the lower the light reading', 'The farther the lamp, the higher the reading', 'The reading stays the same anywhere'],
-v: { n: 'Lamp distance', u: 'cm', L: [10, 20, 30, 40, 50], R: [90, 60, 35, 20, 10], ru: '%' },
-c: ['Light intensity drops as distance from the source increases', 'The reading rises as the lamp moves away', 'The reading never changes'],
-tip: 'Keep ambient room light constant so only lamp distance changes.'
+idx: 5, dim: 'science', sub: 'Science · Biology', icon: '🦠',
+n: 'Prof. Pasteur', sg: 'BIOLOGY: ENZYMES', p: [14, -6], a: [12, -3.5], hair: 0x38bdf8, sh: 0x0284c7, pa: 0x312e81, t: 'Biology: Cell Enzymes & Temperature',
+story: 'Living cells rely on biological catalysts called enzymes. Prof. Pasteur tests how warming up to body temperature (37°C) boosts enzyme reaction speed.',
+o: ['Enzyme reaction speed increases as temperature approaches optimal 37°C', 'Test tubes are glass', 'Cells have nuclei'],
+q: ['How does warming toward optimal body temperature (37°C) affect enzyme activity?', 'What shape is a microscope?', 'How many cells exist?'],
+h: ['Warmer temperatures up to 37°C increase molecular collisions and speed up enzyme reactions', 'Cold ice makes enzymes work fastest', 'Temperature never changes cell reactions'],
+v: { n: 'Temperature', u: '°C', L: [10, 17, 24, 31, 37], R: [18, 35, 58, 82, 100], ru: '% rate' },
+c: ['Biology: Enzymes work fastest at their optimal temperature (37°C in humans)', 'Enzymes freeze faster at 37°C', 'Cells do not use enzymes'],
+tip: 'Biology Fact: Above 50°C, extreme heat denatures (changes the shape of) enzymes!'
 },
 {
-idx: 6, dim: 'science', sub: 'Science', icon: '🔬',
-n: 'Dr. Volt', sg: 'BATTERY LAB', p: [-14, 14], a: [-12, 11.5], hair: 0x8a6be8, sh: 0xf2f2f2, pa: 0x5a8fe8, t: 'Voltage & Motor RPM',
-story: 'Dr. Volt connects 1 to 5 batteries in series to an electric turbine and measures its spin speed in RPM.',
-o: ['Adding more batteries in series makes the turbine spin faster', 'The lab coat is white', 'The turbine hums'],
-q: ['How does the number of batteries affect motor speed (RPM)?', 'What color is the motor?', 'Who bought the batteries?'],
-h: ['More batteries increase voltage and make the motor spin faster', 'More batteries will make the motor slower', 'Batteries have no effect'],
-v: { n: 'Batteries', u: 'pcs', L: [1, 2, 3, 4, 5], R: [40, 85, 120, 165, 200], ru: 'rpm' },
-c: ['Motor speed rises steadily as more batteries are connected', 'Motor speed falls as batteries increase', 'Motor speed stays the same'],
-tip: 'Use the exact same motor and propeller load for every trial.'
+idx: 6, dim: 'science', sub: 'Science · Chemistry', icon: '⚗️',
+n: 'Madam Curie', sg: 'CHEMISTRY: MOLARITY', p: [-14, 14], a: [-12, 11.5], hair: 0xfbbf24, sh: 0xd97706, pa: 0x1f2937, t: 'Chemistry: Concentration & Reactions',
+story: 'Madam Curie mixes magnesium ribbon with hydrochloric acid (HCl). Higher acid concentration packs more reactant particles per liter!',
+o: ['Higher acid concentration causes faster particle collisions and quicker H₂ gas release', 'Bubbles rise in the flask', 'Glassware is clear'],
+q: ['How does increasing acid concentration affect the speed of a chemical reaction?', 'What color is the lab bench?', 'Who washed the flask?'],
+h: ['More concentrated reactants collide more frequently, speeding up the chemical reaction', 'Higher concentration slows reactions down', 'Concentration has no effect in chemistry'],
+v: { n: 'HCl Molarity', u: 'M', L: [0.5, 1.0, 1.5, 2.0, 2.5], R: [12, 25, 41, 59, 78], ru: 'mL/s' },
+c: ['Chemistry: Collision theory proves higher concentration increases reaction rate', 'Dilute acid reacts faster than concentrated acid', 'Chemical reactions occur at one fixed speed'],
+tip: 'Chemistry Collision Theory: More particles in the same volume = more frequent collisions!'
 },
 {
-idx: 7, dim: 'science', sub: 'Science', icon: '🔬',
-n: 'Prof. Magnus', sg: 'MAGNET CORE', p: [14, 14], a: [12, 11.5], hair: 0xcfcfcf, sh: 0xd04a4a, pa: 0x333a4a, t: 'Electromagnet Coils',
-story: 'Prof. Magnus wraps copper wire around an iron core and tests how many steel clips the electromagnet lifts.',
-o: ['More wire coils around the core pick up more steel paper clips', 'The iron core is heavy', 'Copper wire is shiny'],
-q: ['How does the number of wire coils affect how many clips are lifted?', 'Is the nail shiny?', 'What brand is the battery?'],
-h: ['More coils strengthen the magnetic field and pick up more clips', 'More coils will pick up fewer clips', 'Coils have no effect'],
-v: { n: 'Wire coils', u: 'coils', L: [5, 10, 15, 20, 25], R: [2, 4, 7, 9, 12], ru: 'clips' },
-c: ['More wire coils created a stronger electromagnet and lifted more clips', 'More coils picked up fewer clips', 'The number of clips stayed the same'],
-tip: 'Keep the battery voltage and iron core identical across all runs.'
+idx: 7, dim: 'science', sub: 'Science · Chemistry', icon: '🧪',
+n: 'Dr. Mendeleev', sg: 'CHEMISTRY: pH SCALE', p: [14, 14], a: [12, 11.5], hair: 0xf472b6, sh: 0xbe185d, pa: 0x0f172a, t: 'Chemistry: Acids, Bases & pH Scale',
+story: 'Dr. Mendeleev adds alkaline drops (base, pH 13) to acidic solution (pH 2), raising the pH toward neutral water (pH 7.0).',
+o: ['Adding base drops neutralizes H⁺ ions and raises the pH toward 7.0', 'The indicator changes color', 'Beakers hold liquid'],
+q: ['How does adding a base affect the pH of an acidic solution?', 'Why is the pH chart colorful?', 'Which beaker is largest?'],
+h: ['Adding base neutralizes the acid and increases the pH number toward neutral 7', 'Adding base makes the acid drop to pH 0', 'pH never changes when mixing chemicals'],
+v: { n: 'Base Added', u: 'mL', L: [0, 5, 10, 15, 20], R: [2.0, 3.2, 4.5, 5.8, 7.0], ru: 'pH' },
+c: ['Chemistry: Acid + Base → Salt + Water, raising pH from acidic (2) to neutral (7)', 'Bases lower pH below 1', 'Neutral water has a pH of 14'],
+tip: 'pH Scale: 0–6 is Acidic, 7 is Neutral (pure water), and 8–14 is Basic/Alkaline!'
 },
 
-// --- ENGLISH DIMENSION (indices 8..11) ---
+// --- ENGLISH DIMENSION (8..11) ---
 {
 idx: 8, dim: 'english', sub: 'English', icon: '📚',
 n: 'Lady Sonnet', sg: 'CONTEXT CLUES', p: [-14, -6], a: [-12, -3.5], hair: 0xf43f5e, sh: 0xbe123c, pa: 0x312e81, t: 'Decoding Vocabulary',
@@ -557,7 +633,7 @@ c: ['Similes (like/as) and metaphors create memorable, vivid mental images', 'Me
 tip: 'Remember: Similes use "like" or "as"; metaphors make a direct comparison!'
 },
 
-// --- THAI LANGUAGE DIMENSION (indices 12..15) ---
+// --- THAI LANGUAGE DIMENSION (12..15) ---
 {
 idx: 12, dim: 'thai', sub: 'Thai', icon: '🇹🇭',
 n: 'Kru Somchai', sg: 'SAWADEE GREETINGS', p: [-14, -6], a: [-12, -3.5], hair: 0x1e293b, sh: 0x0d9488, pa: 0x1e1b4b, t: 'Polite Particles (ครับ / ค่ะ)',
@@ -601,18 +677,215 @@ h: ['"ไม่" (mâi) means "not", turning "spicy" (เผ็ด) into "not sp
 v: { n: 'Phrases used', u: 'orders', L: [1, 2, 3, 4, 5], R: [25, 50, 75, 90, 100], ru: '% tasty' },
 c: ['Saying "ไม่เผ็ดครับ/ค่ะ" (mâi phèt) lets you customize spice levels like a local!', 'Adding "ไม่" means extra chili', 'Thai food has no spice words'],
 tip: 'Say "อร่อยมาก" (aròi mâak) to tell the chef the food is super delicious!'
+},
+
+// --- ICT & ROBOTICS DIMENSION (16..19) ---
+{
+idx: 16, dim: 'ict', sub: 'ICT & Robotics', icon: '🤖',
+n: 'Commander Ada', sg: 'ALGORITHMS & LOOPS', p: [-14, -6], a: [-12, -3.5], hair: 0x38bdf8, sh: 0x2563eb, pa: 0x0f172a, t: 'Algorithms & Loop Efficiency',
+story: 'Commander Ada programs warehouse bots. Using a repeat loop replaces 100 lines of repeated move commands with 3 clean lines!',
+o: ['Loops execute repeated instructions automatically without duplicating code', 'The bot has blue LEDs', 'The floor has circuit traces'],
+q: ['How do loops improve a robot’s control algorithm?', 'What brand is the microchip?', 'Why is the server room cool?'],
+h: ['Loops repeat actions cleanly, reducing code size and eliminating manual copy-paste bugs', 'Loops make robots spin in circles forever', 'Algorithms work better without loops'],
+v: { n: 'Loop Cycles', u: 'runs', L: [1, 2, 3, 4, 5], R: [10, 20, 30, 40, 50], ru: 'blocks' },
+c: ['ICT: Loops and step-by-step algorithms make robotics code compact and reliable', 'More duplicate lines always run faster', 'Robots guess what to do without algorithms'],
+tip: 'Coding Principle (DRY): Don’t Repeat Yourself — use a loop when repeating steps!'
+},
+{
+idx: 17, dim: 'ict', sub: 'ICT & Robotics', icon: '🤖',
+n: 'Engr. Turing', sg: 'BINARY & LOGIC GATES', p: [14, -6], a: [12, -3.5], hair: 0x93c5fd, sh: 0x1d4ed8, pa: 0x1e293b, t: 'Binary Bits (0 & 1) & Logic',
+story: 'Every computer stores data as binary bits (0 = OFF, 1 = ON). Adding 1 bit doubles the number of unique states (2ⁿ)!',
+o: ['Each extra binary bit doubles the total combinations (2¹=2, 2²=4, 2³=8...)', 'Zeros and ones glow blue', 'Processors are silicon'],
+q: ['How does adding binary bits affect the number of values a computer can represent?', 'How heavy is a gigabyte?', 'What color is the motherboard?'],
+h: ['Each bit multiplies possibilities by 2 (2ⁿ combinations)', 'Adding bits reduces memory capacity', 'Computers use base-10 natively inside transistors'],
+v: { n: 'Binary Bits (n)', u: 'bits', L: [1, 2, 3, 4, 5], R: [2, 4, 8, 16, 32], ru: 'states' },
+c: ['ICT: Binary powers all computing — n bits represent 2ⁿ distinct values', '4 bits can only store 4 numbers', 'Binary uses digits 0 through 9'],
+tip: 'Binary Place Values: 16 · 8 · 4 · 2 · 1 (e.g., 10101 in binary = 16 + 4 + 1 = 21)!'
+},
+{
+idx: 18, dim: 'ict', sub: 'ICT & Robotics', icon: '🤖',
+n: 'Dr. Cyber', sg: 'ULTRASONIC SENSORS', p: [-14, 14], a: [-12, 11.5], hair: 0x34d399, sh: 0x0f766e, pa: 0x111827, t: 'Robotics: Sensors & Avoidance',
+story: 'An autonomous rover emits ultrasonic sound pulses and times the echo to measure distance before braking.',
+o: ['Longer echo return time tells the microcontroller an obstacle is farther away', 'The rover has rubber tires', 'Sound waves are invisible'],
+q: ['How does echo return time allow a robot sensor to calculate obstacle distance?', 'How loud is the ultrasonic ping?', 'Who painted the rover?'],
+h: ['Distance = (Speed of Sound × Echo Time) ÷ 2, preventing collisions', 'Echoes always take 10 seconds', 'Sensors work without sending signals'],
+v: { n: 'Echo Delay', u: 'ms', L: [2, 4, 6, 8, 10], R: [34, 68, 102, 136, 170], ru: 'cm' },
+c: ['Robotics: Sensors convert physical signals (echo time) into digital distance data', 'Robots ignore sensor input while driving', 'Shorter echo times mean walls are miles away'],
+tip: 'Sense → Think → Act is the core feedback loop of every autonomous robot!'
+},
+{
+idx: 19, dim: 'ict', sub: 'ICT & Robotics', icon: '🤖',
+n: 'Captain Servo', sg: 'PWM MOTOR CONTROL', p: [14, 14], a: [12, 11.5], hair: 0xfbbf24, sh: 0x3730a3, pa: 0x0f172a, t: 'Robotics: PWM Duty Cycle & Speed',
+story: 'Captain Servo controls robotic arm motors using Pulse Width Modulation (PWM). Increasing duty cycle from 20% to 100% delivers proportional power!',
+o: ['Higher PWM duty cycle delivers more average voltage and faster motor rotation', 'Servo gears are brass', 'Wires connect to pins'],
+q: ['How does increasing PWM duty cycle affect robotic motor speed?', 'How many screws hold the servo?', 'What color is the ground wire?'],
+h: ['Higher duty cycle keeps power ON longer per cycle, increasing motor speed proportionally', '100% duty cycle turns the motor completely off', 'PWM only controls LED brightness, never motors'],
+v: { n: 'PWM Duty Cycle', u: '%', L: [20, 40, 60, 80, 100], R: [30, 60, 90, 120, 150], ru: 'RPM' },
+c: ['Robotics: PWM precisely regulates actuator speed and torque using digital pulses', 'Motors only have on/off speeds', 'Lower duty cycle makes motors spin faster'],
+tip: '50% PWM duty cycle = ON half the time, OFF half the time = 50% average power!'
+},
+
+// --- MAKERSPACE DIMENSION (20..23) ---
+{
+idx: 20, dim: 'makerspace', sub: 'Makerspace', icon: '🛠️',
+n: 'Master Maker', sg: '3D PRINTING & INFILL', p: [-14, -6], a: [-12, -3.5], hair: 0xfb923c, sh: 0xea580c, pa: 0x1e293b, t: '3D Printing: Infill & Strength',
+story: 'Master Maker 3D-prints drone frames. Raising internal honeycomb infill from 10% to 90% makes parts vastly stronger against crashes!',
+o: ['Higher infill percentage adds internal lattice ribs, increasing structural load capacity', 'Filament spools are orange', 'The nozzle heats up'],
+q: ['How does increasing 3D print infill percentage affect part strength?', 'What smells like melted PLA?', 'How wide is the print bed?'],
+h: ['More internal infill supports heavier loads before bending or snapping', '0% hollow infill is stronger than 80% infill', 'Infill only changes the outer color'],
+v: { n: 'Infill Density', u: '%', L: [10, 30, 50, 70, 90], R: [15, 38, 64, 88, 115], ru: 'kg load' },
+c: ['Makerspace: Tuning infill balances print time, filament weight, and mechanical strength', 'Infill has no effect on durability', 'All 3D prints are solid blocks'],
+tip: 'Maker Tip: Use 15–20% infill for prototypes, and 60–80% for heavy-duty brackets!'
+},
+{
+idx: 21, dim: 'makerspace', sub: 'Makerspace', icon: '🛠️',
+n: 'Tinker Bella', sg: 'LEVERS & GEARS', p: [14, -6], a: [12, -3.5], hair: 0xfde047, sh: 0xc2410c, pa: 0x292524, t: 'Simple Machines: Mechanical Advantage',
+story: 'Tinker Bella uses a long lever arm to lift heavy steel blocks. Moving the effort farther from the fulcrum multiplies lifting force!',
+o: ['Longer effort arm length increases mechanical advantage and reduces required push force', 'The lever is made of oak', 'Gears have teeth'],
+q: ['How does lengthening the lever arm affect the mechanical advantage when lifting a load?', 'What color is the fulcrum?', 'Who forged the steel weight?'],
+h: ['A longer lever arm multiplies your input force so you can lift heavier loads easily', 'Shorter levers require less effort', 'Levers only work horizontally'],
+v: { n: 'Lever Arm Ratio', u: '×', L: [1, 2, 3, 4, 5], R: [20, 40, 60, 80, 100], ru: 'kg lifted' },
+c: ['Makerspace: Simple machines (levers, pulleys, gears) multiply force through distance', 'Mechanical advantage always equals 1', 'Fulcrum placement does not matter'],
+tip: 'Archimedes: "Give me a lever long enough and a fulcrum, and I shall move the world!"'
+},
+{
+idx: 22, dim: 'makerspace', sub: 'Makerspace', icon: '🛠️',
+n: 'Sparky Sam', sg: 'BREADBOARD CIRCUITS', p: [-14, 14], a: [-12, 11.5], hair: 0x38bdf8, sh: 0xb45309, pa: 0x1f2937, t: 'Prototyping: Resistors & LEDs',
+story: 'Sparky Sam prototypes LED badges on a solderless breadboard. Adding higher-ohm resistors limits current so the LED shines safely without burning out!',
+o: ['Higher resistance (Ω) reduces electric current (I = V/R) to protect delicate LEDs', 'Breadboards have tiny holes', 'LEDs emit light'],
+q: ['How does increasing resistor value (Ohms) affect current flowing through an LED circuit?', 'Why are jumper wires colorful?', 'What shape is an LED?'],
+h: ['By Ohm’s Law (I = V/R), higher resistance safely lowers current flow', 'Higher resistance increases current until the LED explodes', 'Resistors store batteries'],
+v: { n: 'Resistance', u: 'Ω', L: [100, 200, 300, 400, 500], R: [50, 25, 17, 12.5, 10], ru: 'mA' },
+c: ['Makerspace: Current-limiting resistors protect components according to Ohm’s Law (I = V/R)', 'LEDs never need resistors', 'Resistance and current are unrelated'],
+tip: 'Ohm’s Law: V = I × R → Current (I) = Voltage (V) ÷ Resistance (R)!'
+},
+{
+idx: 23, dim: 'makerspace', sub: 'Makerspace', icon: '🛠️',
+n: 'Architect Gus', sg: 'TRUSS BRIDGE LAB', p: [14, 14], a: [12, 11.5], hair: 0xa8a29e, sh: 0x9a3412, pa: 0x1c1917, t: 'Structural Engineering: Trusses',
+story: 'Architect Gus builds wooden bridges. Unlike squares that wobble under weight, triangular trusses distribute forces evenly across every beam!',
+o: ['Adding triangular truss bays distributes compression and tension, multiplying bridge strength', 'Balsa wood is lightweight', 'Glue holds joints'],
+q: ['How do triangular truss structures improve a bridge’s weight capacity?', 'How long is a popsicle stick?', 'What color is wood glue?'],
+h: ['Triangles cannot deform without changing side lengths, spreading forces across the frame', 'Squares are stronger than triangles without braces', 'Trusses only add useless weight'],
+v: { n: 'Truss Bays', u: 'bays', L: [1, 2, 3, 4, 5], R: [12, 26, 42, 60, 80], ru: 'N force' },
+c: ['Makerspace: Triangle geometry locks structural joints and maximizes load-to-weight ratio', 'Single flat planks hold more than trusses', 'Triangles collapse immediately under load'],
+tip: 'Engineering Secret: Triangles are the strongest geometric shape in architecture!'
+},
+
+// --- ARTS DIMENSION (24..27) ---
+{
+idx: 24, dim: 'arts', sub: 'Arts', icon: '🎨',
+n: 'Maestro Chroma', sg: 'COLOR THEORY', p: [-14, -6], a: [-12, -3.5], hair: 0xe879f9, sh: 0xa21caf, pa: 0x1e1b4b, t: 'Color Theory: Complementary Contrast',
+story: 'Maestro Chroma pairs opposite colors on the color wheel (Blue & Orange, Red & Green, Yellow & Violet) to make focal points pop off the canvas!',
+o: ['Complementary colors opposite on the wheel create maximum visual vibrancy and contrast', 'Paintbrushes have bristles', 'Palettes hold paint'],
+q: ['How do complementary color pairs affect visual contrast in an artwork?', 'How many brushes are in the jar?', 'What color is the easel?'],
+h: ['Placing complementary colors side by side intensifies both hues and draws the viewer’s eye', 'Opposite colors turn invisible next to each other', 'Color theory only applies to black-and-white drawings'],
+v: { n: 'Contrast Pairs', u: 'pairs', L: [1, 2, 3, 4, 5], R: [25, 50, 75, 90, 100], ru: '% vibrancy' },
+c: ['Arts: Complementary harmonies create vibrant focal points and dynamic balance', 'Mixing all complements creates neon white paint', 'Warm and cool colors never interact'],
+tip: 'Color Wheel: Red↔Green, Blue↔Orange, Yellow↔Purple are classic complementary pairs!'
+},
+{
+idx: 25, dim: 'arts', sub: 'Arts', icon: '🎨',
+n: 'Leonardo DaV', sg: 'PERSPECTIVE & DEPTH', p: [14, -6], a: [12, -3.5], hair: 0xfbbf24, sh: 0x86198f, pa: 0x1f2937, t: 'Linear Perspective & Vanishing Points',
+story: 'Leonardo DaV draws parallel train tracks converging toward a single vanishing point on the horizon line, turning a flat 2D canvas into deep 3D space!',
+o: ['Converging lines toward a horizon vanishing point create realistic 3D depth illusion', 'The horizon line is level', 'Pencils use graphite'],
+q: ['How do vanishing points and converging lines create depth in 2D drawing?', 'How long is a wooden ruler?', 'What paper size is biggest?'],
+h: ['Objects shrink proportionally along perspective lines toward the vanishing point', 'Distant objects must be drawn larger than foreground objects', 'Perspective lines never meet'],
+v: { n: 'Depth Planes', u: 'layers', L: [1, 2, 3, 4, 5], R: [20, 42, 65, 85, 100], ru: '% 3D depth' },
+c: ['Arts: One-point and two-point perspective give flat drawings realistic spatial depth', 'Horizon lines belong at the bottom corner', 'Parallel tracks stay wide apart at the horizon'],
+tip: 'Perspective Rule: Foreground = large & detailed; Background = smaller & softer!'
+},
+{
+idx: 26, dim: 'arts', sub: 'Arts', icon: '🎨',
+n: 'Frida Rhythm', sg: 'RULE OF THIRDS', p: [-14, 14], a: [-12, 11.5], hair: 0xf43f5e, sh: 0xbe185d, pa: 0x111827, t: 'Composition: Rule of Thirds & Balance',
+story: 'Frida Rhythm divides the canvas with a 3×3 grid, placing the main subject on an intersection point for natural flow and visual balance.',
+o: ['Placing focal subjects on Rule-of-Thirds intersections creates dynamic, balanced compositions', 'Frames hang on walls', 'Canvases are rectangular'],
+q: ['How does the Rule of Thirds improve visual balance in painting and photography?', 'How thick is the picture frame?', 'Who stretched the canvas?'],
+h: ['Off-center focal points guide the viewer’s gaze naturally across the entire composition', 'Dead-center placement is the only way to compose art', 'Empty negative space ruins every painting'],
+v: { n: 'Focal Harmony', u: 'pts', L: [1, 2, 3, 4, 5], R: [24, 48, 72, 90, 100], ru: '% balance' },
+c: ['Arts: Rule of Thirds and intentional negative space create compelling visual storytelling', 'Cluttering every inch improves focus', 'Composition rules only apply to sculptures'],
+tip: 'Art Secret: Use negative space (breathing room) around your focal subject!'
+},
+{
+idx: 27, dim: 'arts', sub: 'Arts', icon: '🎨',
+n: 'Sculptor Rodin', sg: 'LIGHT & SHADOW VALUE', p: [14, 14], a: [12, 11.5], hair: 0xc4b5fd, sh: 0x6b21a8, pa: 0x0f172a, t: 'Chiaroscuro: Value Shading & Form',
+story: 'Sculptor Rodin shades spheres using highlights, midtones, core shadows, and cast shadows—making flat circles look like solid 3D marble!',
+o: ['Gradual value transitions from highlight to core shadow give flat shapes 3D volume', 'Charcoal pencils are dark', 'Marble is smooth'],
+q: ['How does shading across light and shadow values transform a 2D shape into 3D form?', 'How many pencils are in a set?', 'What color is raw clay?'],
+h: ['Consistent light direction with highlights and core shadows creates realistic 3D volume', 'Using only one flat shade makes spheres look 3D', 'Shadows belong on the same side as the lamp'],
+v: { n: 'Value Tones', u: 'steps', L: [1, 2, 3, 4, 5], R: [20, 45, 70, 88, 100], ru: '% realism' },
+c: ['Arts: Mastering value scales (light to dark) gives drawings weight, form, and realism', 'Highlights should be darkest black', 'Reflected light never appears in shadows'],
+tip: 'Shading Tip: Always decide where your light source is coming from before shading!'
+},
+
+// --- DIGITAL DESIGN DIMENSION (28..31) ---
+{
+idx: 28, dim: 'design', sub: 'Digital Design', icon: '🖥️',
+n: 'Pixel Director', sg: 'UI/UX HIERARCHY', p: [-14, -6], a: [-12, -3.5], hair: 0x34d399, sh: 0x059669, pa: 0x0f172a, t: 'UI/UX: Visual Hierarchy & Flow',
+story: 'Pixel Director designs game interfaces where primary buttons are larger, brighter, and cleanly spaced so players know what to tap in 0.5 seconds!',
+o: ['Size, contrast, and whitespace guide users to primary actions effortlessly', 'Screens emit light', 'Icons have rounded corners'],
+q: ['How does visual hierarchy improve usability in digital app and game design?', 'How many pixels are in 4K?', 'What brand is the stylus?'],
+h: ['Clear size and contrast hierarchy lets users scan and act without confusion', 'Making every button identical size and color improves clarity', 'Hiding buttons in tiny text makes apps faster'],
+v: { n: 'UX Clarity Score', u: 'tests', L: [1, 2, 3, 4, 5], R: [28, 52, 74, 90, 100], ru: '% usability' },
+c: ['Digital Design: Strong visual hierarchy reduces cognitive load and speeds up navigation', 'Randomly scattered buttons improve UX', 'Whitespace is wasted screen area'],
+tip: 'UI/UX Rule: Primary CTA = Bold & High Contrast; Secondary Action = Subtle!'
+},
+{
+idx: 29, dim: 'design', sub: 'Digital Design', icon: '🖥️',
+n: 'Typo Queen', sg: 'TYPOGRAPHY & CONTRAST', p: [14, -6], a: [12, -3.5], hair: 0x38bdf8, sh: 0x0d9488, pa: 0x1e293b, t: 'Typography & Accessibility Contrast',
+story: 'Typo Queen tests text legibility on mobile screens. High foreground-to-background contrast (≥ 4.5:1) ensures everyone can read cleanly in sunlight!',
+o: ['High color contrast and clear font sizing make digital text readable on every device', 'Letters have curves', 'Screens use RGB pixels'],
+q: ['How do font hierarchy and WCAG color contrast affect digital readability?', 'How many fonts exist online?', 'What is a pixel?'],
+h: ['High luminance contrast and generous line height prevent eye strain and improve reading speed', 'Light gray text on a white background is easiest to read', 'Using 8 different fonts on one card looks cleanest'],
+v: { n: 'Contrast Ratio', u: ':1', L: [1.5, 3.0, 4.5, 7.0, 10.0], R: [22, 48, 78, 92, 100], ru: '% legible' },
+c: ['Digital Design: Accessible contrast (4.5:1+) and clean typography make interfaces inclusive', 'Low contrast makes buttons easier to read', 'Body text should be smaller than 6px'],
+tip: 'Design Rule: Stick to max 2 font families per project (1 Display + 1 Clean Sans-Serif)!'
+},
+{
+idx: 30, dim: 'design', sub: 'Digital Design', icon: '🖥️',
+n: 'Vector Nova', sg: 'SVG BEZIER VECTORS', p: [-14, 14], a: [-12, 11.5], hair: 0xfbbf24, sh: 0x047857, pa: 0x111827, t: 'Vector Graphics (SVG) vs. Raster',
+story: 'Vector Nova zooms an SVG logo to 1000% billboard size—and every curve stays razor-sharp because vectors use mathematical Bezier equations!',
+o: ['Vector graphics scale infinitely without pixelation because they are math-based paths', 'Logos represent brands', 'Bezier handles control curves'],
+q: ['Why do vector graphics (SVG) stay crisp at any screen resolution compared to raster bitmaps?', 'How many colors are in PNG?', 'Who invented the mouse?'],
+h: ['Vectors recalculate smooth mathematical paths at any zoom level with zero pixel blur', 'Vectors contain millions of tiny blurry squares', 'Raster JPEGs never pixelate when zoomed'],
+v: { n: 'Zoom Scale', u: '×', L: [1, 2, 4, 8, 16], R: [100, 100, 100, 100, 100], ru: '% sharpness' },
+c: ['Digital Design: SVG vectors maintain 100% sharpness across watches, phones, and billboards', 'Vector logos get blurry at 2× zoom', 'Bitmaps are better than vectors for geometric icons'],
+tip: 'Format Tip: Use SVG for logos & icons; use WebP/PNG for detailed photos!'
+},
+{
+idx: 31, dim: 'design', sub: 'Digital Design', icon: '🖥️',
+n: 'Motion Jax', sg: '60 FPS MOTION DESIGN', p: [14, 14], a: [12, 11.5], hair: 0xf472b6, sh: 0x115e59, pa: 0x0f172a, t: 'Animation: Keyframes, Easing & FPS',
+story: 'Motion Jax replaces stiff linear robot movement with smooth ease-out curves at 60 frames per second, making UI transitions feel alive and natural!',
+o: ['Easing curves and high frame rates (60 FPS) create fluid, lifelike digital motion', 'Animations play over time', 'Keyframes mark start and end'],
+q: ['How do easing curves and 60 FPS frame rates improve interactive motion design?', 'How many seconds are in a minute?', 'What color is the timeline bar?'],
+h: ['Ease-in/ease-out mimics real-world acceleration and deceleration for natural feedback', '5 FPS choppy slideshows feel smoother than 60 FPS', 'UI animations should last 10 seconds per click'],
+v: { n: 'Frame Rate', u: 'FPS', L: [12, 24, 30, 48, 60], R: [20, 45, 62, 85, 100], ru: '% smoothness' },
+c: ['Digital Design: Fast, eased 60 FPS micro-interactions make digital apps feel responsive', 'Linear robotic jumps feel most organic', 'Frame rate has no effect on perceived smoothness'],
+tip: 'Motion Rule: Keep UI micro-interactions snappy (150ms–300ms) with ease-out curves!'
 }
 ];
 
-// Hub World Portals (when currentDim === 'hub') & Return Portal (when inside a dimension)
 const HUB_PORTALS = [
-{ target: 'math', n: 'MATH PORTAL', icon: '📐', color: '#38bdf8', hex: 0x0284c7, p: [-16, -6], a: [-14, -3] },
-{ target: 'science', n: 'SCIENCE PORTAL', icon: '🔬', color: '#fbbf24', hex: 0xd97706, p: [-5.5, -10], a: [-5.5, -7] },
-{ target: 'english', n: 'ENGLISH PORTAL', icon: '📚', color: '#f472b6', hex: 0xdb2777, p: [5.5, -10], a: [5.5, -7] },
-{ target: 'thai', n: 'THAI PORTAL', icon: '🇹🇭', color: '#2dd4bf', hex: 0x0d9488, p: [16, -6], a: [14, -3] }
+{ target: 'math', n: 'MATH PORTAL', icon: '📐', color: '#38bdf8', hex: 0x0284c7, p: [-21, -8], a: [-19, -5] },
+{ target: 'science', n: 'SCIENCE PORTAL', icon: '🔬', color: '#fbbf24', hex: 0xd97706, p: [-13, -11], a: [-12, -8] },
+{ target: 'english', n: 'ENGLISH PORTAL', icon: '📚', color: '#f472b6', hex: 0xdb2777, p: [-5, -13], a: [-5, -10] },
+{ target: 'thai', n: 'THAI PORTAL', icon: '🇹🇭', color: '#2dd4bf', hex: 0x0d9488, p: [5, -13], a: [5, -10] },
+{ target: 'ict', n: 'ICT & ROBOTICS', icon: '🤖', color: '#60a5fa', hex: 0x2563eb, p: [13, -11], a: [12, -8] },
+{ target: 'makerspace', n: 'MAKERSPACE', icon: '🛠️', color: '#fb923c', hex: 0xea580c, p: [21, -8], a: [19, -5] },
+{ target: 'arts', n: 'ARTS PORTAL', icon: '🎨', color: '#e879f9', hex: 0xc026d3, p: [-18, 4], a: [-15, 4] },
+{ target: 'design', n: 'DIGITAL DESIGN', icon: '🖥️', color: '#34d399', hex: 0x059669, p: [18, 4], a: [15, 4] },
+{ target: 'pvp', n: 'LV.100 PVP ARENA', icon: '⚔️', color: '#fde047', hex: 0xeab308, p: [0, 18], a: [0, 15], minLv: 100 }
 ];
 const RETURN_PORTAL = { target: 'hub', n: 'MAIN PLAZA', icon: '🌐', color: '#a78bfa', hex: 0x7c3aed, p: [0, -18], a: [0, -15] };
 
+const PVP_STATIONS = [
+{ id: 'graphwars', n: 'GRAPH WARS', icon: '📈', color: '#38bdf8', p: [-14, -6], a: [-11, -4] },
+{ id: 'football', n: 'PVP FOOTBALL', icon: '⚽', color: '#34d399', p: [14, -6], a: [11, -4] },
+{ id: 'basketball', n: 'PVP BASKETBALL', icon: '🏀', color: '#fb923c', p: [-14, 12], a: [-11, 10] },
+{ id: 'dronerace', n: 'DRONE RACING', icon: '🚁', color: '#f472b6', p: [14, 12], a: [11, 10] }
+];
+let activePvpStations = [];
+let pvpSigns = [];
+let droneRace = { active: false, ringIdx: 0, startTime: 0, rings: [] };
 let currentDim = 'hub';
 let activeQuests = [];
 let activePortals = [];
@@ -705,7 +978,7 @@ render();
 
 function render() {
 const c = cs.qObj, pn = $('#pn');
-const badgeCol = c.sub === 'Math' ? '#38bdf8' : c.sub === 'English' ? '#f472b6' : c.sub === 'Thai' ? '#2dd4bf' : '#fbbf24';
+const badgeCol = (DIMS[c.dim] && DIMS[c.dim].color) || '#fbbf24';
 let h = '<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:' + badgeCol + ';margin-bottom:0.2em">' + c.icon + ' ' + c.sub + ' Dimension Quest</div><h2>' + c.n + ': ' + c.t + '</h2><div class="steps">' +
 ST.map((_, k) => '<i class="' + (k < cs.s ? 'ok' : k == cs.s ? 'on' : '') + '"></i>').join('') + '</div>';
 if (cs.s < 5) h += '<div class="story">' + c.story + '</div><div class="q">' + ST[cs.s] + ': ' + QS[cs.s] + '</div>';
@@ -769,7 +1042,7 @@ pn.innerHTML = '<h2>' + c.sub + ' Quest Complete!</h2><div>' + star(st) + '</div
 $('#cl').onclick = () => {
 $('#dlg').style.display = 'none';
 cs = null;
-if (S.stars.every(x => x > 0)) say('สุดยอด (Sùt yâwt), ' + S.name + '! You conquered all 4 Dimensions!', 5000);
+if (S.stars.every(x => x > 0)) say('สุดยอด (Sùt yâwt), ' + S.name + '! You conquered all 8 Subject Dimensions & 32 Quests!', 5500);
 };
 }
 
@@ -923,17 +1196,21 @@ const rem = Math.ceil((S.detentionUntil - Date.now()) / 1000);
 say('🚨 Locked in Detention Room for ' + rem + 's!', 2500);
 return;
 }
+const curLv = lvl();
 const dimBtns = Object.entries(DIMS).filter(([key]) => key !== 'detention').map(([key, d]) => {
 const isCur = currentDim === key;
+const locked = d.minLv && curLv < d.minLv;
 const subStars = key === 'hub'
-? totalStars() + '/48 ⭐'
+? totalStars() + '/96 ⭐'
+: key === 'pvp'
+? (locked ? '🔒 Requires Lv.' + d.minLv : '⚔️ ' + Object.values(S.pvpWins || {}).reduce((a, b) => a + b, 0) + ' Wins')
 : C.filter(q => q.dim === key).reduce((acc, q) => acc + S.stars[q.idx], 0) + '/12 ⭐';
-return '<button class="opt ' + (isCur ? 'good' : '') + '" data-dim="' + key + '" style="display:flex;justify-content:space-between;align-items:center">' +
+return '<button class="opt ' + (isCur ? 'good' : '') + '" data-dim="' + key + '" ' + (locked ? 'disabled style="opacity:0.55;display:flex;justify-content:space-between;align-items:center"' : 'style="display:flex;justify-content:space-between;align-items:center"') + '>' +
 '<span><b>' + d.icon + ' ' + d.name + '</b>' + (isCur ? ' (Current)' : '') + '</span>' +
 '<span style="color:#fbbf24;font-weight:800">' + subStars + '</span></button>';
 }).join('');
-infoPanel('<h2>🌐 Dimension Teleporter</h2><p style="color:#cbd5e1;font-size:0.92em">Walk into a glowing 3D Portal in the plaza or select a dimension below to warp instantly:</p>' + dimBtns);
-$('#pn').querySelectorAll('button[data-dim]').forEach(btn => {
+infoPanel('<h2>🌐 Dimension Teleporter (8 Worlds + Lv.100 PVP)</h2><p style="color:#cbd5e1;font-size:0.9em">Walk into any glowing 3D Portal in the plaza or select a dimension below:</p>' + dimBtns);
+$('#pn').querySelectorAll('button[data-dim]:not([disabled])').forEach(btn => {
 btn.onclick = () => {
 $('#dlg').style.display = 'none';
 enterDimension(btn.dataset.dim);
@@ -943,16 +1220,23 @@ enterDimension(btn.dataset.dim);
 
 $('#i1').onclick = () => {
 const groups = [
-{ key: 'math', label: '📐 Math Dimension', col: '#38bdf8' },
-{ key: 'science', label: '🔬 Science Dimension', col: '#fbbf24' },
-{ key: 'english', label: '📚 English Dimension', col: '#f472b6' },
-{ key: 'thai', label: '🇹🇭 Thai Language Dimension', col: '#2dd4bf' }
+{ key: 'math', label: '📐 Math (Arithmetics, Patterns & Algebra)', col: '#38bdf8' },
+{ key: 'science', label: '🔬 Science (Biology & Chemistry)', col: '#fbbf24' },
+{ key: 'english', label: '📚 English Language', col: '#f472b6' },
+{ key: 'thai', label: '🇹🇭 Thai Language', col: '#2dd4bf' },
+{ key: 'ict', label: '🤖 ICT & Robotics', col: '#60a5fa' },
+{ key: 'makerspace', label: '🛠️ Makerspace', col: '#fb923c' },
+{ key: 'arts', label: '🎨 Arts Dimension', col: '#e879f9' },
+{ key: 'design', label: '🖥️ Digital Design', col: '#34d399' }
 ].map(g => {
 const rows = C.filter(c => c.dim === g.key)
-.map(c => '<p style="display:flex;justify-content:space-between;align-items:center;margin:0.28em 0;font-size:0.94em"><span>' + c.icon + ' ' + c.t + ' <small style="color:#94a3b8">(' + c.n + ')</small></span><span>' + star(S.stars[c.idx]) + '</span></p>').join('');
-return '<h3 style="margin:0.7em 0 0.25em;color:' + g.col + ';font-size:1em;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.2em">' + g.label + '</h3>' + rows;
+.map(c => '<p style="display:flex;justify-content:space-between;align-items:center;margin:0.24em 0;font-size:0.9em"><span>' + c.icon + ' ' + c.t + ' <small style="color:#94a3b8">(' + c.n + ')</small></span><span>' + star(S.stars[c.idx]) + '</span></p>').join('');
+return '<h3 style="margin:0.65em 0 0.2em;color:' + g.col + ';font-size:0.96em;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.2em">' + g.label + '</h3>' + rows;
 }).join('');
-infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + ' (Earned: ' + totalStars() + '/48 ⭐ · Wallet: ' + availStars() + ' ⭐)</h2>' + groups + '<p style="color:#a5b4fc;margin-top:0.6em">Total XP: ' + S.xp + '</p>');
+const w = S.pvpWins || {};
+const pvpSummary = '<h3 style="margin:0.65em 0 0.2em;color:#fde047;font-size:0.96em;border-bottom:1px solid rgba(253,224,71,0.25);padding-bottom:0.2em">⚔️ Lv.100 PVP Arena Record</h3>' +
+'<p style="font-size:0.88em;color:#e2e8f0">📈 Graph Wars: <b>' + (w.graphwars || 0) + 'W</b> · ⚽ Football: <b>' + (w.football || 0) + 'W</b> · 🏀 Basketball: <b>' + (w.basketball || 0) + 'W</b> · 🚁 Drone Race: <b>' + (w.dronerace || 0) + 'W</b></p>';
+infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + ' (Earned: ' + totalStars() + '/96 ⭐ · Wallet: ' + availStars() + ' ⭐)</h2>' + groups + pvpSummary + '<p style="color:#a5b4fc;margin-top:0.6em">Total XP: ' + S.xp + '</p>');
 };
 
 $('#i2').onclick = () => {
@@ -972,18 +1256,16 @@ return;
 }
 const nextAny = C.find(q => S.stars[q.idx] === 0);
 if (!nextAny) {
-say('All 12 quests across all dimensions solved! Replay any to get 3 stars.', 4500);
+say('All 32 quests across all 8 dimensions solved! Reach Lv.100 to enter the PVP Arena!', 4500);
 } else {
 say('All quests here are done! Warp to ' + DIMS[nextAny.dim].name + ' for ' + nextAny.n + '.', 4500);
 }
 };
 
-$('#i4').onclick = () => infoPanel('<h2>Dimension Explorer Guide</h2>' +
-'<p><b>🌐 Main Plaza:</b> Step into the glowing <b>Math</b>, <b>Science</b>, or <b>English</b> Portals (or click the top dimension pill) to teleport to specialized worlds!</p>' +
-'<p><b>📐 Math Dimension:</b> Surrounded by floating formulas, numbers, and geometric monuments with 4 Math NPCs.</p>' +
-'<p><b>🔬 Science Dimension:</b> High-tech orbital research station with 4 Science NPCs.</p>' +
-'<p><b>📚 English Dimension:</b> Floating sky library with giant books, letters, and 4 English NPCs.</p>' +
-'<p><b>🇹🇭 Thai Language Dimension:</b> Golden temple sanctuary with floating Thai script, numerals (๑–๕), and 4 Thai NPCs.</p>' +
+$('#i4').onclick = () => infoPanel('<h2>Inquiry World v13 · Explorer Guide</h2>' +
+'<p><b>🌐 8 Subject Dimensions (32 Quests · 96 ⭐):</b></p>' +
+'<p style="font-size:0.88em;line-height:1.45">📐 <b>Math</b> (Arithmetics, Patterns, Algebra) · 🔬 <b>Science</b> (Biology & Chemistry) · 📚 <b>English</b> · 🇹🇭 <b>Thai</b> · 🤖 <b>ICT & Robotics</b> · 🛠️ <b>Makerspace</b> · 🎨 <b>Arts</b> · 🖥️ <b>Digital Design</b></p>' +
+'<p><b>⚔️ Lv.100 PVP Arena:</b> Unlock at Level 100 to battle in <b>Graph Wars</b>, <b>PVP Football</b>, <b>PVP Basketball</b>, and <b>3D Drone Racing</b>!</p>' +
 '<p><b>🚁 Drone Flight:</b> Press <b>F</b> or tap <b>Drone</b> anytime to fly around any dimension!</p>' +
 '<hr style="border:0;border-top:1px solid rgba(255,255,255,0.15);margin:0.8em 0;">' +
 '<p style="font-size:0.85em;color:#c4b5fd;text-align:center;margin:0;">💻 <b>Developer:</b> johnicebourne@gmail.com</p>');
@@ -991,7 +1273,7 @@ $('#i4').onclick = () => infoPanel('<h2>Dimension Explorer Guide</h2>' +
 $('#i5').onclick = () => {
 infoPanel('<h2>Reset progress?</h2><p>This erases your stars and XP on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
 $('#rs').onclick = () => {
-S = { name: S.name, xp: 0, stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], spentStars: 0, ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0 };
+S = { name: S.name, xp: 0, stars: Array(32).fill(0), pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 }, spentStars: 0, ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0 };
 rebuildLocalAvatar();
 save();
 hud();
@@ -1008,6 +1290,10 @@ activeQuests.forEach(q => {
 const d = Math.hypot(q.p[0] - P.x, q.p[1] - P.z);
 if (d < bd) { bd = d; best = { type: 'quest', item: q, dist: d }; }
 });
+activePvpStations.forEach(st => {
+const d = Math.hypot(st.p[0] - P.x, st.p[1] - P.z);
+if (d < bd) { bd = d; best = { type: 'pvp', item: st, dist: d }; }
+});
 activePortals.forEach(pt => {
 const d = Math.hypot(pt.p[0] - P.x, pt.p[1] - P.z);
 if (d < bd) { bd = d; best = { type: 'portal', item: pt, dist: d }; }
@@ -1019,6 +1305,7 @@ $('#tg').onclick = () => {
 const near = nearestInteractable();
 if (!near) return;
 if (near.type === 'quest') goNpc(near.item);
+else if (near.type === 'pvp') goPvpStation(near.item);
 else goPortal(near.item);
 };
 
@@ -1050,11 +1337,375 @@ P.tz = qObj.a[1];
 P.pend = { type: 'quest', item: qObj };
 }
 function goPortal(ptObj) {
+if (ptObj.minLv && lvl() < ptObj.minLv) {
+say('⚔️ Lv.100 PVP Arena requires Level ' + ptObj.minLv + '! (You are Lv.' + lvl() + ')', 3500);
+return;
+}
 if (P.flying) toggleDrone(false);
 P.tx = ptObj.a[0];
 P.tz = ptObj.a[1];
 P.pend = { type: 'portal', item: ptObj };
 }
+function goPvpStation(stObj) {
+if (P.flying) toggleDrone(false);
+P.tx = stObj.a[0];
+P.tz = stObj.a[1];
+P.pend = { type: 'pvp', item: stObj };
+}
+
+let activePvpLoop = null;
+function stopPvpLoop() {
+if (activePvpLoop) {
+cancelAnimationFrame(activePvpLoop);
+activePvpLoop = null;
+}
+}
+const origDlgClose = $('#dlg-close').onclick;
+$('#dlg-close').onclick = () => {
+stopPvpLoop();
+if (origDlgClose) origDlgClose();
+else { cs = null; $('#dlg').style.display = 'none'; }
+};
+
+function recordPvpWin(gameKey, label) {
+S.pvpWins = S.pvpWins || { graphwars: 0, football: 0, basketball: 0, dronerace: 0 };
+S.pvpWins[gameKey] = (S.pvpWins[gameKey] || 0) + 1;
+S.xp += 350;
+save();
+hud();
+pushState(true);
+say('🏆 Victory in ' + label + '! +350 XP · Total Wins: ' + S.pvpWins[gameKey], 4500);
+}
+
+function getPvpOpponentName() {
+const now = Date.now();
+const live = Object.values(remotePlayers).find(rp => rp && now - (rp.ts || 0) < 20000);
+return live ? (live.name + ' (Lv.' + (live.lv || 100) + ')') : 'Grandmaster Bot (Lv.100)';
+}
+
+function openPvpGame(gameId) {
+stopPvpLoop();
+cs = 'pvp';
+$('#dlg').style.display = 'flex';
+const opp = getPvpOpponentName();
+
+if (gameId === 'dronerace') {
+$('#pn').innerHTML = '<h2>🚁 3D Drone Racing Circuit</h2>' +
+'<p style="color:#cbd5e1;font-size:0.92em">Fly your drone through all <b>6 glowing sky rings</b> in order as fast as possible! Beat the <b>28.0s</b> pro record to win.</p>' +
+'<div class="pvp-scorebar"><span>🏁 Opponent: ' + opp + '</span><span>🏆 Wins: ' + (S.pvpWins.dronerace || 0) + '</span></div>' +
+'<button class="opt good" id="start-drone-race" style="text-align:center;font-weight:800">🚀 Launch Drone & Start 6-Ring Race!</button>';
+$('#start-drone-race').onclick = () => {
+cs = null;
+$('#dlg').style.display = 'none';
+startDroneRace();
+};
+return;
+}
+
+if (gameId === 'graphwars') {
+$('#pn').innerHTML = '<h2>📈 Graph Wars · Coordinate Artillery</h2>' +
+'<div class="pvp-scorebar"><span>You (Blue) vs ' + opp + ' (Red)</span><span id="gw-status">Your Turn!</span></div>' +
+'<div class="pvp-hud-card"><canvas id="pvp-cv" class="pvp-canvas" width="520" height="210"></canvas>' +
+'<div class="pvp-controls">' +
+'<div class="pvp-slider-row"><label>Slope <b>m</b>: <span id="gw-m-v">0.8</span></label><input id="gw-m" type="range" min="-2.5" max="2.5" step="0.1" value="0.8"></div>' +
+'<div class="pvp-slider-row"><label>Curve <b>a</b> (ax²): <span id="gw-a-v">-0.04</span></label><input id="gw-a" type="range" min="-0.15" max="0.15" step="0.01" value="-0.04"></div>' +
+'</div></div>' +
+'<button class="opt good" id="gw-fire" style="text-align:center;font-weight:800">💥 Fire Equation y = ax² + mx!</button>';
+
+const cv2 = $('#pvp-cv'), ctx = cv2.getContext('2d');
+const p1 = { x: -10, y: Math.round((Math.random() * 6 - 3)) };
+const p2 = { x: 10, y: Math.round((Math.random() * 6 - 3)) };
+const obs = { x: 0, y: Math.round((Math.random() * 4 - 2)), r: 1.8 };
+let beam = null, turn = 'player', done = false;
+
+const toPx = (gx, gy) => [260 + gx * 20, 105 - gy * 16];
+function drawGW() {
+ctx.fillStyle = '#070b14';
+ctx.fillRect(0, 0, 520, 210);
+ctx.strokeStyle = 'rgba(56,189,248,0.14)';
+ctx.lineWidth = 1;
+for (let x = -12; x <= 12; x += 2) {
+const [px] = toPx(x, 0);
+ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, 210); ctx.stroke();
+}
+for (let y = -6; y <= 6; y += 2) {
+const [, py] = toPx(0, y);
+ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(520, py); ctx.stroke();
+}
+ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+ctx.beginPath(); ctx.moveTo(0, 105); ctx.lineTo(520, 105); ctx.moveTo(260, 0); ctx.lineTo(260, 210); ctx.stroke();
+
+// Obstacle
+const [ox, oy] = toPx(obs.x, obs.y);
+ctx.fillStyle = '#475569';
+ctx.beginPath(); ctx.arc(ox, oy, obs.r * 18, 0, 7); ctx.fill();
+ctx.strokeStyle = '#94a3b8'; ctx.stroke();
+
+// Players
+const [x1, y1] = toPx(p1.x, p1.y);
+ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(x1, y1, 9, 0, 7); ctx.fill();
+const [x2, y2] = toPx(p2.x, p2.y);
+ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(x2, y2, 9, 0, 7); ctx.fill();
+
+// Preview curve for player
+if (turn === 'player' && !beam && !done) {
+const m = parseFloat($('#gw-m').value), a = parseFloat($('#gw-a').value);
+ctx.strokeStyle = 'rgba(56,189,248,0.45)';
+ctx.setLineDash([4, 4]);
+ctx.beginPath();
+for (let dx = 0; dx <= 6; dx += 0.25) {
+const gx = p1.x + dx;
+const gy = p1.y + a * dx * dx + m * dx;
+const [px, py] = toPx(gx, gy);
+if (dx === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+}
+ctx.stroke();
+ctx.setLineDash([]);
+}
+
+if (beam) {
+ctx.strokeStyle = beam.who === 'player' ? '#38bdf8' : '#f43f5e';
+ctx.lineWidth = 3;
+ctx.beginPath();
+beam.pts.forEach(([px, py], i) => { if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py); });
+ctx.stroke();
+}
+}
+drawGW();
+$('#gw-m').oninput = () => { $('#gw-m-v').textContent = $('#gw-m').value; drawGW(); };
+$('#gw-a').oninput = () => { $('#gw-a-v').textContent = $('#gw-a').value; drawGW(); };
+
+function fireCurve(who, a, m) {
+const start = who === 'player' ? p1 : p2;
+const target = who === 'player' ? p2 : p1;
+const dir = who === 'player' ? 1 : -1;
+const pts = [];
+let hit = false;
+for (let step = 0; step <= 22; step += 0.2) {
+const dx = step * dir;
+const gx = start.x + dx;
+const gy = start.y + a * step * step + m * step;
+pts.push(toPx(gx, gy));
+if (Math.hypot(gx - obs.x, gy - obs.y) < obs.r) break;
+if (Math.hypot(gx - target.x, gy - target.y) < 1.15) { hit = true; break; }
+if (Math.abs(gx) > 13 || Math.abs(gy) > 7) break;
+}
+beam = { who, pts };
+drawGW();
+if (hit) {
+done = true;
+if (who === 'player') {
+$('#gw-status').textContent = '🎯 DIRECT HIT! YOU WIN!';
+recordPvpWin('graphwars', 'Graph Wars');
+} else {
+$('#gw-status').textContent = '💥 Opponent Hit You! Try Again!';
+}
+return;
+}
+if (who === 'player') {
+turn = 'bot';
+$('#gw-status').textContent = 'Opponent aiming...';
+setTimeout(() => {
+if (done) return;
+beam = null;
+const idealM = (p1.y - p2.y) / 20 + (Math.random() * 0.35 - 0.17);
+fireCurve('bot', -0.02, idealM);
+if (!done) {
+setTimeout(() => { beam = null; turn = 'player'; $('#gw-status').textContent = 'Your Turn!'; drawGW(); }, 900);
+}
+}, 900);
+}
+}
+$('#gw-fire').onclick = () => {
+if (done || turn !== 'player') return;
+fireCurve('player', parseFloat($('#gw-a').value), parseFloat($('#gw-m').value));
+};
+return;
+}
+
+if (gameId === 'football') {
+$('#pn').innerHTML = '<h2>⚽ PVP Penalty & Free-Kick Shootout</h2>' +
+'<div class="pvp-scorebar"><span id="fb-score">You 0 – 0 ' + opp + '</span><span id="fb-msg">Set Aim & Curve!</span></div>' +
+'<div class="pvp-hud-card"><canvas id="pvp-cv" class="pvp-canvas" width="520" height="205"></canvas>' +
+'<div class="pvp-controls">' +
+'<div class="pvp-slider-row"><label>Target X: <span id="fb-x-v">0</span></label><input id="fb-x" type="range" min="-150" max="150" value="0"></div>' +
+'<div class="pvp-slider-row"><label>Spin Curve: <span id="fb-c-v">0</span></label><input id="fb-c" type="range" min="-90" max="90" value="0"></div>' +
+'</div></div>' +
+'<button class="opt good" id="fb-kick" style="text-align:center;font-weight:800">⚽ Strike Free Kick! (First to 3 Goals)</button>';
+
+const cv2 = $('#pvp-cv'), ctx = cv2.getContext('2d');
+let myG = 0, oppG = 0, kicking = false, keeperX = 260, keeperDir = 3.2;
+let ball = { x: 260, y: 182, tx: 260, ty: 52, curve: 0, t: 0 };
+
+$('#fb-x').oninput = () => $('#fb-x-v').textContent = $('#fb-x').value;
+$('#fb-c').oninput = () => $('#fb-c-v').textContent = $('#fb-c').value;
+
+function tickFB() {
+ctx.fillStyle = '#064e3b';
+ctx.fillRect(0, 0, 520, 205);
+// Goal frame
+ctx.strokeStyle = '#ffffff';
+ctx.lineWidth = 4;
+ctx.strokeRect(105, 18, 310, 68);
+ctx.fillStyle = 'rgba(255,255,255,0.08)';
+ctx.fillRect(105, 18, 310, 68);
+
+if (!kicking) {
+keeperX += keeperDir;
+if (keeperX > 385 || keeperX < 135) keeperDir *= -1;
+const aimX = 260 + parseFloat($('#fb-x').value);
+ctx.strokeStyle = '#fde047';
+ctx.lineWidth = 2;
+ctx.beginPath(); ctx.arc(aimX, 48, 10, 0, 7); ctx.stroke();
+}
+
+// Goalkeeper
+ctx.fillStyle = '#f43f5e';
+ctx.fillRect(keeperX - 24, 42, 48, 22);
+
+if (kicking) {
+ball.t += 0.045;
+const p = Math.min(1, ball.t);
+const curX = ball.x + (ball.tx - ball.x) * p + Math.sin(p * Math.PI) * ball.curve;
+const curY = ball.y + (ball.ty - ball.y) * p;
+ctx.fillStyle = '#ffffff';
+ctx.beginPath(); ctx.arc(curX, curY, 9 - p * 2, 0, 7); ctx.fill();
+if (p >= 1) {
+kicking = false;
+const saved = Math.abs(curX - keeperX) < 30;
+const inGoal = curX > 108 && curX < 412;
+if (inGoal && !saved) {
+myG++;
+$('#fb-msg').textContent = '⚽ GOAL!!';
+} else {
+oppG++;
+$('#fb-msg').textContent = saved ? '🧤 SAVED! Opponent counters!' : '❌ Wide! Opponent scores!';
+}
+$('#fb-score').textContent = 'You ' + myG + ' – ' + oppG + ' ' + opp;
+if (myG >= 3) {
+$('#fb-msg').textContent = '🏆 CHAMPION! You won 3-' + oppG + '!';
+recordPvpWin('football', 'PVP Football');
+return;
+} else if (oppG >= 3) {
+$('#fb-msg').textContent = 'Opponent won ' + oppG + '-' + myG + '. Rematch ready!';
+myG = 0; oppG = 0;
+}
+}
+} else {
+ctx.fillStyle = '#ffffff';
+ctx.beginPath(); ctx.arc(260, 182, 9, 0, 7); ctx.fill();
+}
+activePvpLoop = requestAnimationFrame(tickFB);
+}
+activePvpLoop = requestAnimationFrame(tickFB);
+$('#fb-kick').onclick = () => {
+if (kicking) return;
+ball = {
+x: 260, y: 182,
+tx: 260 + parseFloat($('#fb-x').value),
+ty: 48,
+curve: parseFloat($('#fb-c').value),
+t: 0
+};
+keeperDir = (Math.random() > 0.5 ? 1 : -1) * (3.8 + Math.random() * 2.2);
+kicking = true;
+};
+return;
+}
+
+if (gameId === 'basketball') {
+$('#pn').innerHTML = '<h2>🏀 PVP 3-Point Arc Shootout</h2>' +
+'<div class="pvp-scorebar"><span id="bb-score">You 0 – 0 ' + opp + '</span><span id="bb-msg">Dial Angle & Power!</span></div>' +
+'<div class="pvp-hud-card"><canvas id="pvp-cv" class="pvp-canvas" width="520" height="205"></canvas>' +
+'<div class="pvp-controls">' +
+'<div class="pvp-slider-row"><label>Launch Angle: <span id="bb-a-v">52</span>°</label><input id="bb-a" type="range" min="30" max="75" value="52"></div>' +
+'<div class="pvp-slider-row"><label>Shot Power: <span id="bb-p-v">72</span>%</label><input id="bb-p" type="range" min="45" max="100" value="72"></div>' +
+'</div></div>' +
+'<button class="opt good" id="bb-shoot" style="text-align:center;font-weight:800">🏀 Shoot 3-Pointer! (First to 9 Pts)</button>';
+
+const cv2 = $('#pvp-cv'), ctx = cv2.getContext('2d');
+let myPts = 0, oppPts = 0, shot = null, hoopY = 74, hoopDir = 0.7;
+
+$('#bb-a').oninput = () => $('#bb-a-v').textContent = $('#bb-a').value;
+$('#bb-p').oninput = () => $('#bb-p-v').textContent = $('#bb-p').value;
+
+function tickBB() {
+ctx.fillStyle = '#1e1b4b';
+ctx.fillRect(0, 0, 520, 205);
+hoopY += hoopDir;
+if (hoopY > 105 || hoopY < 52) hoopDir *= -1;
+
+// Backboard & Rim
+ctx.fillStyle = '#f8fafc';
+ctx.fillRect(455, hoopY - 34, 8, 46);
+ctx.strokeStyle = '#fb923c';
+ctx.lineWidth = 4;
+ctx.beginPath(); ctx.moveTo(418, hoopY); ctx.lineTo(455, hoopY); ctx.stroke();
+
+// Shooter
+ctx.fillStyle = '#38bdf8';
+ctx.fillRect(48, 152, 18, 38);
+
+if (shot) {
+shot.x += shot.vx;
+shot.y += shot.vy;
+shot.vy += 0.36;
+ctx.fillStyle = '#f97316';
+ctx.beginPath(); ctx.arc(shot.x, shot.y, 9, 0, 7); ctx.fill();
+
+if (Math.hypot(shot.x - 436, shot.y - hoopY) < 16 && shot.vy > 0) {
+shot = null;
+myPts += 3;
+$('#bb-msg').textContent = '🔥 SWISH! +3 PTS!';
+$('#bb-score').textContent = 'You ' + myPts + ' – ' + oppPts + ' ' + opp;
+if (myPts >= 9) {
+$('#bb-msg').textContent = '🏆 SWISH CHAMPION! You won!';
+recordPvpWin('basketball', 'PVP Basketball');
+return;
+}
+} else if (shot.y > 205 || shot.x > 520) {
+shot = null;
+if (Math.random() < 0.55) oppPts += 3;
+$('#bb-msg').textContent = 'Rim out! Opponent shoots...';
+$('#bb-score').textContent = 'You ' + myPts + ' – ' + oppPts + ' ' + opp;
+if (oppPts >= 9) {
+$('#bb-msg').textContent = 'Opponent hit 9 pts! Rematch reset.';
+myPts = 0; oppPts = 0;
+}
+}
+}
+activePvpLoop = requestAnimationFrame(tickBB);
+}
+activePvpLoop = requestAnimationFrame(tickBB);
+$('#bb-shoot').onclick = () => {
+if (shot) return;
+const ang = parseFloat($('#bb-a').value) * Math.PI / 180;
+const spd = parseFloat($('#bb-p').value) * 0.175;
+shot = { x: 66, y: 150, vx: Math.cos(ang) * spd, vy: -Math.sin(ang) * spd };
+};
+return;
+}
+}
+
+function startDroneRace() {
+if (currentDim !== 'pvp') {
+enterDimension('pvp', () => startDroneRace());
+return;
+}
+droneRace.active = true;
+droneRace.ringIdx = 0;
+droneRace.startTime = performance.now();
+$('#drone-race-hud').classList.add('active');
+$('#race-cp').textContent = 'Ring 1/' + droneRace.rings.length;
+P.x = 0; P.y = 4; P.z = 16; P.ry = Math.PI;
+if (!P.flying) toggleDrone(true);
+say('🚁 Fly through all 6 glowing pink/gold sky rings in order!', 4000);
+}
+$('#race-quit').onclick = () => {
+droneRace.active = false;
+$('#drone-race-hud').classList.remove('active');
+say('Drone Race cancelled.', 2000);
+};
 
 function toggleDrone(forceState) {
 const next = typeof forceState === 'boolean' ? forceState : !P.flying;
@@ -1317,8 +1968,14 @@ worldGroup.remove(worldGroup.children[0]);
 }
 questSigns.forEach(s => s.remove());
 portalSigns.forEach(s => s.remove());
+pvpSigns.forEach(s => s.remove());
 questSigns = [];
 portalSigns = [];
+pvpSigns = [];
+activePvpStations = [];
+droneRace.active = false;
+droneRace.rings = [];
+$('#drone-race-hud').classList.remove('active');
 porings = [];
 npcs = [];
 portalRings = [];
@@ -1601,6 +2258,161 @@ if (idx % 2 === 0) {
 cyl(0.55, 0.75, 3.0, 0xb45309, fx, 1.5, fz);
 }
 });
+} else if (dim === 'ict') {
+// --- ICT & ROBOTICS DIMENSION ---
+sc.background = new THREE.Color(0x061024);
+sc.fog = new THREE.Fog(0x061024, 42, 115);
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x0b1936));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+const grid = new THREE.GridHelper(110, 44, 0x60a5fa, 0x1e3a8a);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+box(4.8, 0.7, 4.8, 0x1e3a8a, 0, 0.35, -2);
+const core = new THREE.Mesh(new THREE.OctahedronGeometry(1.8, 0), new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true }));
+core.position.set(0, 4.0, -2);
+worldGroup.add(core);
+floaters.push({ mesh: core, baseY: 4.0, spd: 1.2, rot: true });
+
+['01001001 · BINARY', 'FOR (i=0; i<10; i++)', 'PWM 50Hz SERVO', 'ULTRASONIC ECHO', 'IF / ELSE LOGIC', 'CPU 64-BIT'].forEach((txt, idx) => {
+const ang = (idx / 6) * Math.PI * 2, rad = 25;
+const fx = Math.cos(ang) * rad, fz = Math.sin(ang) * rad, fy = 5.2 + (idx % 2) * 1.6;
+const sp = makeTextSprite(txt, 'rgba(15, 23, 42, 0.9)', '#60a5fa', 512, 128, 'bold 42px monospace');
+sp.position.set(fx, fy, fz);
+worldGroup.add(sp);
+floaters.push({ mesh: sp, baseY: fy, spd: 0.9, rot: false });
+box(1.4, 3.2, 1.4, 0x1e293b, fx, 1.6, fz);
+});
+} else if (dim === 'makerspace') {
+// --- MAKERSPACE DIMENSION ---
+sc.background = new THREE.Color(0x231309);
+sc.fog = new THREE.Fog(0x231309, 42, 115);
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x331c0e));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+const grid = new THREE.GridHelper(110, 44, 0xfb923c, 0x7c2d12);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+box(5.2, 0.8, 5.2, 0x7c2d12, 0, 0.4, -2);
+const gear = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.35, 8, 12), new THREE.MeshBasicMaterial({ color: 0xfb923c }));
+gear.position.set(0, 4.1, -2);
+worldGroup.add(gear);
+floaters.push({ mesh: gear, baseY: 4.1, spd: 1.1, rot: true });
+
+['3D INFILL 80%', 'V = I × R (OHM)', 'TRUSS TRIANGLE', 'LEVER FULCRUM', 'PLA EXTRUDER', 'PROTOTYPE LAB'].forEach((txt, idx) => {
+const ang = (idx / 6) * Math.PI * 2, rad = 25;
+const fx = Math.cos(ang) * rad, fz = Math.sin(ang) * rad, fy = 5.0 + (idx % 2) * 1.6;
+const sp = makeTextSprite(txt, 'rgba(41, 20, 8, 0.9)', '#fdba74', 512, 128, 'bold 42px Inter, sans-serif');
+sp.position.set(fx, fy, fz);
+worldGroup.add(sp);
+floaters.push({ mesh: sp, baseY: fy, spd: 0.9, rot: false });
+});
+} else if (dim === 'arts') {
+// --- ARTS DIMENSION ---
+sc.background = new THREE.Color(0x220c2e);
+sc.fog = new THREE.Fog(0x220c2e, 42, 115);
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x321242));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+const grid = new THREE.GridHelper(110, 44, 0xe879f9, 0x701a75);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+cyl(2.6, 3.0, 0.7, 0x86198f, 0, 0.35, -2);
+const prism = new THREE.Mesh(new THREE.DodecahedronGeometry(1.75, 0), new THREE.MeshBasicMaterial({ color: 0xf0abfc }));
+prism.position.set(0, 4.1, -2);
+worldGroup.add(prism);
+floaters.push({ mesh: prism, baseY: 4.1, spd: 1.0, rot: true });
+
+['COLOR WHEEL', 'VANISHING POINT', 'RULE OF THIRDS', 'CHIAROSCURO', 'COMPLEMENTARY', '3D FORM & VALUE'].forEach((txt, idx) => {
+const ang = (idx / 6) * Math.PI * 2, rad = 25;
+const fx = Math.cos(ang) * rad, fz = Math.sin(ang) * rad, fy = 5.0 + (idx % 2) * 1.6;
+const sp = makeTextSprite(txt, 'rgba(46, 16, 60, 0.9)', '#f5d0fe', 512, 128, 'bold 42px Georgia, serif');
+sp.position.set(fx, fy, fz);
+worldGroup.add(sp);
+floaters.push({ mesh: sp, baseY: fy, spd: 0.85, rot: false });
+});
+} else if (dim === 'design') {
+// --- DIGITAL DESIGN DIMENSION ---
+sc.background = new THREE.Color(0x06211d);
+sc.fog = new THREE.Fog(0x06211d, 42, 115);
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x0b332d));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+const grid = new THREE.GridHelper(110, 44, 0x34d399, 0x065f46);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+box(5.4, 0.6, 4.0, 0x065f46, 0, 0.3, -2);
+const frame = new THREE.Mesh(new THREE.BoxGeometry(3.2, 2.0, 0.2), new THREE.MeshBasicMaterial({ color: 0x34d399, wireframe: true }));
+frame.position.set(0, 3.8, -2);
+worldGroup.add(frame);
+floaters.push({ mesh: frame, baseY: 3.8, spd: 1.0, rot: true });
+
+['UI/UX HIERARCHY', 'WCAG 4.5:1 CONTRAST', 'SVG BEZIER CURVES', '60 FPS EASING', 'GRID & WHITESPACE', 'TYPOGRAPHY'].forEach((txt, idx) => {
+const ang = (idx / 6) * Math.PI * 2, rad = 25;
+const fx = Math.cos(ang) * rad, fz = Math.sin(ang) * rad, fy = 5.0 + (idx % 2) * 1.6;
+const sp = makeTextSprite(txt, 'rgba(6, 40, 35, 0.9)', '#6ee7b7', 512, 128, 'bold 40px Inter, sans-serif');
+sp.position.set(fx, fy, fz);
+worldGroup.add(sp);
+floaters.push({ mesh: sp, baseY: fy, spd: 0.9, rot: false });
+});
+} else if (dim === 'pvp') {
+// --- LV.100 CHAMPION PVP ARENA ---
+sc.background = new THREE.Color(0x181204);
+sc.fog = new THREE.Fog(0x181204, 48, 130);
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(260, 260), M(0x261d08));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+const grid = new THREE.GridHelper(120, 48, 0xfde047, 0x713f12);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+// Golden Trophy Monument
+cyl(3.2, 3.8, 0.8, 0xf59e0b, 0, 0.4, -2);
+const trophy = new THREE.Mesh(new THREE.OctahedronGeometry(2.1, 0), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
+trophy.position.set(0, 4.4, -2);
+worldGroup.add(trophy);
+floaters.push({ mesh: trophy, baseY: 4.4, spd: 1.2, rot: true });
+
+const arenaBanner = makeTextSprite('⚔️ LV.100 CHAMPION PVP ARENA ⚔️', 'rgba(45, 30, 5, 0.92)', '#fde047', 768, 128, 'bold 40px Inter, sans-serif');
+arenaBanner.position.set(0, 7.2, -2);
+worldGroup.add(arenaBanner);
+
+// Spawn 4 PVP Game Stations
+activePvpStations = PVP_STATIONS;
+PVP_STATIONS.forEach(st => {
+const ped = new THREE.Mesh(new THREE.CylinderGeometry(2.0, 2.3, 0.6, 20), M(0x1e293b));
+ped.position.set(st.p[0], 0.3, st.p[1]);
+worldGroup.add(ped);
+const orb = new THREE.Mesh(new THREE.IcosahedronGeometry(1.1, 0), new THREE.MeshBasicMaterial({ color: st.color }));
+orb.position.set(st.p[0], 2.2, st.p[1]);
+worldGroup.add(orb);
+floaters.push({ mesh: orb, baseY: 2.2, spd: 1.3, rot: true });
+
+const s = document.createElement('div');
+s.className = 'sign portal-sign';
+s.style.borderColor = st.color;
+s.innerHTML = '<u style="background:' + st.color + '">' + st.icon + '</u>' + st.n;
+stg.appendChild(s);
+pvpSigns.push(s);
+});
+
+// Spawn 6 Aerial Drone Racing Checkpoint Rings
+const ringCoords = [
+[0, 6, 6], [16, 9, -4], [14, 13, -18], [0, 15, -24], [-15, 11, -14], [-14, 7, 4]
+];
+ringCoords.forEach(([rx, ry, rz], idx) => {
+const mesh = new THREE.Mesh(
+new THREE.TorusGeometry(3.2, 0.25, 12, 32),
+new THREE.MeshBasicMaterial({ color: idx === 0 ? 0xfde047 : 0xf472b6 })
+);
+mesh.position.set(rx, ry, rz);
+worldGroup.add(mesh);
+droneRace.rings.push({ x: rx, y: ry, z: rz, mesh });
+});
 } else if (dim === 'detention') {
 // --- DETENTION ROOM (1-minute Anti-Rapid-Guess Time-Out) ---
 sc.background = new THREE.Color(0x1f090d);
@@ -1675,7 +2487,7 @@ npcs.push(g);
 
 const s = document.createElement('div');
 s.className = 'sign';
-const subCol = q.sub === 'Math' ? '#38bdf8' : q.sub === 'English' ? '#f472b6' : q.sub === 'Thai' ? '#2dd4bf' : '#fbbf24';
+const subCol = (DIMS[q.dim] && DIMS[q.dim].color) || '#fbbf24';
 s.style.borderColor = subCol;
 s.innerHTML = '<u style="background:' + subCol + '">' + q.icon + '</u>' + q.sg + '<div class="mk">!</div>';
 stg.appendChild(s);
@@ -1690,6 +2502,10 @@ say('🚨 Cannot leave Detention Room yet! ' + rem + 's remaining.', 2500);
 return;
 }
 if (!DIMS[dimKey]) dimKey = 'hub';
+if (DIMS[dimKey].minLv && lvl() < DIMS[dimKey].minLv) {
+say('⚔️ Lv.100 PVP Arena requires Level ' + DIMS[dimKey].minLv + '! (Current: Lv.' + lvl() + ')', 3500);
+return;
+}
 const fx = $('#warp-fx');
 const info = DIMS[dimKey];
 fx.textContent = info.icon + ' Warping to ' + info.name + '...';
@@ -1933,6 +2749,13 @@ return Math.hypot((v.x - nx) * r.width / 2, (v.y - ny) * r.height / 2) < r.width
 });
 if (qHit) return goNpc(qHit);
 
+// Check if user clicked on a PVP Station
+const stHit = activePvpStations.find(st => {
+const v = new THREE.Vector3(st.p[0], 2.0, st.p[1]).project(cam);
+return Math.hypot((v.x - nx) * r.width / 2, (v.y - ny) * r.height / 2) < r.width * 0.075;
+});
+if (stHit) return goPvpStation(stHit);
+
 // Check if user clicked on a Dimension Portal
 const pHit = activePortals.find(pt => {
 const v = new THREE.Vector3(pt.p[0], 2.2, pt.p[1]).project(cam);
@@ -1951,7 +2774,7 @@ P.pend = null;
 
 const mm = $('#mm').getContext('2d');
 function drawMM() {
-mm.fillStyle = currentDim === 'math' ? '#0b1f3a' : currentDim === 'science' ? '#16213e' : currentDim === 'english' ? '#361d32' : currentDim === 'thai' ? '#133836' : '#1e3a2f';
+mm.fillStyle = currentDim === 'math' ? '#0b1f3a' : currentDim === 'science' ? '#16213e' : currentDim === 'english' ? '#361d32' : currentDim === 'thai' ? '#133836' : currentDim === 'ict' ? '#09152b' : currentDim === 'makerspace' ? '#29150a' : currentDim === 'arts' ? '#270e33' : currentDim === 'design' ? '#082621' : currentDim === 'pvp' ? '#2b2007' : '#1e3a2f';
 mm.fillRect(0, 0, 140, 140);
 mm.strokeStyle = 'rgba(255,255,255,0.14)';
 mm.lineWidth = 1;
@@ -1968,6 +2791,14 @@ mm.beginPath();
 mm.arc((pt.p[0] + 48) * 1.45, (pt.p[1] + 46) * 1.45, 5.2, 0, 7);
 mm.fill();
 mm.stroke();
+});
+
+// PVP Stations on Radar
+activePvpStations.forEach(st => {
+mm.fillStyle = st.color;
+mm.beginPath();
+mm.arc((st.p[0] + 48) * 1.45, (st.p[1] + 46) * 1.45, 4.6, 0, 7);
+mm.fill();
 });
 
 // Active Quests on Radar
@@ -2118,6 +2949,7 @@ P.tx = P.x;
 P.tz = P.z;
 mv = false;
 if (act.type === 'quest') openCase(act.item);
+else if (act.type === 'pvp') openPvpGame(act.item.id);
 else if (act.type === 'portal') enterDimension(act.item.target);
 }
 }
@@ -2306,6 +3138,42 @@ s.style.top = (-v.y * 0.5 + 0.5) * 100 + '%';
 s.style.display = (v.z > 1 || dist > 55) ? 'none' : 'flex';
 });
 
+activePvpStations.forEach((st, i) => {
+const v = V.set(st.p[0], 3.8, st.p[1]).project(cam), s = pvpSigns[i], dist = Math.hypot(st.p[0] - P.x, st.p[1] - P.z);
+if (!s) return;
+s.style.left = (v.x * 0.5 + 0.5) * 100 + '%';
+s.style.top = (-v.y * 0.5 + 0.5) * 100 + '%';
+s.style.display = (v.z > 1 || dist > 55) ? 'none' : 'flex';
+});
+
+if (droneRace.active && currentDim === 'pvp' && droneRace.rings.length > 0) {
+const elapsed = (performance.now() - droneRace.startTime) / 1000;
+$('#race-tm').textContent = elapsed.toFixed(1) + 's';
+const targetRing = droneRace.rings[droneRace.ringIdx];
+if (targetRing) {
+targetRing.mesh.rotation.z += 0.05;
+const dist3d = Math.hypot(P.x - targetRing.x, (P.y + 1.5) - targetRing.y, P.z - targetRing.z);
+if (dist3d < 4.3) {
+targetRing.mesh.material.color.setHex(0x34d399);
+droneRace.ringIdx++;
+if (droneRace.ringIdx >= droneRace.rings.length) {
+droneRace.active = false;
+$('#drone-race-hud').classList.remove('active');
+droneRace.rings.forEach((rg, idx) => rg.mesh.material.color.setHex(idx === 0 ? 0xfde047 : 0xf472b6));
+if (elapsed <= 28.0) {
+recordPvpWin('dronerace', 'Drone Racing (' + elapsed.toFixed(1) + 's)');
+} else {
+say('⏱️ Finished in ' + elapsed.toFixed(1) + 's! Beat 28.0s to earn a PVP Win!', 4500);
+}
+} else {
+droneRace.rings[droneRace.ringIdx].mesh.material.color.setHex(0xfde047);
+$('#race-cp').textContent = 'Ring ' + (droneRace.ringIdx + 1) + '/' + droneRace.rings.length;
+say('✅ Ring ' + droneRace.ringIdx + '/' + droneRace.rings.length + ' cleared!', 1200);
+}
+}
+}
+}
+
 const interval = (mv || P.flying) ? 150 : 2000;
 if (now - lastPushTime > interval) {
 pushState(false);
@@ -2461,7 +3329,7 @@ function begin() {
 hud();
 renderPlayersList();
 startRealtimeSync();
-say('Sawàtdii ' + S.name + '! Step into a glowing Portal to enter Math, Science, English, or Thai Dimension!', 5500);
+say('Sawàtdii ' + S.name + '! Explore 8 Subject Dimensions (96 ⭐) & reach Lv.100 to unlock the PVP Arena!', 5500);
 }
 
 // --- iPadOS & Mobile Anti-Zoom Lock + Auto-Fullscreen ---
