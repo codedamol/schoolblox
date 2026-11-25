@@ -1,309 +1,2368 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Inquiry World</title>
+<title>Inquiry World · Live MMO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
-html,body{margin:0;height:100%;background:#1b1530;font-family:"Trebuchet MS",system-ui,sans-serif;overflow:hidden;touch-action:none}
-#app{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-#stage{position:relative;aspect-ratio:16/9;width:min(100vw,177.78vh);overflow:hidden;font-size:calc(min(100vw,177.78vh)/80);background:#a8d4ff}
-canvas#cv{width:100%;height:100%;display:block}
-.hud{position:absolute}
-button{font:inherit;cursor:pointer}
-#me{left:.6%;top:1.5%;display:flex;align-items:center}
-#av{width:5.2em;height:5.2em;border-radius:50%;border:.28em solid #fff;overflow:hidden;background:#cfe3ff;z-index:2;box-shadow:0 .1em .4em #0006}
-#av svg{width:100%;height:100%;display:block}
-#st{margin-left:-.4em;padding-top:.2em}
-#lvr{display:flex;align-items:center;gap:.5em;color:#fff;font-weight:700;font-size:1.5em;text-shadow:0 .05em .2em #000a;padding-left:.8em;line-height:1.1}
-#lvr i{width:1.2em;height:1.2em;border-radius:.3em;background:linear-gradient(#a98bff,#5b3bc4);font-style:normal;font-size:.75em;display:flex;align-items:center;justify-content:center;border:.1em solid #fff}
-#lvr small{font-size:.6em;opacity:.9;font-weight:400}
-.bar{height:.9em;width:12em;margin:.25em 0 0 .6em;transform:skewX(-25deg);background:#0005;border-radius:.2em;overflow:hidden;box-shadow:0 0 .2em #0006}
-.bar i{display:block;height:100%;transition:width .4s}
-#hp i{background:linear-gradient(#a6f27c,#43b82e 60%,#2f9a20)}
-#xp i{background:linear-gradient(#a3f0ff,#3ec1ea 60%,#2a9ac4)}
-#tr{right:1%;top:.8%;text-align:right;color:#fff}
-#cur{font-size:1.8em;font-weight:900;text-shadow:0 .05em .15em #000,0 0 .2em #000}
-.pill{display:inline-flex;align-items:center;gap:.4em;background:#2b2740d9;border:.1em solid #ffffff55;border-radius:.4em;padding:.15em .6em;font-size:.95em;margin-top:.1em}
-#mmw{right:1%;top:12.5%;width:9em;height:9em;border-radius:50%;border:.2em solid #fffa;overflow:hidden;box-shadow:0 0 .4em #0007}
-#mmw canvas{width:100%;height:100%;display:block}
-.sign{position:absolute;transform:translate(-50%,-100%);pointer-events:none;background:#e9e9ee;color:#4a4a55;border-radius:.5em;padding:.25em .9em .25em .3em;font-size:1.1em;font-weight:700;letter-spacing:.03em;white-space:nowrap;display:flex;align-items:center;gap:.45em;box-shadow:0 .1em .3em #0005;border:.1em solid #fff}
-.sign u{width:1.4em;height:1.4em;border-radius:50%;background:radial-gradient(#ffe27a,#e8a400);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:.8em;color:#7a4a00}
-.sign .mk{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);font-size:2.4em;font-weight:900;color:#ffc400;-webkit-text-stroke:.08em #fff;paint-order:stroke fill;line-height:1;animation:bn 1s infinite alternate}
-.sign .mk.ok{color:#3fb82d;animation:none}
-@keyframes bn{to{transform:translate(-50%,-.25em)}}
-#cap{left:0;right:0;bottom:11%;text-align:center;color:#fff;font-family:Georgia,"Times New Roman",serif;font-weight:900;font-size:3em;-webkit-text-stroke:.16em #000;paint-order:stroke fill;pointer-events:none;padding:0 12%;line-height:1.15}
-#bl{left:1.4%;bottom:1.6%;display:flex;gap:.5em}
-.ic{width:3.6em;height:3.6em;background:none;border:0;position:relative;padding:0}
-.ic span{font-size:2.2em;filter:grayscale(1) brightness(6) drop-shadow(0 0 .08em #000b)}
-.ic em{position:absolute;left:0;right:0;top:50%;transform:translateY(-45%);font-style:normal;font-weight:900;font-size:1.05em;color:#fff;text-shadow:0 0 .2em #000}
-#joy{left:2.5%;bottom:14%;width:9.5em;height:9.5em;border-radius:50%;background:#0003;border:.15em solid #fff7;touch-action:none}
-#knob{position:absolute;left:50%;top:50%;width:4.2em;height:4.2em;margin:-2.1em 0 0 -2.1em;border-radius:50%;background:radial-gradient(circle at 50% 35%,#a58cf5,#5a35c8 75%);border:.12em solid #d8c9ff;pointer-events:none}
-#skills{right:9.4%;bottom:2%;display:flex;gap:.7em}
-.sk{width:4.3em;height:4.3em;border-radius:50%;border:.12em solid #b9a4ff;background:radial-gradient(circle at 50% 35%,#9a80ee,#5a3ac2 70%);color:#fff;position:relative;padding:0;box-shadow:0 .1em .4em #0006}
-.sk span{font-size:2em;filter:grayscale(1) brightness(5)}
-.sk b{position:absolute;left:.1em;top:-.5em;font-size:1em;text-shadow:0 0 .2em #000}
-.sk:active,#atk:active,.sm:active{transform:scale(.9)}
-#atk{right:1.2%;bottom:6.5%;width:7.4em;height:7.4em;border-radius:50%;border:.25em solid #d8c9ff;background:radial-gradient(circle at 50% 35%,#a58cf5,#5a35c8 75%);box-shadow:0 0 0 .2em #5a35c855,0 .2em .6em #0007;padding:0}
-#atk span{font-size:3.6em;filter:grayscale(1) brightness(6)}
-.sm{width:3.1em;height:3.1em;border-radius:50%;background:#0006;border:.1em solid #fff8;color:#fff;padding:0}
-.sm span{font-size:1.6em;filter:grayscale(1) brightness(6)}
-#rf{right:.8%;bottom:19%}#tg{right:3.8%;bottom:1.6%}
-#auto{right:1.2%;bottom:22%;background:none;border:0;color:#fff;text-align:center;padding:0;width:6em}
-#auto span{font-size:2.6em;display:block;filter:grayscale(1) brightness(6) drop-shadow(0 0 .08em #000b);line-height:1}
-#auto em{font-style:normal;font-size:1em;font-weight:700;text-shadow:0 0 .2em #000,0 0 .2em #000}
-#dlg,#intro{position:absolute;inset:0;background:#000a;display:none;align-items:center;justify-content:center;z-index:5}
-.panel{width:90%;max-width:40em;max-height:92%;overflow:auto;background:linear-gradient(#fff,#ece9f8);border:.28em solid #8a6be8;border-radius:1em;padding:1.1em 1.4em;color:#2b2350;box-shadow:0 .6em 2em #000a;font-size:1.45em;touch-action:pan-y}
-.panel h2{margin:0 0 .4em;font-family:Georgia,serif;font-size:1.4em;color:#4b2fa5}
-.steps{display:flex;gap:.3em;margin-bottom:.6em}
-.steps i{flex:1;height:.4em;border-radius:1em;background:#d5cdee}.steps i.on{background:#8a6be8}.steps i.ok{background:#3fb82d}
-.q{font-weight:700;margin:.3em 0}
-.story{background:#f1edff;border-left:.25em solid #8a6be8;padding:.4em .7em;margin:.3em 0 .6em}
-.opt{display:block;width:100%;text-align:left;margin:.35em 0;padding:.55em .8em;font:inherit;border:.1em solid #b8aee0;border-radius:.7em;background:#fff;color:#2b2350}
-.opt:active{background:#e9e2ff}.opt.bad{background:#f7c9c0;opacity:.6;pointer-events:none}.opt.good{background:#c6f0b8}
-.btn{font:inherit;font-weight:700;color:#fff;background:#6a4fc0;border:0;border-radius:2em;padding:.5em 1.4em;margin-top:.5em}
-.fb{min-height:1.3em;color:#b3321b;font-weight:700}
-.row{display:flex;gap:.4em;flex-wrap:wrap}.row .opt{width:auto;flex:1;text-align:center;min-width:6em}
-.chart{margin:.5em 0}.chart div{display:flex;align-items:center;gap:.5em;margin:.2em 0}.chart b{width:9.5em;font-size:.8em}
-.chart s{display:block;height:1em;background:linear-gradient(90deg,#8a6be8,#6cc6ff);border-radius:.3em;text-decoration:none}
-.star{font-size:2.2em;color:#d5cdee}.star.on{color:#f5b800}
-#intro input{font:inherit;padding:.4em;border-radius:.6em;border:.1em solid #8a6be8;width:100%;margin-top:.4em}
-#err{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#fff;font-size:2em;text-align:center;padding:2em}
-</style></head><body>
-<div id="app"><div id="stage">
-<canvas id="cv"></canvas>
-<div class="hud" id="me">
- <div id="av"><svg viewBox="0 0 60 60"><rect width="60" height="60" fill="#cfe3ff"/><rect x="14" y="14" width="32" height="32" fill="#f5cd30"/><rect x="12" y="8" width="36" height="9" fill="#dfe3ee"/><rect x="21" y="26" width="4" height="7" fill="#1a1a1a"/><rect x="35" y="26" width="4" height="7" fill="#1a1a1a"/><path d="M22 37Q30 46 38 37" stroke="#1a1a1a" stroke-width="2.5" fill="none"/><rect x="6" y="48" width="48" height="14" fill="#7b4fd0"/></svg></div>
- <div id="st"><div id="lvr"><i>⚡</i>Lv.<span id="lv">1</span> <small id="nm"></small></div><div class="bar" id="hp"><i></i></div><div class="bar" id="xp"><i></i></div></div>
+:root {
+  --glass-bg: rgba(19, 16, 38, 0.68);
+  --glass-bg-light: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.22);
+  --glass-highlight: rgba(167, 139, 250, 0.45);
+  --accent-primary: #8b5cf6;
+  --accent-secondary: #38bdf8;
+  --accent-gold: #fbbf24;
+  --accent-green: #34d399;
+  --accent-pink: #f472b6;
+  --text-main: #ffffff;
+  --text-muted: #cbd5e1;
+  --shadow-glow: 0 8px 32px rgba(10, 7, 26, 0.55);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: radial-gradient(circle at center, #1e163b 0%, #0d0a1c 100%);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  touch-action: none;
+  color: var(--text-main);
+}
+
+#app {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#stage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-size: clamp(11px, min(1.35vw, 2.2vh), 16px);
+  background: #a8d4ff;
+}
+
+canvas#cv {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hud {
+  position: absolute;
+  z-index: 2;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.2s, box-shadow 0.2s;
+}
+
+button:active {
+  transform: scale(0.92);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glow);
+}
+
+/* ---------- TOP-LEFT PLAYER PROFILE CARD ---------- */
+#me {
+  left: 1.2em;
+  top: 1.1em;
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0.55em 1.1em 0.55em 0.65em;
+  border-radius: 1.4em;
+}
+
+#av-wrap {
+  position: relative;
+  width: 4.1em;
+  height: 4.1em;
+  flex-shrink: 0;
+}
+
+#av {
+  width: 100%;
+  height: 100%;
+  border-radius: 1.1em;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  overflow: hidden;
+  background: linear-gradient(135deg, #c4b5fd, #60a5fa);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+#av svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#lv-badge {
+  position: absolute;
+  bottom: -0.35em;
+  right: -0.35em;
+  background: linear-gradient(135deg, #a855f7, #6366f1);
+  border: 1.5px solid #fff;
+  border-radius: 0.6em;
+  padding: 0.1em 0.45em;
+  font-size: 0.78em;
+  font-weight: 800;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+#st {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32em;
+  min-width: 11.5em;
+}
+
+#lvr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+#nm {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.15em;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  max-width: 8.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  font-size: 0.72em;
+  font-weight: 700;
+  color: var(--accent-green);
+  background: rgba(52, 211, 153, 0.14);
+  border: 1px solid rgba(52, 211, 153, 0.35);
+  padding: 0.12em 0.5em;
+  border-radius: 99px;
+}
+
+.status-dot::before {
+  content: '';
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+  background: var(--accent-green);
+  box-shadow: 0 0 6px var(--accent-green);
+}
+
+.status-dot.offline {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.14);
+  border-color: rgba(251, 191, 36, 0.35);
+}
+.status-dot.offline::before {
+  background: #fbbf24;
+  box-shadow: 0 0 6px #fbbf24;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.bar-lbl {
+  font-size: 0.68em;
+  font-weight: 800;
+  width: 1.8em;
+  color: var(--text-muted);
+}
+
+.bar {
+  position: relative;
+  flex: 1;
+  height: 0.72em;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.bar i {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.bar span {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.58em;
+  font-weight: 800;
+  text-shadow: 0 1px 2px #000;
+}
+
+#hp i {
+  background: linear-gradient(90deg, #22c55e, #86efac);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+}
+
+#xp i {
+  background: linear-gradient(90deg, #0ea5e9, #7dd3fc);
+  box-shadow: 0 0 8px rgba(14, 165, 233, 0.6);
+}
+
+/* ---------- TOP-RIGHT CLUSTER (STARS, ONLINE PLAYERS, RADAR) ---------- */
+#tr {
+  right: 1.2em;
+  top: 1.1em;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65em;
+}
+
+#top-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.45em 0.85em;
+  border-radius: 99px;
+  font-weight: 800;
+  font-size: 0.92em;
+  color: #fff;
+  border: 1px solid var(--glass-border);
+}
+
+.stat-pill.stars {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(19, 16, 38, 0.78));
+  border-color: rgba(251, 191, 36, 0.45);
+}
+
+.stat-pill.online-btn {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.25), rgba(19, 16, 38, 0.78));
+  border-color: rgba(52, 211, 153, 0.45);
+}
+
+.stat-pill.online-btn:hover {
+  background: linear-gradient(135deg, rgba(52, 211, 153, 0.42), rgba(19, 16, 38, 0.88));
+}
+
+.pulse-green {
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  animation: pulseDot 1.8s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.65; }
+}
+
+#mmw {
+  position: relative;
+  width: 9.2em;
+  height: 9.2em;
+  border-radius: 50%;
+  border: 2.5px solid rgba(255, 255, 255, 0.55);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), inset 0 0 14px rgba(0, 0, 0, 0.6);
+  background: #1b2838;
+}
+
+#mmw canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#mm-compass {
+  position: absolute;
+  top: 0.25em;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.62em;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 2px #000;
+  pointer-events: none;
+}
+
+/* Online Players Popover Drawer */
+#players-drawer {
+  position: absolute;
+  right: 1.2em;
+  top: 4.3em;
+  width: 17.5em;
+  max-height: 20em;
+  border-radius: 1.1em;
+  padding: 0.85em;
+  display: none;
+  flex-direction: column;
+  gap: 0.5em;
+  z-index: 6;
+}
+
+#players-drawer.open {
+  display: flex;
+  animation: popIn 0.18s ease-out;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.drawer-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.88em;
+  font-weight: 800;
+  color: var(--accent-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 0.4em;
+}
+
+#players-list {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  max-height: 15em;
+}
+
+.pl-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45em 0.65em;
+  border-radius: 0.75em;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.84em;
+  color: #fff;
+  text-align: left;
+}
+
+.pl-item:hover {
+  background: rgba(139, 92, 246, 0.28);
+  border-color: rgba(167, 139, 250, 0.5);
+}
+
+.pl-swatch {
+  width: 0.85em;
+  height: 0.85em;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.45em;
+  border: 1.5px solid #fff;
+}
+
+/* ---------- 3D FLOATING LABELS (NPC SIGNS, REMOTE PLAYERS, CHAT BUBBLES) ---------- */
+.sign {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  background: rgba(22, 18, 44, 0.82);
+  backdrop-filter: blur(8px);
+  color: #fff;
+  border-radius: 99px;
+  padding: 0.28em 0.85em 0.28em 0.35em;
+  font-size: 0.85em;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  z-index: 1;
+}
+
+.sign u {
+  width: 1.55em;
+  height: 1.55em;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fde047, #f59e0b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.85em;
+  color: #451a03;
+  font-weight: 900;
+}
+
+.sign .mk {
+  position: absolute;
+  left: 50%;
+  bottom: 108%;
+  transform: translateX(-50%);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 2.3em;
+  font-weight: 700;
+  color: #fbbf24;
+  -webkit-text-stroke: 0.08em #1e1b4b;
+  paint-order: stroke fill;
+  line-height: 1;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+  animation: bn 0.9s infinite alternate ease-in-out;
+}
+
+.sign .mk.ok {
+  color: #34d399;
+  animation: none;
+}
+
+@keyframes bn {
+  to { transform: translate(-50%, -0.28em); }
+}
+
+.player-tag {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25em;
+  z-index: 1;
+}
+
+.chat-bubble {
+  background: rgba(255, 255, 255, 0.95);
+  color: #1e1b4b;
+  font-weight: 700;
+  font-size: 0.86em;
+  padding: 0.35em 0.75em;
+  border-radius: 1em;
+  max-width: 14em;
+  word-wrap: break-word;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  border: 2px solid #8b5cf6;
+  animation: popIn 0.2s ease-out;
+}
+
+.name-pill {
+  background: rgba(15, 23, 42, 0.76);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  font-size: 0.76em;
+  font-weight: 700;
+  padding: 0.2em 0.65em;
+  border-radius: 99px;
+  border: 1px solid rgba(56, 189, 248, 0.55);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.name-pill b {
+  color: #38bdf8;
+}
+
+/* ---------- CAPTION BANNER ---------- */
+#cap {
+  left: 50%;
+  top: 15%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #fff;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 1.35em;
+  background: rgba(19, 16, 38, 0.82);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(167, 139, 250, 0.45);
+  border-radius: 99px;
+  padding: 0.45em 1.3em;
+  pointer-events: none;
+  max-width: 82%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+#cap.show {
+  opacity: 1;
+}
+
+/* ---------- BOTTOM-LEFT: LIVE CHAT + UTILITY BAR + JOYSTICK ---------- */
+#chat-box {
+  left: 1.2em;
+  bottom: 4.8em;
+  width: 21em;
+  border-radius: 1.1em;
+  padding: 0.6em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45em;
+  transition: height 0.2s, opacity 0.2s;
+}
+
+#chat-box.minimized #chat-feed,
+#chat-box.minimized #emote-row,
+#chat-box.minimized #chat-form {
+  display: none;
+}
+
+#chat-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78em;
+  font-weight: 800;
+  color: var(--text-muted);
+  padding: 0 0.25em;
+}
+
+#chat-toggle {
+  background: rgba(255, 255, 255, 0.12);
+  border: 0;
+  color: #fff;
+  border-radius: 0.5em;
+  padding: 0.15em 0.5em;
+  font-size: 0.9em;
+}
+
+#chat-feed {
+  height: 7.4em;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28em;
+  padding-right: 0.2em;
+  font-size: 0.8em;
+  touch-action: pan-y;
+}
+
+#chat-feed::-webkit-scrollbar {
+  width: 4px;
+}
+#chat-feed::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+}
+
+.msg-line {
+  line-height: 1.32;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.24em 0.5em;
+  border-radius: 0.5em;
+  word-break: break-word;
+}
+
+.msg-line.sys {
+  color: #a5b4fc;
+  font-style: italic;
+  background: rgba(139, 92, 246, 0.14);
+}
+
+.msg-line b {
+  color: #38bdf8;
+  margin-right: 0.35em;
+}
+
+.msg-line b.me-name {
+  color: #fbbf24;
+}
+
+#emote-row {
+  display: flex;
+  gap: 0.3em;
+  justify-content: space-between;
+}
+
+.em-btn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.6em;
+  padding: 0.22em 0;
+  font-size: 1.05em;
+  color: #fff;
+}
+
+.em-btn:hover {
+  background: rgba(139, 92, 246, 0.35);
+}
+
+#chat-form {
+  display: flex;
+  gap: 0.35em;
+}
+
+#chat-in {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.7em;
+  padding: 0.42em 0.65em;
+  color: #fff;
+  font: inherit;
+  font-size: 0.82em;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+#chat-in:focus {
+  border-color: var(--accent-secondary);
+}
+
+#chat-send {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  border: 0;
+  border-radius: 0.7em;
+  padding: 0 0.75em;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.8em;
+}
+
+#bl {
+  left: 1.2em;
+  bottom: 1.1em;
+  display: flex;
+  gap: 0.45em;
+  padding: 0.35em 0.5em;
+  border-radius: 1em;
+}
+
+.ic {
+  width: 2.7em;
+  height: 2.7em;
+  border-radius: 0.75em;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  position: relative;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.ic:hover {
+  background: rgba(139, 92, 246, 0.35);
+  border-color: rgba(167, 139, 250, 0.6);
+}
+
+.ic span {
+  font-size: 1.3em;
+}
+
+.ic em {
+  position: absolute;
+  right: -0.25em;
+  top: -0.25em;
+  background: var(--accent-gold);
+  color: #1e1b4b;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 0.68em;
+  padding: 0.1em 0.38em;
+  border-radius: 99px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Touch Joystick (positioned cleanly above chat or adaptive on touch) */
+#joy {
+  left: 2.2em;
+  bottom: 19.5em;
+  width: 8.2em;
+  height: 8.2em;
+  border-radius: 50%;
+  background: rgba(19, 16, 38, 0.35);
+  backdrop-filter: blur(4px);
+  border: 2px solid rgba(255, 255, 255, 0.32);
+  touch-action: none;
+}
+
+#knob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 3.6em;
+  height: 3.6em;
+  margin: -1.8em 0 0 -1.8em;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #c4b5fd, #6d28d9 80%);
+  border: 2px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+/* ---------- BOTTOM-CENTER INQUIRY SKILL BAR ---------- */
+#skills {
+  left: 50%;
+  bottom: 1.1em;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.55em;
+  padding: 0.45em 0.7em;
+  border-radius: 1.25em;
+}
+
+.sk {
+  width: 3.6em;
+  height: 3.6em;
+  border-radius: 0.95em;
+  border: 1.5px solid rgba(196, 181, 253, 0.45);
+  background: linear-gradient(145deg, rgba(139, 92, 246, 0.35), rgba(30, 27, 75, 0.8));
+  color: #fff;
+  position: relative;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.sk:hover {
+  border-color: #fff;
+  background: linear-gradient(145deg, rgba(139, 92, 246, 0.65), rgba(49, 46, 129, 0.9));
+}
+
+.sk span {
+  font-size: 1.45em;
+  line-height: 1;
+}
+
+.sk small {
+  font-size: 0.56em;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-top: 0.15em;
+}
+
+.sk b {
+  position: absolute;
+  left: 0.35em;
+  top: 0.2em;
+  font-size: 0.65em;
+  color: var(--accent-secondary);
+}
+
+/* ---------- BOTTOM-RIGHT RPG ACTION CLUSTER ---------- */
+#actions-right {
+  right: 1.4em;
+  bottom: 1.2em;
+  position: absolute;
+  width: 13.5em;
+  height: 13.5em;
+  pointer-events: none;
+}
+
+#actions-right button {
+  pointer-events: auto;
+}
+
+#atk {
+  position: absolute;
+  right: 0.2em;
+  bottom: 0.2em;
+  width: 6.4em;
+  height: 6.4em;
+  border-radius: 50%;
+  border: 2.5px solid #e9d5ff;
+  background: radial-gradient(circle at 35% 30%, #a855f7, #4c1d95 85%);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.28), 0 8px 24px rgba(0, 0, 0, 0.55);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1em;
+}
+
+#atk span {
+  font-size: 2.3em;
+  line-height: 1;
+}
+
+#atk em {
+  font-style: normal;
+  font-size: 0.72em;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.act-orb {
+  position: absolute;
+  width: 3.7em;
+  height: 3.7em;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  padding: 0;
+}
+
+.act-orb:hover {
+  border-color: var(--accent-secondary);
+  background: rgba(56, 189, 248, 0.28);
+}
+
+.act-orb span {
+  font-size: 1.35em;
+  line-height: 1;
+}
+
+.act-orb em {
+  font-style: normal;
+  font-size: 0.56em;
+  font-weight: 700;
+  margin-top: 0.15em;
+  color: var(--text-muted);
+}
+
+#auto {
+  right: 1.2em;
+  bottom: 7.4em;
+}
+
+#tg {
+  right: 6.5em;
+  bottom: 5.2em;
+}
+
+#rf {
+  right: 7.4em;
+  bottom: 0.5em;
+}
+
+/* ---------- QUEST & INTRO MODALS ---------- */
+#dlg, #intro {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 8, 24, 0.74);
+  backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 1em;
+}
+
+.panel {
+  width: 100%;
+  max-width: 38em;
+  max-height: 90%;
+  overflow-y: auto;
+  background: linear-gradient(165deg, rgba(28, 23, 56, 0.96), rgba(16, 13, 34, 0.98));
+  border: 1.5px solid rgba(167, 139, 250, 0.45);
+  border-radius: 1.4em;
+  padding: 1.5em 1.7em;
+  color: #f8fafc;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+  font-size: 1.08em;
+  touch-action: pan-y;
+}
+
+.panel h2 {
+  margin: 0 0 0.5em;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.55em;
+  background: linear-gradient(90deg, #fff, #c4b5fd);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.steps {
+  display: flex;
+  gap: 0.4em;
+  margin-bottom: 0.9em;
+}
+
+.steps i {
+  flex: 1;
+  height: 0.45em;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.14);
+  transition: background 0.3s;
+}
+
+.steps i.on {
+  background: var(--accent-secondary);
+  box-shadow: 0 0 10px var(--accent-secondary);
+}
+
+.steps i.ok {
+  background: var(--accent-green);
+}
+
+.q {
+  font-weight: 800;
+  font-size: 1.05em;
+  color: #e2e8f0;
+  margin: 0.4em 0 0.6em;
+}
+
+.story {
+  background: rgba(139, 92, 246, 0.16);
+  border-left: 4px solid var(--accent-primary);
+  border-radius: 0 0.75em 0.75em 0;
+  padding: 0.7em 0.95em;
+  margin: 0.4em 0 0.8em;
+  color: #e2e8f0;
+  line-height: 1.45;
+}
+
+.opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 0.45em 0;
+  padding: 0.7em 1em;
+  font: inherit;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0.85em;
+  background: rgba(255, 255, 255, 0.07);
+  color: #fff;
+}
+
+.opt:hover {
+  background: rgba(139, 92, 246, 0.25);
+  border-color: rgba(167, 139, 250, 0.55);
+}
+
+.opt.bad {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: rgba(239, 68, 68, 0.5);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.opt.good {
+  background: rgba(52, 211, 153, 0.25);
+  border-color: var(--accent-green);
+}
+
+.btn {
+  font: inherit;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  border: 0;
+  border-radius: 99px;
+  padding: 0.65em 1.6em;
+  margin-top: 0.75em;
+  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.45);
+}
+
+.fb {
+  min-height: 1.4em;
+  color: #fca5a5;
+  font-weight: 700;
+  margin-top: 0.35em;
+  font-size: 0.92em;
+}
+
+.row {
+  display: flex;
+  gap: 0.45em;
+  flex-wrap: wrap;
+}
+
+.row .opt {
+  width: auto;
+  flex: 1;
+  text-align: center;
+  min-width: 6.5em;
+}
+
+.chart {
+  margin: 0.75em 0;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.75em;
+  border-radius: 0.85em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chart div {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  margin: 0.35em 0;
+}
+
+.chart b {
+  width: 9.5em;
+  font-size: 0.84em;
+  color: var(--text-muted);
+}
+
+.chart s {
+  display: block;
+  height: 1.1em;
+  background: linear-gradient(90deg, #8b5cf6, #38bdf8);
+  border-radius: 99px;
+  text-decoration: none;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.star {
+  font-size: 2.3em;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.star.on {
+  color: var(--accent-gold);
+  text-shadow: 0 0 14px rgba(251, 191, 36, 0.7);
+}
+
+#intro input {
+  font: inherit;
+  padding: 0.65em 0.85em;
+  border-radius: 0.8em;
+  border: 1.5px solid rgba(167, 139, 250, 0.5);
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  width: 100%;
+  margin-top: 0.45em;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+#err {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.5em;
+  text-align: center;
+  padding: 2em;
+  background: #0d0a1c;
+  z-index: 20;
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  #chat-box {
+    width: 16.5em;
+    bottom: 4.4em;
+  }
+  #chat-feed {
+    height: 5.5em;
+  }
+  #skills {
+    display: none;
+  }
+  #joy {
+    bottom: 16.5em;
+    left: 1.5em;
+  }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+    <canvas id="cv"></canvas>
+
+    <!-- TOP-LEFT: PLAYER PROFILE CARD -->
+    <div class="hud glass-card" id="me">
+      <div id="av-wrap">
+        <div id="av">
+          <svg viewBox="0 0 60 60">
+            <rect width="60" height="60" fill="#cfe3ff"/>
+            <rect x="14" y="14" width="32" height="32" fill="#f5cd30"/>
+            <rect x="12" y="8" width="36" height="9" fill="#dfe3ee"/>
+            <rect x="21" y="26" width="4" height="7" fill="#1a1a1a"/>
+            <rect x="35" y="26" width="4" height="7" fill="#1a1a1a"/>
+            <path d="M22 37Q30 46 38 37" stroke="#1a1a1a" stroke-width="2.5" fill="none"/>
+            <rect id="av-shirt" x="6" y="48" width="48" height="14" fill="#7b4fd0"/>
+          </svg>
+        </div>
+        <div id="lv-badge">Lv.<span id="lv">1</span></div>
+      </div>
+      <div id="st">
+        <div id="lvr">
+          <span id="nm">Explorer</span>
+          <span class="status-dot offline" id="sync-status">Connecting</span>
+        </div>
+        <div class="bar-row">
+          <span class="bar-lbl">HP</span>
+          <div class="bar" id="hp"><i></i><span id="hp-txt">100/100</span></div>
+        </div>
+        <div class="bar-row">
+          <span class="bar-lbl">XP</span>
+          <div class="bar" id="xp"><i></i><span id="xp-txt">0/60</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOP-RIGHT: STARS, ONLINE PLAYERS PILL & RADAR MINIMAP -->
+    <div class="hud" id="tr">
+      <div id="top-pills">
+        <div class="glass-card stat-pill stars">⭐ <span id="tot">0</span>/18</div>
+        <button class="glass-card stat-pill online-btn" id="online-btn" aria-label="Online Players">
+          <span class="pulse-green"></span>
+          <span id="online-cnt">1</span> Online
+        </button>
+      </div>
+      <div id="mmw">
+        <canvas id="mm" width="140" height="140"></canvas>
+        <div id="mm-compass">N</div>
+      </div>
+    </div>
+
+    <!-- ONLINE EXPLORERS DRAWER -->
+    <div class="glass-card" id="players-drawer">
+      <div class="drawer-hdr">
+        <span>🌐 Live Explorers</span>
+        <span id="drawer-sub">Click to walk to player</span>
+      </div>
+      <div id="players-list"></div>
+    </div>
+
+    <!-- FLOATING CAPTION -->
+    <div class="hud" id="cap"></div>
+
+    <!-- VIRTUAL JOYSTICK -->
+    <div class="hud" id="joy"><div id="knob"></div></div>
+
+    <!-- LIVE WORLD CHAT & EMOTES -->
+    <div class="hud glass-card" id="chat-box">
+      <div id="chat-hdr">
+        <span>💬 Live World Chat</span>
+        <button id="chat-toggle" type="button">−</button>
+      </div>
+      <div id="chat-feed">
+        <div class="msg-line sys">Welcome to Inquiry World Live! Say hi to nearby explorers.</div>
+      </div>
+      <div id="emote-row">
+        <button class="em-btn" type="button" data-em="👋">👋</button>
+        <button class="em-btn" type="button" data-em="🎉">🎉</button>
+        <button class="em-btn" type="button" data-em="💡">💡</button>
+        <button class="em-btn" type="button" data-em="❓">❓</button>
+        <button class="em-btn" type="button" data-em="🔥">🔥</button>
+      </div>
+      <form id="chat-form">
+        <input id="chat-in" maxlength="60" placeholder="Type message..." autocomplete="off">
+        <button id="chat-send" type="submit">Send</button>
+      </form>
+    </div>
+
+    <!-- BOTTOM-LEFT UTILITY DOCK -->
+    <div class="hud glass-card" id="bl">
+      <button class="ic" id="i1" title="Quest Progress" aria-label="Stars"><span>🏆</span><em id="badge">0</em></button>
+      <button class="ic" id="i2" title="Screenshot" aria-label="Screenshot"><span>📷</span></button>
+      <button class="ic" id="i3" title="Next Clue" aria-label="Hint"><span>🧭</span></button>
+      <button class="ic" id="i4" title="Science Journal" aria-label="Journal"><span>📖</span></button>
+      <button class="ic" id="i5" title="Reset Progress" aria-label="Reset"><span>♻️</span></button>
+    </div>
+
+    <!-- BOTTOM-CENTER INQUIRY STEPS BAR -->
+    <div class="hud glass-card" id="skills"></div>
+
+    <!-- BOTTOM-RIGHT RPG ACTION ORBS -->
+    <div id="actions-right">
+      <button class="act-orb" id="auto" aria-label="Auto-Guide"><span>⚔️</span><em>Auto</em></button>
+      <button class="act-orb" id="tg" aria-label="Nearest NPC"><span>🎯</span><em>Target</em></button>
+      <button class="act-orb" id="rf" aria-label="Stop"><span>🛑</span><em>Stop</em></button>
+      <button id="atk" aria-label="Talk"><span>💬</span><em>Talk</em></button>
+    </div>
+
+    <!-- QUEST / INFO DIALOG -->
+    <div id="dlg"><div class="panel" id="pn"></div></div>
+
+    <!-- WELCOME INTRO MODAL -->
+    <div id="intro">
+      <div class="panel" style="max-width:29em">
+        <h2>Welcome to Inquiry World!</h2>
+        <p style="color:#cbd5e1;line-height:1.45">Roam the open world, meet other live explorers, and solve 6 science mysteries with characters marked with <b>!</b> above their heads.</p>
+        <label style="font-weight:700;font-size:0.92em">Your Explorer Nickname:
+          <input id="ni" maxlength="14" placeholder="Explorer">
+        </label>
+        <button class="btn" id="go">Enter Live World</button>
+      </div>
+    </div>
+
+    <div id="err">Internet connection is required to load 3D engine (three.js). Please refresh the page.</div>
+  </div>
 </div>
-<div class="hud" id="tr"><div id="cur">⭐ <span id="tot">0</span>/18</div><br><div class="pill">🪙 Open World</div></div>
-<div class="hud" id="mmw"><canvas id="mm" width="120" height="120"></canvas></div>
-<div class="hud" id="cap"></div>
-<div class="hud" id="joy"><div id="knob"></div></div>
-<div class="hud" id="bl">
- <button class="ic" id="i1" aria-label="Stars"><span>📅</span><em id="badge">0</em></button>
- <button class="ic" id="i2" aria-label="Screenshot"><span>📷</span></button>
- <button class="ic" id="i3" aria-label="Hint"><span>🏃</span></button>
- <button class="ic" id="i4" aria-label="Journal"><span>📖</span></button>
- <button class="ic" id="i5" aria-label="Reset"><span>♻️</span></button>
-</div>
-<div class="hud" id="skills"></div>
-<button class="hud sm" id="rf" aria-label="Stop"><span>🔄</span></button>
-<button class="hud sm" id="tg" aria-label="Nearest NPC"><span>🎯</span></button>
-<button class="hud" id="auto" aria-label="Automatic"><span>⚔️</span><em>Automatic</em></button>
-<button class="hud" id="atk" aria-label="Talk"><span>💬</span></button>
-<div id="dlg"><div class="panel" id="pn"></div></div>
-<div id="intro"><div class="panel" style="max-width:30em"><h2>Welcome, Explorer!</h2><p>Roam the open world and find the characters with a ! above their heads. Solve each science mystery by observing, questioning, predicting, testing and concluding. No sign-up needed. Your progress saves on this device.</p><label>Your nickname:<input id="ni" maxlength="12" placeholder="Explorer"></label><button class="btn" id="go">Start Exploring</button></div></div>
-<div id="err">Internet is needed on the first load (three.js). Please refresh the page.</div>
-</div></div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-const $=s=>document.querySelector(s);
-if(!window.THREE){$('#err').style.display='flex'}
-let S={name:'',xp:0,stars:[0,0,0,0,0,0],hp:100};
-try{Object.assign(S,JSON.parse(localStorage.getItem('iw1')||'{}'))}catch(e){}
-while(S.stars.length<6)S.stars.push(0);
-const save=()=>{try{localStorage.setItem('iw1',JSON.stringify(S))}catch(e){}};
-const lvl=()=>1+Math.floor(S.xp/60);
-function hud(){$('#nm').textContent=S.name||'Explorer';$('#lv').textContent=lvl();$('#hp i').style.width=S.hp+'%';$('#xp i').style.width=(S.xp%60)/60*100+'%';const t=S.stars.reduce((a,b)=>a+b,0);$('#tot').textContent=t;$('#badge').textContent=S.stars.filter(x=>x>0).length}
-/* ---------- inquiry content ---------- */
-const C=[
-{n:'Master Forge',sg:'RAMP RACE',p:[0,-2.6],a:[0,1],hair:0xe8643c,sh:0xefe3c8,pa:0x6b4a2b,t:'Ramp Race',
-story:'A robot car rolls down a ramp. Sometimes it rolls far, sometimes only a little. Why?',
-o:['The ramp height is different on each run','The car is red','The forge is noisy'],
-q:['How does ramp height affect how far the car rolls?','How cool does the robot car look?','Who built the ramp?'],
-h:['The higher the ramp, the farther the car will roll','The higher the ramp, the shorter the roll','The ramp has no effect'],
-v:{n:'Ramp height',u:'cm',L:[5,10,15,20,25],R:[28,52,83,108,139],ru:'cm'},
-c:['Distance increases as ramp height increases','Distance decreases as ramp height increases','Distance stays the same'],
-tip:'Fair test: change only one thing (the height). Keep the same car and floor.'},
-{n:'Tech Mira',sg:'LIGHT LAB',p:[-16,3],a:[-13.8,5.6],hair:0xf0a030,sh:0xb86a4a,pa:0x3a3a52,t:'Light Sensor',
-story:'A robot reads light with a sensor. When the lamp is moved away, the reading changes.',
-o:['The reading changes when the lamp distance changes','The lamp is heavy','The wire is blue'],
-q:['How does lamp distance affect the light reading?','How much does the sensor cost?','Why do I like the lamp?'],
-h:['The farther the lamp, the lower the reading','The farther the lamp, the higher the reading','The reading stays the same anywhere'],
-v:{n:'Lamp distance',u:'cm',L:[10,20,30,40,50],R:[90,60,35,20,10],ru:'%'},
-c:['The reading drops as the lamp moves away','The reading rises as the lamp moves away','The reading never changes'],
-tip:'Test in a dark room so the test stays fair.'},
-{n:'Dr. Volt',sg:'BATTERY LAB',p:[16,4],a:[13.8,6.6],hair:0x8a6be8,sh:0xf2f2f2,pa:0x5a8fe8,t:'Battery Power',
-story:'A robot has a motor. Dr. Volt added more batteries and it seemed to spin faster.',
-o:['The motor seems faster with more batteries','The lab coat is big','The lab is warm'],
-q:['How does the number of batteries affect motor speed?','What color is the motor?','Who bought the batteries?'],
-h:['More batteries will make the motor faster','More batteries will make the motor slower','Batteries have no effect'],
-v:{n:'Batteries',u:'pcs',L:[1,2,3,4,5],R:[40,85,120,165,200],ru:'rpm'},
-c:['Motor speed rises as batteries increase','Motor speed falls as batteries increase','Motor speed stays the same'],
-tip:'Use the same motor and the same load each time.'},
-{n:'Captain Swing',sg:'PENDULUM PIER',p:[-34,-18],a:[-31.8,-15.4],hair:0x2b2b2b,sh:0x2c5fa8,pa:0xf2f2f2,t:'Pendulum Pier',
-story:'Swings on the pier take different amounts of time to go back and forth. Does the rope length matter?',
-o:['Swings with different rope lengths take different times','The pier is made of wood','The seagulls are loud'],
-q:['How does pendulum length affect the time of one swing?','How tall is the captain?','Which swing looks prettiest?'],
-h:['The longer the pendulum, the longer one swing takes','The longer the pendulum, the shorter one swing takes','Length has no effect on swing time'],
-v:{n:'Pendulum length',u:'cm',L:[20,40,60,80,100],R:[0.9,1.3,1.6,1.8,2.0],ru:'s'},
-c:['Longer pendulums take longer for each swing','Longer pendulums swing faster','All pendulums swing in the same time'],
-tip:'Release from the same angle each time and use the same weight.'},
-{n:'Gardener Fern',sg:'GARDEN LAB',p:[30,-18],a:[27.8,-15.4],hair:0x6b4a2b,sh:0x3fa84a,pa:0x8a6b3a,t:'Garden Growth',
-story:'Identical bean plants got different amounts of water for two weeks. Now their heights are not the same.',
-o:['The plants got different amounts of water','The pots are round','The gardener wears a hat'],
-q:['How does the amount of water affect plant height?','Which plant smells nicest?','Who planted the beans?'],
-h:['More water will make the plant grow taller','Water will make the plant shrink','Water has no effect on growth'],
-v:{n:'Water per day',u:'ml',L:[0,10,20,30,40],R:[3,8,14,18,19],ru:'cm'},
-c:['More water helped growth, but extra water gave less and less benefit','Water had no effect','Plants grew best with no water'],
-tip:'Same soil, same light, same seeds. Only the water changes.'},
-{n:'Prof. Magnus',sg:'MAGNET MOUNTAIN',p:[3,-36],a:[.8,-33.4],hair:0xcfcfcf,sh:0xd04a4a,pa:0x333a4a,t:'Electromagnet',
-story:'Prof. Magnus wraps wire around a nail and connects a battery. The nail becomes a magnet and picks up paper clips.',
-o:['Different numbers of coils pick up different numbers of clips','The nail is long','The mountain is big'],
-q:['How does the number of wire coils affect how many paper clips the nail picks up?','Is the nail shiny?','What brand is the battery?'],
-h:['More coils will pick up more paper clips','More coils will pick up fewer paper clips','Coils have no effect'],
-v:{n:'Wire coils',u:'coils',L:[5,10,15,20,25],R:[2,4,7,9,12],ru:'clips'},
-c:['More coils picked up more paper clips','More coils picked up fewer paper clips','The number of clips stayed the same'],
-tip:'Use the same nail and the same battery every time.'}];
-const ST=['Observe','Question','Hypothesis','Experiment','Conclusion'];
-const QS=['What do you notice?','Which question can be tested?','What is your prediction?','Try the levels below. Test at least 3.','What did you find out?'];
-const DEF=['Observe: look closely and note what you see.','Question: ask something you can test.','Hypothesis: predict what will happen and why.','Experiment: change one thing and measure.','Conclusion: explain what the data shows.'];
-const shuf=a=>a.map((t,i)=>({t,ok:i==0})).sort(()=>Math.random()-.5);
-let cs=null;
-function say(t,ms=3500){const c=$('#cap');c.textContent=t;clearTimeout(say.t);say.t=setTimeout(()=>c.textContent='',ms)}
-function dmg(){S.hp=Math.max(30,S.hp-10);hud();save()}
-function openCase(i){cs={i,s:0,m:0,tested:{}};$('#dlg').style.display='flex';render()}
-function render(){
-const c=C[cs.i],pn=$('#pn');
-let h='<h2>'+c.n+': '+c.t+'</h2><div class="steps">'+ST.map((_,k)=>'<i class="'+(k<cs.s?'ok':k==cs.s?'on':'')+'"></i>').join('')+'</div>';
-if(cs.s<5)h+='<div class="story">'+c.story+'</div><div class="q">'+ST[cs.s]+': '+QS[cs.s]+'</div>';
-if(cs.s==3){const v=c.v;
-h+='<div class="row">'+v.L.map((l,k)=>'<button class="opt" data-k="'+k+'">'+v.n+' '+l+' '+v.u+'</button>').join('')+'</div><div class="chart" id="ch"></div><div class="fb" id="fb" style="color:#4b2fa5">'+c.tip+'</div><button class="btn" id="nx" style="display:none">Next</button>';
-pn.innerHTML=h;pn.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{cs.tested[b.dataset.k]=1;chart();b.classList.add('good')});chart();return}
-if(cs.s<5){const src=[c.o,c.q,c.h,null,c.c][cs.s];
-cs.opts=cs.opts&&cs.opts.s==cs.s?cs.opts:{s:cs.s,l:shuf(src)};
-h+=cs.opts.l.map((o,k)=>'<button class="opt" data-k="'+k+'">'+o.t+'</button>').join('')+'<div class="fb" id="fb"></div>';
-pn.innerHTML=h;pn.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const o=cs.opts.l[b.dataset.k];
-if(o.ok){S.xp+=10;cs.s++;cs.opts=null;hud();save();render()}else{b.classList.add('bad');cs.m++;dmg();$('#fb').textContent='Not quite. Re-read the story and try again!'}});return}
-const st=cs.m==0?3:cs.m<=2?2:1;S.stars[cs.i]=Math.max(S.stars[cs.i],st);S.xp+=30;S.hp=100;hud();save();
-pn.innerHTML='<h2>Quest Complete!</h2><div>'+star(st)+'</div><p>You solved <b>'+c.t+'</b> using scientific inquiry. +40 XP. Wrong answers: '+cs.m+'.</p><button class="btn" id="cl">Back to the world</button>';
-$('#cl').onclick=()=>{$('#dlg').style.display='none';cs=null;if(S.stars.every(x=>x>0))say('Amazing, '+S.name+'! You solved every mystery!',5000)}}
-function chart(){const c=C[cs.i],v=c.v,mx=Math.max(...v.R);
-$('#ch').innerHTML=Object.keys(cs.tested).sort().map(k=>'<div><b>'+v.n+' '+v.L[k]+'</b><s style="width:'+v.R[k]/mx*50+'%"></s>'+v.R[k]+' '+v.ru+'</div>').join('');
-const n=Object.keys(cs.tested).length,b=$('#nx');
-if(n>=3){b.style.display='inline-block';b.onclick=()=>{cs.s++;S.xp+=10;hud();save();render()}}}
-function infoPanel(h){$('#pn').innerHTML=h+'<br><button class="btn" id="cl">Close</button>';$('#dlg').style.display='flex';cs=null;$('#cl').onclick=()=>$('#dlg').style.display='none'}
-const star=n=>[1,2,3].map(k=>'<span class="star '+(k<=n?'on':'')+'">★</span>').join('');
-/* ---------- HUD buttons ---------- */
-['👁️','❓','💡','🧪','✅'].forEach((ic,k)=>{const b=document.createElement('button');b.className='sk';b.innerHTML='<b>'+(k+1)+'</b><span>'+ic+'</span>';b.onclick=()=>say(DEF[k],5000);$('#skills').appendChild(b)});
-$('#i1').onclick=()=>infoPanel('<h2>'+S.name+' · Lv.'+lvl()+'</h2>'+C.map((c,i)=>'<p>'+c.t+' '+star(S.stars[i])+'</p>').join('')+'<p>XP: '+S.xp+'</p>');
-$('#i2').onclick=()=>{R.render(sc,cam);const a=document.createElement('a');a.href=cv.toDataURL('image/png');a.download='inquiry-world.png';a.click()};
-$('#i3').onclick=()=>{const k=S.stars.findIndex(x=>x==0);say(k<0?'All quests done! Replay any quest to earn 3 stars.':'Find '+C[k].n+' (look for the !). Check the minimap.',4500)};
-$('#i4').onclick=()=>infoPanel('<h2>Science Journal</h2><p><b>Inquiry steps:</b> Observe → Question → Hypothesis → Experiment → Conclusion.</p><p>Fair test: <i>change only one variable at a time.</i></p><p>Controls: joystick or WASD / arrow keys to walk, or tap the ground. Tap an NPC to go and talk.</p>');
-$('#i5').onclick=()=>{infoPanel('<h2>Reset progress?</h2><p>This erases your stars and XP on this device.</p><button class="btn" id="rs" style="background:#b3321b">Yes, reset</button>');$('#rs').onclick=()=>{S={name:S.name,xp:0,stars:[0,0,0,0,0,0],hp:100};save();hud();$('#dlg').style.display='none'}};
-$('#rf').onclick=()=>{P.tx=P.x;P.tz=P.z;P.pend=-1};
-const near=()=>{let b=0,bd=1e9;C.forEach((c,i)=>{const d=Math.hypot(c.p[0]-P.x,c.p[1]-P.z);if(d<bd){bd=d;b=i}});return[b,bd]};
-$('#tg').onclick=()=>goNpc(near()[0]);
-$('#auto').onclick=()=>{let k=S.stars.findIndex(x=>x==0);if(k<0)k=S.stars.indexOf(Math.min(...S.stars));goNpc(k)};
-$('#atk').onclick=()=>{const[b,d]=near();if(d<5)openCase(b);else say('Walk up to a character with a !',2500)};
-function goNpc(i){P.tx=C[i].a[0];P.tz=C[i].a[1];P.pend=i}
-/* ---------- input: joystick + keys ---------- */
-const cv=$('#cv'),stg=$('#stage'),P={x:0,z:9,tx:0,tz:9,pend:-1,amp:0},J={x:0,z:0},K={};
-(()=>{const j=$('#joy'),k=$('#knob');let on=false;
-const mv=e=>{const r=j.getBoundingClientRect(),R=r.width/2;let dx=e.clientX-(r.left+R),dz=e.clientY-(r.top+R);const m=Math.hypot(dx,dz);if(m>R){dx*=R/m;dz*=R/m}k.style.transform='translate('+dx+'px,'+dz+'px)';J.x=dx/R;J.z=dz/R};
-j.addEventListener('pointerdown',e=>{on=true;j.setPointerCapture(e.pointerId);mv(e)});
-j.addEventListener('pointermove',e=>{if(on)mv(e)});
-const up=()=>{on=false;J.x=J.z=0;k.style.transform=''};j.addEventListener('pointerup',up);j.addEventListener('pointercancel',up)})();
-addEventListener('keydown',e=>{K[e.key.toLowerCase()]=1;if(e.key.startsWith('Arrow'))e.preventDefault()});
-addEventListener('keyup',e=>K[e.key.toLowerCase()]=0);
-/* ---------- 3D world ---------- */
-let R,sc,cam,pl,signs=[],porings=[],npcs=[],pends=[];const OB=[];
-function init(){
-R=new THREE.WebGLRenderer({canvas:cv,antialias:true});
-sc=new THREE.Scene();sc.background=new THREE.Color(0xa8d4ff);sc.fog=new THREE.Fog(0xa8d4ff,45,115);
-cam=new THREE.PerspectiveCamera(38,16/9,.1,200);
-const fit=()=>{const w=stg.clientWidth,h=stg.clientHeight;R.setPixelRatio(Math.min(devicePixelRatio||1,2));R.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()};
-addEventListener('resize',fit);fit();
-sc.add(new THREE.HemisphereLight(0xffffff,0x8a9a7a,.95));
-const dl=new THREE.DirectionalLight(0xfff1d6,.7);dl.position.set(-8,14,10);sc.add(dl);
-const M=c=>new THREE.MeshLambertMaterial({color:c});
-const box=(w,h,d,c,x,y,z,rx)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),M(c));m.position.set(x,y,z);if(rx)m.rotation.x=rx;sc.add(m);return m};
-const gr=new THREE.Mesh(new THREE.PlaneGeometry(300,300),M(0x7fbf5a));gr.rotation.x=-Math.PI/2;sc.add(gr);
-const tc=document.createElement('canvas');tc.width=tc.height=256;const tx=tc.getContext('2d');tx.fillStyle='#86725a';tx.fillRect(0,0,256,256);
-for(let j=0;j<8;j++)for(let i=0;i<8;i++){const o=j%2?16:0;tx.fillStyle='hsl(32,'+(16+Math.random()*10)+'%,'+(56+Math.random()*13)+'%)';tx.beginPath();tx.ellipse(i*32+o+16,j*32+16,14.5,14.5,0,0,7);tx.fill()}
-const patch=(cx,cz,w,d)=>{const t=new THREE.CanvasTexture(tc);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(w/5.6,d/5.6);const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),new THREE.MeshLambertMaterial({map:t}));m.rotation.x=-Math.PI/2;m.position.set(cx,.02,cz);sc.add(m)};
-patch(0,3,46,40);C.slice(3).forEach(c=>patch(c.p[0]+2,c.p[1]-2,16,16));patch(3,-36,16,14);
-const cyl=(r1,r2,h,c,x,y,z)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,10),M(c));m.position.set(x,y,z);sc.add(m);return m};
-/* forge */
-box(8.4,4.4,.4,0xf08a3c,0,2.2,-4.9);box(.9,5.2,5.2,0x5a6aa0,-4.3,2.6,-2.4);box(.9,5.2,5.2,0x5a6aa0,4.3,2.6,-2.4);
-box(8.4,.6,.5,0x46395f,0,4.9,0);box(7.6,.8,5,0x3d4a78,0,.4,-2.4);
-box(10.6,.35,3.7,0xd0503c,0,5.95,-3.75,-.75);box(10.6,.35,3.7,0xc24a38,0,5.95,-1.25,.75);box(10.6,.5,.5,0x7a4a2b,0,7.15,-2.5);
-OB.push([-5,5,-5.5,.3]);
-const lab=(t,w,h,f,bg,fg)=>{const c=document.createElement('canvas');c.width=512;c.height=Math.round(512*h/w);const x=c.getContext('2d');x.fillStyle=bg;x.fillRect(0,0,c.width,c.height);x.fillStyle=fg;x.font='bold '+f+'px Georgia';x.textAlign='center';x.textBaseline='middle';x.fillText(t,256,c.height/2);return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(c)}))};
-box(5.6,1.5,.4,0x7a4a2b,0,6.2,.5);const sb=lab('FORGE',5,1.2,150,'#46395f','#ffe27a');sb.position.set(0,6.2,.72);sc.add(sb);
-const fire=new THREE.Mesh(new THREE.BoxGeometry(2.2,.5,1.2),new THREE.MeshBasicMaterial({color:0xff7a1a}));fire.position.set(2.2,1,-3.2);sc.add(fire);
-box(2.4,.7,1.4,0x6b4a2b,2.2,.55,-3.2);box(.9,.7,.6,0x30343c,-2.2,.6,-2.6);
-const poring=(x,y,z,s)=>{const g=new THREE.Group();const b=new THREE.Mesh(new THREE.SphereGeometry(.9,18,14),M(0xff9fb8));b.scale.y=.85;g.add(b);[-.3,.3].forEach(e=>{const m=new THREE.Mesh(new THREE.SphereGeometry(.1,8,8),M(0x2a2040));m.position.set(e,.1,.82);g.add(m)});g.position.set(x,y,z);g.scale.setScalar(s);g.userData.y=y;sc.add(g);porings.push(g)};
-poring(-1.8,7.9,-2.6,1);poring(.3,7.7,-2.2,.7);
-/* tower, stands, houses, trees */
-box(5,10,5,0x8c919c,-14,5,-6);box(5.4,.4,5.4,0x6b4a3a,-14,10.2,-6);const rc=new THREE.Mesh(new THREE.ConeGeometry(4.2,3.2,4),M(0x7a4a3a));rc.position.set(-14,12,-6);rc.rotation.y=Math.PI/4;sc.add(rc);box(1.2,1.6,.1,0xbcd8ee,-14,6.5,-3.45);OB.push([-16.5,-11.5,-8.5,-3.5]);
-[10,11.8].forEach(x=>{box(.12,3.4,.12,0x5a3a22,x,1.7,-1.5);cyl(.5,.7,1.6,0xaab3c2,x,2.2,-1.5);const h=new THREE.Mesh(new THREE.SphereGeometry(.45,10,8),M(0xc4ccd8));h.position.set(x,3.4,-1.5);sc.add(h)});
-const house=(x,z,c)=>{box(6,3.4,5,c,x,1.7,z);box(7,.3,3.2,0xb5503c,x,4.2,z-1.2,-.7);box(7,.3,3.2,0xa84636,x,4.2,z+1.2,.7);box(1.2,2,.1,0x5a3a22,x,1,z+2.55);box(1.2,1,.1,0xbcd8ee,x+1.8,2,z+2.55);OB.push([x-3,x+3,z-2.5,z+2.5])};
-house(24,-4,0xe8dcc0);house(-27,12,0xd8c9a8);house(26,19,0xe0d0b0);house(-22,-26,0xd0c0a0);house(20,-34,0xe8dcc0);
-const bench=(x,z)=>box(3,1,1.4,0x7a5a3a,x,.5,z);
-bench(-19,2);const lp=cyl(.08,.08,2.4,0x555b66,-19,2.2,2);const lamp=new THREE.Mesh(new THREE.SphereGeometry(.4,12,10),new THREE.MeshBasicMaterial({color:0xffe27a}));lamp.position.set(-19,3.5,2);sc.add(lamp);
-bench(19,3);const orb=new THREE.Mesh(new THREE.SphereGeometry(.35,12,10),new THREE.MeshBasicMaterial({color:0x7be8ff}));orb.position.set(19,1.5,3);sc.add(orb);
-/* pendulum pier */
-box(10,.4,6,0x9a6b3a,-34,.2,-22);[-37,-31].forEach(x=>box(.3,5,.3,0x5a3a22,x,2.5,-22));box(6.6,.3,.3,0x5a3a22,-34,5,-22);
-[[-35.4,3],[-32.6,1.8]].forEach(([x,L])=>{const g=new THREE.Group();g.position.set(x,5,-22);const ln=cyl(.04,.04,L,0x333333,0,-L/2,0);sc.remove(ln);g.add(ln);const bob=new THREE.Mesh(new THREE.SphereGeometry(.5,14,12),M(0xd04a4a));bob.position.y=-L;g.add(bob);g.userData.L=L;sc.add(g);pends.push(g)});
-/* garden */
-[26,29.5,33].forEach((x,i)=>{box(2.6,.5,2.6,0x6b4a2b,x,.25,-23);[0,1,2,3].forEach(k=>{const h=[.5,1,1.5,1.9][i%4]+k*.05;const pc=new THREE.Mesh(new THREE.ConeGeometry(.3,h+.4,6),M(0x3fa84a));pc.position.set(x-.8+(k%2)*1.6,.5+h/2,-23.8+Math.floor(k/2)*1.6);sc.add(pc)})});
-/* magnet mountain */
-const mt=new THREE.Mesh(new THREE.ConeGeometry(9,12,7),M(0x7a7f8a));mt.position.set(3,6,-44);sc.add(mt);
-bench(3,-39);const nl=cyl(.12,.12,2.2,0x9aa0aa,3,1.3,-39);nl.rotation.z=Math.PI/2;const cl=cyl(.3,.3,1.2,0xc87533,3,1.3,-39);cl.rotation.z=Math.PI/2;[0,1,2].forEach(i=>box(.25,.08,.12,0xdddddd,4.8+i*.4,1.05,-38.7));
-/* trees */
-let sd=7;const rnd=()=>(sd=(sd*9301+49297)%233280)/233280;
-for(let i=0;i<110;i++){const x=rnd()*92-46,z=rnd()*88-44;if(Math.abs(x)<24&&z>-20&&z<24)continue;if(C.some(c=>Math.hypot(c.p[0]-x,c.p[1]-z)<9)||Math.hypot(x-3,z+40)<14||OB.some(o=>x>o[0]-4&&x<o[1]+4&&z>o[2]-4&&z<o[3]+4))continue;
-const s=.8+rnd()*.7;cyl(.3*s,.4*s,1.6*s,0x7a5a3a,x,.8*s,z);const f=new THREE.Mesh(new THREE.ConeGeometry(1.6*s,3.6*s,8),M(0x3f8f45));f.position.set(x,3.2*s,z);sc.add(f)}
-/* Roblox-style characters */
-const rbx=(shirt,pants,hair,ring)=>{const g=new THREE.Group(),Y=0xf5cd30;
-const fc=document.createElement('canvas');fc.width=fc.height=64;const f=fc.getContext('2d');f.fillStyle='#f5cd30';f.fillRect(0,0,64,64);f.fillStyle='#1a1a1a';f.fillRect(18,20,6,10);f.fillRect(40,20,6,10);f.lineWidth=4;f.strokeStyle='#1a1a1a';f.beginPath();f.arc(32,34,14,.3,Math.PI-.3);f.stroke();
-const hd=new THREE.Mesh(new THREE.BoxGeometry(.72,.72,.72),[M(Y),M(Y),M(Y),M(Y),new THREE.MeshLambertMaterial({map:new THREE.CanvasTexture(fc)}),M(Y)]);hd.position.y=2.42;g.add(hd);
-const hr=new THREE.Mesh(new THREE.BoxGeometry(.78,.22,.78),M(hair));hr.position.y=2.76;g.add(hr);
-const tr=new THREE.Mesh(new THREE.BoxGeometry(1,1,.5),M(shirt));tr.position.y=1.5;g.add(tr);
-const limb=(x,y,c1,c2,h1)=>{const p=new THREE.Group();p.position.set(x,y,0);const a=new THREE.Mesh(new THREE.BoxGeometry(.48,h1,.48),M(c1));a.position.y=-h1/2;p.add(a);if(c2!=null){const b=new THREE.Mesh(new THREE.BoxGeometry(.48,1-h1,.48),M(c2));b.position.y=-h1-(1-h1)/2;p.add(b)}g.add(p);return p};
-g.userData={la:limb(-.75,2,shirt,Y,.65),ra:limb(.75,2,shirt,Y,.65),ll:limb(-.25,1,pants,null,1),rl:limb(.25,1,pants,null,1)};
-if(ring){const r=new THREE.Mesh(new THREE.RingGeometry(1.1,1.3,36),new THREE.MeshBasicMaterial({color:0x8bf05a,side:THREE.DoubleSide}));r.rotation.x=-Math.PI/2;r.position.y=.05;g.add(r)}
-sc.add(g);return g};
-const anim=(g,ph,a)=>{const u=g.userData,s=Math.sin(ph)*a;u.la.rotation.x=s;u.ra.rotation.x=-s;u.ll.rotation.x=-s;u.rl.rotation.x=s};
-pl=rbx(0x7b4fd0,0x2c2f4a,0xdfe3ee,true);pl.position.set(P.x,0,P.z);pl.rotation.y=Math.PI;
-C.forEach(c=>{const g=rbx(c.sh,c.pa,c.hair,false);g.position.set(c.p[0],0,c.p[1]);npcs.push(g);
-const s=document.createElement('div');s.className='sign';s.innerHTML='<u>$</u>'+c.sg+'<div class="mk">!</div>';stg.appendChild(s);signs.push(s)});
-/* tap to move / tap NPC */
-const RC=new THREE.Raycaster(),PL=new THREE.Plane(new THREE.Vector3(0,1,0),0);
-cv.addEventListener('pointerdown',e=>{if(cs||$('#intro').style.display=='flex')return;
-const r=cv.getBoundingClientRect(),nx=(e.clientX-r.left)/r.width*2-1,ny=-((e.clientY-r.top)/r.height)*2+1;
-const i=C.findIndex(c=>{const v=new THREE.Vector3(c.p[0],1.4,c.p[1]).project(cam);return Math.hypot((v.x-nx)*r.width/2,(v.y-ny)*r.height/2)<r.width*.06});
-if(i>=0)return goNpc(i);
-RC.setFromCamera({x:nx,y:ny},cam);const pt=new THREE.Vector3();
-if(RC.ray.intersectPlane(PL,pt)){P.tx=Math.max(-47,Math.min(47,pt.x));P.tz=Math.max(-45,Math.min(45,pt.z));P.pend=-1}});
-const mm=$('#mm').getContext('2d');
-function drawMM(){mm.fillStyle='#3d6b3a';mm.fillRect(0,0,120,120);mm.fillStyle='#b8a58a';mm.fillRect(25*1.25,26*1.25,46*1.25,40*1.25);
-C.forEach((c,i)=>{mm.fillStyle=S.stars[i]>0?'#3fb82d':'#ffc400';mm.beginPath();mm.arc((c.p[0]+48)*1.25,(c.p[1]+46)*1.25,4,0,7);mm.fill()});
-mm.fillStyle='#fff';mm.strokeStyle='#5a35c8';mm.lineWidth=2;mm.beginPath();mm.arc((P.x+48)*1.25,(P.z+46)*1.25,4,0,7);mm.fill();mm.stroke()}
-let last=performance.now();const cp=new THREE.Vector3(0,9,22),V=new THREE.Vector3();
-function loop(t){const d=Math.min(.05,(t-last)/1000);last=t;
-const busy=cs||$('#intro').style.display=='flex';
-let ix=(K.d||K.arrowright?1:0)-(K.a||K.arrowleft?1:0),iz=(K.s||K.arrowdown?1:0)-(K.w||K.arrowup?1:0);
-if(Math.hypot(J.x,J.z)>.15){ix=J.x;iz=J.z}
-let mv=false;
-if(!busy&&Math.hypot(ix,iz)>.1){const m=Math.hypot(ix,iz),k=Math.min(1,m);P.x+=ix/m*k*d*8;P.z+=iz/m*k*d*8;P.tx=P.x;P.tz=P.z;P.pend=-1;pl.rotation.y=Math.atan2(ix,iz);mv=true}
-else if(!busy){const dx=P.tx-P.x,dz=P.tz-P.z,di=Math.hypot(dx,dz);
- if(di>.35){const s=Math.min(di,d*8);P.x+=dx/di*s;P.z+=dz/di*s;pl.rotation.y=Math.atan2(dx,dz);mv=true}
- if(P.pend>=0){const c=C[P.pend],nd=Math.hypot(c.p[0]-P.x,c.p[1]-P.z);if(di<=.35||nd<3.2){const i=P.pend;P.pend=-1;pl.rotation.y=Math.atan2(c.p[0]-P.x,c.p[1]-P.z);P.tx=P.x;P.tz=P.z;mv=false;openCase(i)}}}
-P.x=Math.max(-47,Math.min(47,P.x));P.z=Math.max(-45,Math.min(45,P.z));
-OB.forEach(o=>{const x0=o[0]-.6,x1=o[1]+.6,z0=o[2]-.6,z1=o[3]+.6;if(P.x>x0&&P.x<x1&&P.z>z0&&P.z<z1){const a=[P.x-x0,x1-P.x,P.z-z0,z1-P.z],m=Math.min(...a),k=a.indexOf(m);if(k==0)P.x=x0;else if(k==1)P.x=x1;else if(k==2)P.z=z0;else P.z=z1}});
-P.amp+=((mv?.9:0)-P.amp)*.2;anim(pl,t/95,P.amp);
-pl.position.set(P.x,mv?Math.abs(Math.sin(t/95))*.08:0,P.z);
-cp.lerp(V.set(P.x*.85,7.8,P.z+10.5),.08);cam.position.copy(cp);cam.lookAt(P.x*.85,1.3,P.z-2);
-porings.forEach((p,i)=>p.position.y=p.userData.y+Math.sin(t/400+i*2)*.15);
-pends.forEach(g=>g.rotation.z=.6*Math.sin(t/1000*(3.4/Math.sqrt(g.userData.L))));
-npcs.forEach((n,i)=>anim(n,t/500+i,.12));
-C.forEach((c,i)=>{const v=V.set(c.p[0],3.4,c.p[1]).project(cam),s=signs[i],dist=Math.hypot(c.p[0]-P.x,c.p[1]-P.z);s.style.left=(v.x*.5+.5)*100+'%';s.style.top=(-v.y*.5+.5)*100+'%';s.style.display=(v.z>1||dist>38)?'none':'flex';const m=s.querySelector('.mk'),ok=S.stars[i]>0;m.textContent=ok?'✓':'!';m.className='mk'+(ok?' ok':'')});
-drawMM();R.render(sc,cam);requestAnimationFrame(loop)}
-requestAnimationFrame(loop)}
-function begin(){hud();say('Walk with the joystick or tap the ground. Find the characters with a !',6000)}
-if(window.THREE){init();
-if(S.name){begin()}else{$('#intro').style.display='flex';$('#go').onclick=()=>{S.name=($('#ni').value.trim()||'Explorer');save();$('#intro').style.display='none';begin()}}}
-</script></body></html>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+const $ = s => document.querySelector(s);
+if (!window.THREE) { $('#err').style.display = 'flex'; }
+
+/* ---------- OUTFIT PALETTE FOR DISTINCT LIVE PLAYERS ---------- */
+const OUTFITS = [
+  { shirt: 0x7b4fd0, pants: 0x2c2f4a, hair: 0xdfe3ee, hex: '#8b5cf6' },
+  { shirt: 0x0ea5e9, pants: 0x1e293b, hair: 0xfde047, hex: '#38bdf8' },
+  { shirt: 0xec4899, pants: 0x312e81, hair: 0xf97316, hex: '#f472b6' },
+  { shirt: 0x10b981, pants: 0x1f2937, hair: 0x78350f, hex: '#34d399' },
+  { shirt: 0xf59e0b, pants: 0x334155, hair: 0x1e1b4b, hex: '#fbbf24' },
+  { shirt: 0xef4444, pants: 0x111827, hair: 0xe2e8f0, hex: '#f87171' }
+];
+
+/* ---------- PLAYER SAVE STATE ---------- */
+let S = {
+  name: '',
+  xp: 0,
+  stars: [0, 0, 0, 0, 0, 0],
+  hp: 100,
+  outfit: Math.floor(Math.random() * OUTFITS.length)
+};
+try {
+  Object.assign(S, JSON.parse(localStorage.getItem('iw1') || '{}'));
+} catch (e) {}
+while (S.stars.length < 6) S.stars.push(0);
+if (typeof S.outfit !== 'number' || !OUTFITS[S.outfit]) S.outfit = 0;
+
+const save = () => {
+  try { localStorage.setItem('iw1', JSON.stringify(S)); } catch (e) {}
+};
+const lvl = () => 1 + Math.floor(S.xp / 60);
+const totalStars = () => S.stars.reduce((a, b) => a + b, 0);
+
+function hud() {
+  $('#nm').textContent = S.name || 'Explorer';
+  $('#lv').textContent = lvl();
+  $('#hp i').style.width = S.hp + '%';
+  $('#hp-txt').textContent = S.hp + '/100';
+  const xpMod = S.xp % 60;
+  $('#xp i').style.width = (xpMod / 60 * 100) + '%';
+  $('#xp-txt').textContent = xpMod + '/60';
+  $('#tot').textContent = totalStars();
+  $('#badge').textContent = S.stars.filter(x => x > 0).length;
+  $('#av-shirt').setAttribute('fill', OUTFITS[S.outfit].hex);
+}
+
+/* ---------- INQUIRY CONTENT (6 QUESTS) ---------- */
+const C = [
+  {
+    n: 'Master Forge', sg: 'RAMP RACE', p: [0, -2.6], a: [0, 1], hair: 0xe8643c, sh: 0xefe3c8, pa: 0x6b4a2b, t: 'Ramp Race',
+    story: 'A robot car rolls down a ramp. Sometimes it rolls far, sometimes only a little. Why?',
+    o: ['The ramp height is different on each run', 'The car is red', 'The forge is noisy'],
+    q: ['How does ramp height affect how far the car rolls?', 'How cool does the robot car look?', 'Who built the ramp?'],
+    h: ['The higher the ramp, the farther the car will roll', 'The higher the ramp, the shorter the roll', 'The ramp has no effect'],
+    v: { n: 'Ramp height', u: 'cm', L: [5, 10, 15, 20, 25], R: [28, 52, 83, 108, 139], ru: 'cm' },
+    c: ['Distance increases as ramp height increases', 'Distance decreases as ramp height increases', 'Distance stays the same'],
+    tip: 'Fair test: change only one thing (the height). Keep the same car and floor.'
+  },
+  {
+    n: 'Tech Mira', sg: 'LIGHT LAB', p: [-16, 3], a: [-13.8, 5.6], hair: 0xf0a030, sh: 0xb86a4a, pa: 0x3a3a52, t: 'Light Sensor',
+    story: 'A robot reads light with a sensor. When the lamp is moved away, the reading changes.',
+    o: ['The reading changes when the lamp distance changes', 'The lamp is heavy', 'The wire is blue'],
+    q: ['How does lamp distance affect the light reading?', 'How much does the sensor cost?', 'Why do I like the lamp?'],
+    h: ['The farther the lamp, the lower the reading', 'The farther the lamp, the higher the reading', 'The reading stays the same anywhere'],
+    v: { n: 'Lamp distance', u: 'cm', L: [10, 20, 30, 40, 50], R: [90, 60, 35, 20, 10], ru: '%' },
+    c: ['The reading drops as the lamp moves away', 'The reading rises as the lamp moves away', 'The reading never changes'],
+    tip: 'Test in a dark room so the test stays fair.'
+  },
+  {
+    n: 'Dr. Volt', sg: 'BATTERY LAB', p: [16, 4], a: [13.8, 6.6], hair: 0x8a6be8, sh: 0xf2f2f2, pa: 0x5a8fe8, t: 'Battery Power',
+    story: 'A robot has a motor. Dr. Volt added more batteries and it seemed to spin faster.',
+    o: ['The motor seems faster with more batteries', 'The lab coat is big', 'The lab is warm'],
+    q: ['How does the number of batteries affect motor speed?', 'What color is the motor?', 'Who bought the batteries?'],
+    h: ['More batteries will make the motor faster', 'More batteries will make the motor slower', 'Batteries have no effect'],
+    v: { n: 'Batteries', u: 'pcs', L: [1, 2, 3, 4, 5], R: [40, 85, 120, 165, 200], ru: 'rpm' },
+    c: ['Motor speed rises as batteries increase', 'Motor speed falls as batteries increase', 'Motor speed stays the same'],
+    tip: 'Use the same motor and the same load each time.'
+  },
+  {
+    n: 'Captain Swing', sg: 'PENDULUM PIER', p: [-34, -18], a: [-31.8, -15.4], hair: 0x2b2b2b, sh: 0x2c5fa8, pa: 0xf2f2f2, t: 'Pendulum Pier',
+    story: 'Swings on the pier take different amounts of time to go back and forth. Does the rope length matter?',
+    o: ['Swings with different rope lengths take different times', 'The pier is made of wood', 'The seagulls are loud'],
+    q: ['How does pendulum length affect the time of one swing?', 'How tall is the captain?', 'Which swing looks prettiest?'],
+    h: ['The longer the pendulum, the longer one swing takes', 'The longer the pendulum, the shorter one swing takes', 'Length has no effect on swing time'],
+    v: { n: 'Pendulum length', u: 'cm', L: [20, 40, 60, 80, 100], R: [0.9, 1.3, 1.6, 1.8, 2.0], ru: 's' },
+    c: ['Longer pendulums take longer for each swing', 'Longer pendulums swing faster', 'All pendulums swing in the same time'],
+    tip: 'Release from the same angle each time and use the same weight.'
+  },
+  {
+    n: 'Gardener Fern', sg: 'GARDEN LAB', p: [30, -18], a: [27.8, -15.4], hair: 0x6b4a2b, sh: 0x3fa84a, pa: 0x8a6b3a, t: 'Garden Growth',
+    story: 'Identical bean plants got different amounts of water for two weeks. Now their heights are not the same.',
+    o: ['The plants got different amounts of water', 'The pots are round', 'The gardener wears a hat'],
+    q: ['How does the amount of water affect plant height?', 'Which plant smells nicest?', 'Who planted the beans?'],
+    h: ['More water will make the plant grow taller', 'Water will make the plant shrink', 'Water has no effect on growth'],
+    v: { n: 'Water per day', u: 'ml', L: [0, 10, 20, 30, 40], R: [3, 8, 14, 18, 19], ru: 'cm' },
+    c: ['More water helped growth, but extra water gave less and less benefit', 'Water had no effect', 'Plants grew best with no water'],
+    tip: 'Same soil, same light, same seeds. Only the water changes.'
+  },
+  {
+    n: 'Prof. Magnus', sg: 'MAGNET MOUNTAIN', p: [3, -36], a: [0.8, -33.4], hair: 0xcfcfcf, sh: 0xd04a4a, pa: 0x333a4a, t: 'Electromagnet',
+    story: 'Prof. Magnus wraps wire around a nail and connects a battery. The nail becomes a magnet and picks up paper clips.',
+    o: ['Different numbers of coils pick up different numbers of clips', 'The nail is long', 'The mountain is big'],
+    q: ['How does the number of wire coils affect how many paper clips the nail picks up?', 'Is the nail shiny?', 'What brand is the battery?'],
+    h: ['More coils will pick up more paper clips', 'More coils will pick up fewer paper clips', 'Coils have no effect'],
+    v: { n: 'Wire coils', u: 'coils', L: [5, 10, 15, 20, 25], R: [2, 4, 7, 9, 12], ru: 'clips' },
+    c: ['More coils picked up more paper clips', 'More coils picked up fewer paper clips', 'The number of clips stayed the same'],
+    tip: 'Use the same nail and the same battery every time.'
+  }
+];
+
+const ST = ['Observe', 'Question', 'Hypothesis', 'Experiment', 'Conclusion'];
+const QS = ['What do you notice?', 'Which question can be tested?', 'What is your prediction?', 'Try the levels below. Test at least 3.', 'What did you find out?'];
+const DEF = [
+  'Observe: Look closely and note what you see.',
+  'Question: Ask something you can test.',
+  'Hypothesis: Predict what will happen and why.',
+  'Experiment: Change one thing and measure.',
+  'Conclusion: Explain what the data shows.'
+];
+const shuf = a => a.map((t, i) => ({ t, ok: i == 0 })).sort(() => Math.random() - 0.5);
+let cs = null;
+
+function say(t, ms = 3500) {
+  const c = $('#cap');
+  c.textContent = t;
+  c.classList.add('show');
+  clearTimeout(say.t);
+  say.t = setTimeout(() => c.classList.remove('show'), ms);
+}
+
+function dmg() {
+  S.hp = Math.max(30, S.hp - 10);
+  hud();
+  save();
+}
+
+function openCase(i) {
+  cs = { i, s: 0, m: 0, tested: {} };
+  $('#dlg').style.display = 'flex';
+  render();
+}
+
+function render() {
+  const c = C[cs.i], pn = $('#pn');
+  let h = '<h2>' + c.n + ': ' + c.t + '</h2><div class="steps">' +
+    ST.map((_, k) => '<i class="' + (k < cs.s ? 'ok' : k == cs.s ? 'on' : '') + '"></i>').join('') + '</div>';
+  if (cs.s < 5) h += '<div class="story">' + c.story + '</div><div class="q">' + ST[cs.s] + ': ' + QS[cs.s] + '</div>';
+  if (cs.s == 3) {
+    const v = c.v;
+    h += '<div class="row">' + v.L.map((l, k) => '<button class="opt" data-k="' + k + '">' + v.n + ' ' + l + ' ' + v.u + '</button>').join('') +
+      '</div><div class="chart" id="ch"></div><div class="fb" id="fb" style="color:#a5b4fc">' + c.tip +
+      '</div><button class="btn" id="nx" style="display:none">Next Step</button>';
+    pn.innerHTML = h;
+    pn.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+      cs.tested[b.dataset.k] = 1;
+      chart();
+      b.classList.add('good');
+    });
+    chart();
+    return;
+  }
+  if (cs.s < 5) {
+    const src = [c.o, c.q, c.h, null, c.c][cs.s];
+    cs.opts = cs.opts && cs.opts.s == cs.s ? cs.opts : { s: cs.s, l: shuf(src) };
+    h += cs.opts.l.map((o, k) => '<button class="opt" data-k="' + k + '">' + o.t + '</button>').join('') + '<div class="fb" id="fb"></div>';
+    pn.innerHTML = h;
+    pn.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+      const o = cs.opts.l[b.dataset.k];
+      if (o.ok) {
+        S.xp += 10;
+        cs.s++;
+        cs.opts = null;
+        hud();
+        save();
+        pushState(true);
+        render();
+      } else {
+        b.classList.add('bad');
+        cs.m++;
+        dmg();
+        $('#fb').textContent = 'Not quite. Re-read the story and try again!';
+      }
+    });
+    return;
+  }
+  const st = cs.m == 0 ? 3 : cs.m <= 2 ? 2 : 1;
+  S.stars[cs.i] = Math.max(S.stars[cs.i], st);
+  S.xp += 30;
+  S.hp = 100;
+  hud();
+  save();
+  pushState(true);
+  sendChat('⭐ Solved ' + c.t + ' (' + st + '/3 stars)!', true);
+  pn.innerHTML = '<h2>Quest Complete!</h2><div>' + star(st) + '</div><p>You solved <b>' + c.t +
+    '</b> using scientific inquiry. +40 XP. Wrong answers: ' + cs.m + '.</p><button class="btn" id="cl">Back to the world</button>';
+  $('#cl').onclick = () => {
+    $('#dlg').style.display = 'none';
+    cs = null;
+    if (S.stars.every(x => x > 0)) say('Amazing, ' + S.name + '! You solved every mystery!', 5000);
+  };
+}
+
+function chart() {
+  const c = C[cs.i], v = c.v, mx = Math.max(...v.R);
+  $('#ch').innerHTML = Object.keys(cs.tested).sort().map(k =>
+    '<div><b>' + v.n + ' ' + v.L[k] + '</b><s style="width:' + v.R[k] / mx * 52 + '%"></s><span>' + v.R[k] + ' ' + v.ru + '</span></div>'
+  ).join('');
+  const n = Object.keys(cs.tested).length, b = $('#nx');
+  if (n >= 3) {
+    b.style.display = 'inline-block';
+    b.onclick = () => {
+      cs.s++;
+      S.xp += 10;
+      hud();
+      save();
+      pushState(true);
+      render();
+    };
+  }
+}
+
+function infoPanel(h) {
+  $('#pn').innerHTML = h + '<br><button class="btn" id="cl">Close</button>';
+  $('#dlg').style.display = 'flex';
+  cs = null;
+  $('#cl').onclick = () => $('#dlg').style.display = 'none';
+}
+
+const star = n => [1, 2, 3].map(k => '<span class="star ' + (k <= n ? 'on' : '') + '">★</span>').join('');
+
+/* ---------- HUD BUTTONS ---------- */
+['👁️', '❓', '💡', '🧪', '✅'].forEach((ic, k) => {
+  const b = document.createElement('button');
+  b.className = 'sk';
+  b.innerHTML = '<b>' + (k + 1) + '</b><span>' + ic + '</span><small>' + ST[k].slice(0, 4) + '</small>';
+  b.onclick = () => say(DEF[k], 5000);
+  $('#skills').appendChild(b);
+});
+
+$('#i1').onclick = () => infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + '</h2>' +
+  C.map((c, i) => '<p style="display:flex;justify-content:space-between;align-items:center;margin:0.35em 0"><span>' + c.t + '</span><span>' + star(S.stars[i]) + '</span></p>').join('') +
+  '<p style="color:#a5b4fc">Total XP: ' + S.xp + '</p>');
+
+$('#i2').onclick = () => {
+  R.render(sc, cam);
+  const a = document.createElement('a');
+  a.href = cv.toDataURL('image/png');
+  a.download = 'inquiry-world.png';
+  a.click();
+  say('Screenshot saved!', 2500);
+};
+
+$('#i3').onclick = () => {
+  const k = S.stars.findIndex(x => x == 0);
+  say(k < 0 ? 'All quests done! Replay any quest to earn 3 stars.' : 'Find ' + C[k].n + ' (look for the !). Check the radar.', 4500);
+};
+
+$('#i4').onclick = () => infoPanel('<h2>Science Journal</h2><p><b>Inquiry steps:</b> Observe → Question → Hypothesis → Experiment → Conclusion.</p>' +
+  '<p><b>Fair test:</b> <i>Change only one variable at a time.</i></p>' +
+  '<p><b>Controls:</b> WASD / Arrow keys, virtual joystick, or tap the ground. Click online players in the top-right list to walk over to them!</p>');
+
+$('#i5').onclick = () => {
+  infoPanel('<h2>Reset progress?</h2><p>This erases your stars and XP on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
+  $('#rs').onclick = () => {
+    S = { name: S.name, xp: 0, stars: [0, 0, 0, 0, 0, 0], hp: 100, outfit: S.outfit };
+    save();
+    hud();
+    pushState(true);
+    $('#dlg').style.display = 'none';
+  };
+};
+
+$('#rf').onclick = () => { P.tx = P.x; P.tz = P.z; P.pend = -1; };
+const near = () => {
+  let b = 0, bd = 1e9;
+  C.forEach((c, i) => {
+    const d = Math.hypot(c.p[0] - P.x, c.p[1] - P.z);
+    if (d < bd) { bd = d; b = i; }
+  });
+  return [b, bd];
+};
+$('#tg').onclick = () => goNpc(near()[0]);
+$('#auto').onclick = () => {
+  let k = S.stars.findIndex(x => x == 0);
+  if (k < 0) k = S.stars.indexOf(Math.min(...S.stars));
+  goNpc(k);
+};
+$('#atk').onclick = () => {
+  const [b, d] = near();
+  if (d < 5.2) openCase(b);
+  else say('Walk up to a character with a !', 2500);
+};
+
+function goNpc(i) {
+  P.tx = C[i].a[0];
+  P.tz = C[i].a[1];
+  P.pend = i;
+}
+
+/* ---------- ONLINE PLAYERS DRAWER ---------- */
+$('#online-btn').onclick = () => {
+  $('#players-drawer').classList.toggle('open');
+  renderPlayersList();
+};
+
+function renderPlayersList() {
+  const list = $('#players-list');
+  const now = Date.now();
+  const active = Object.entries(remotePlayers).filter(([, d]) => now - (d.updatedAt || 0) < 16000);
+  $('#online-cnt').textContent = 1 + active.length;
+  let html = `<div class="pl-item" style="border-color:rgba(251,191,36,0.4)">
+    <span><i class="pl-swatch" style="background:${OUTFITS[S.outfit].hex}"></i><b>${esc(S.name || 'Explorer')}</b> (You)</span>
+    <span>Lv.${lvl()} · ⭐${totalStars()}</span>
+  </div>`;
+  active.forEach(([uid, d]) => {
+    const out = OUTFITS[d.outfit % OUTFITS.length] || OUTFITS[0];
+    html += `<button class="pl-item" type="button" data-uid="${uid}">
+      <span><i class="pl-swatch" style="background:${out.hex}"></i><b>${esc(d.name || 'Explorer')}</b></span>
+      <span>Lv.${d.lv || 1} · ⭐${d.stars || 0}</span>
+    </button>`;
+  });
+  list.innerHTML = html;
+  list.querySelectorAll('button[data-uid]').forEach(btn => {
+    btn.onclick = () => {
+      const rp = remotePlayers[btn.dataset.uid];
+      if (rp) {
+        P.tx = rp.x;
+        P.tz = rp.z + 1.5;
+        P.pend = -1;
+        $('#players-drawer').classList.remove('open');
+        say('Walking to ' + (rp.name || 'Explorer') + '...', 2200);
+      }
+    };
+  });
+}
+
+/* ---------- CHAT & EMOTES ---------- */
+const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+const seenChats = new Set();
+
+function appendChatLine(id, sender, text, isMe = false) {
+  if (id && seenChats.has(id)) return;
+  if (id) seenChats.add(id);
+  const feed = $('#chat-feed');
+  const div = document.createElement('div');
+  div.className = 'msg-line';
+  div.innerHTML = `<b class="${isMe ? 'me-name' : ''}">${esc(sender)}:</b>${esc(text)}`;
+  feed.appendChild(div);
+  while (feed.children.length > 35) feed.removeChild(feed.firstChild);
+  feed.scrollTop = feed.scrollHeight;
+}
+
+let myLastChat = '', myChatAt = 0;
+
+function sendChat(txt, silentFeed = false) {
+  const clean = txt.trim().slice(0, 60);
+  if (!clean) return;
+  myLastChat = clean;
+  myChatAt = Date.now();
+  const msgId = (myUid || 'local') + '_' + myChatAt;
+  if (!silentFeed) appendChatLine(msgId, S.name || 'Explorer', clean, true);
+  pushState(true);
+}
+
+$('#chat-form').onsubmit = e => {
+  e.preventDefault();
+  const inp = $('#chat-in');
+  sendChat(inp.value);
+  inp.value = '';
+  inp.blur();
+};
+
+document.querySelectorAll('.em-btn').forEach(btn => {
+  btn.onclick = () => sendChat(btn.dataset.em);
+});
+
+$('#chat-toggle').onclick = () => {
+  const box = $('#chat-box');
+  box.classList.toggle('minimized');
+  $('#chat-toggle').textContent = box.classList.contains('minimized') ? '+' : '−';
+};
+
+/* ---------- INPUT: JOYSTICK + KEYS ---------- */
+const cv = $('#cv'), stg = $('#stage');
+const P = { x: 0, z: 9, tx: 0, tz: 9, ry: Math.PI, pend: -1, amp: 0, mv: false };
+const J = { x: 0, z: 0 }, K = {};
+
+(() => {
+  const j = $('#joy'), k = $('#knob');
+  let on = false;
+  const mv = e => {
+    const r = j.getBoundingClientRect(), R = r.width / 2;
+    let dx = e.clientX - (r.left + R), dz = e.clientY - (r.top + R);
+    const m = Math.hypot(dx, dz);
+    if (m > R) { dx *= R / m; dz *= R / m; }
+    k.style.transform = 'translate(' + dx + 'px,' + dz + 'px)';
+    J.x = dx / R;
+    J.z = dz / R;
+  };
+  j.addEventListener('pointerdown', e => { on = true; j.setPointerCapture(e.pointerId); mv(e); });
+  j.addEventListener('pointermove', e => { if (on) mv(e); });
+  const up = () => { on = false; J.x = J.z = 0; k.style.transform = ''; };
+  j.addEventListener('pointerup', up);
+  j.addEventListener('pointercancel', up);
+})();
+
+addEventListener('keydown', e => {
+  if (document.activeElement === $('#chat-in') || document.activeElement === $('#ni')) return;
+  if (e.key === 'Enter') { $('#chat-in').focus(); return; }
+  K[e.key.toLowerCase()] = 1;
+  if (e.key.startsWith('Arrow')) e.preventDefault();
+});
+addEventListener('keyup', e => K[e.key.toLowerCase()] = 0);
+
+/* ---------- 3D WORLD & ROBLOX CHARACTER FACTORY ---------- */
+let R, sc, cam, pl, myTag, signs = [], porings = [], npcs = [], pends = [];
+const OB = [];
+let rbxBuilder = null, animLimbs = null;
+
+function init() {
+  R = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  sc = new THREE.Scene();
+  sc.background = new THREE.Color(0xa8d4ff);
+  sc.fog = new THREE.Fog(0xa8d4ff, 48, 120);
+  cam = new THREE.PerspectiveCamera(38, 16 / 9, 0.1, 200);
+
+  const fit = () => {
+    const w = stg.clientWidth, h = stg.clientHeight;
+    R.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    R.setSize(w, h, false);
+    cam.aspect = w / h;
+    cam.updateProjectionMatrix();
+  };
+  addEventListener('resize', fit);
+  fit();
+
+  sc.add(new THREE.HemisphereLight(0xffffff, 0x8a9a7a, 0.95));
+  const dl = new THREE.DirectionalLight(0xfff1d6, 0.72);
+  dl.position.set(-8, 14, 10);
+  sc.add(dl);
+
+  const M = c => new THREE.MeshLambertMaterial({ color: c });
+  const box = (w, h, d, c, x, y, z, rx) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), M(c));
+    m.position.set(x, y, z);
+    if (rx) m.rotation.x = rx;
+    sc.add(m);
+    return m;
+  };
+
+  const gr = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), M(0x7fbf5a));
+  gr.rotation.x = -Math.PI / 2;
+  sc.add(gr);
+
+  const tc = document.createElement('canvas');
+  tc.width = tc.height = 256;
+  const tx = tc.getContext('2d');
+  tx.fillStyle = '#86725a';
+  tx.fillRect(0, 0, 256, 256);
+  for (let j = 0; j < 8; j++) {
+    for (let i = 0; i < 8; i++) {
+      const o = j % 2 ? 16 : 0;
+      tx.fillStyle = 'hsl(32,' + (16 + Math.random() * 10) + '%,' + (56 + Math.random() * 13) + '%)';
+      tx.beginPath();
+      tx.ellipse(i * 32 + o + 16, j * 32 + 16, 14.5, 14.5, 0, 0, 7);
+      tx.fill();
+    }
+  }
+  const patch = (cx, cz, w, d) => {
+    const t = new THREE.CanvasTexture(tc);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.repeat.set(w / 5.6, d / 5.6);
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshLambertMaterial({ map: t }));
+    m.rotation.x = -Math.PI / 2;
+    m.position.set(cx, 0.02, cz);
+    sc.add(m);
+  };
+  patch(0, 3, 46, 40);
+  C.slice(3).forEach(c => patch(c.p[0] + 2, c.p[1] - 2, 16, 16));
+  patch(3, -36, 16, 14);
+
+  const cyl = (r1, r2, h, c, x, y, z) => {
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(r1, r2, h, 10), M(c));
+    m.position.set(x, y, z);
+    sc.add(m);
+    return m;
+  };
+
+  /* Forge */
+  box(8.4, 4.4, 0.4, 0xf08a3c, 0, 2.2, -4.9);
+  box(0.9, 5.2, 5.2, 0x5a6aa0, -4.3, 2.6, -2.4);
+  box(0.9, 5.2, 5.2, 0x5a6aa0, 4.3, 2.6, -2.4);
+  box(8.4, 0.6, 0.5, 0x46395f, 0, 4.9, 0);
+  box(7.6, 0.8, 5, 0x3d4a78, 0, 0.4, -2.4);
+  box(10.6, 0.35, 3.7, 0xd0503c, 0, 5.95, -3.75, -0.75);
+  box(10.6, 0.35, 3.7, 0xc24a38, 0, 5.95, -1.25, 0.75);
+  box(10.6, 0.5, 0.5, 0x7a4a2b, 0, 7.15, -2.5);
+  OB.push([-5, 5, -5.5, 0.3]);
+
+  const lab = (t, w, h, f, bg, fg) => {
+    const c = document.createElement('canvas');
+    c.width = 512;
+    c.height = Math.round(512 * h / w);
+    const x = c.getContext('2d');
+    x.fillStyle = bg;
+    x.fillRect(0, 0, c.width, c.height);
+    x.fillStyle = fg;
+    x.font = 'bold ' + f + 'px Georgia';
+    x.textAlign = 'center';
+    x.textBaseline = 'middle';
+    x.fillText(t, 256, c.height / 2);
+    return new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c) }));
+  };
+  box(5.6, 1.5, 0.4, 0x7a4a2b, 0, 6.2, 0.5);
+  const sb = lab('FORGE', 5, 1.2, 150, '#46395f', '#ffe27a');
+  sb.position.set(0, 6.2, 0.72);
+  sc.add(sb);
+
+  const fire = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.5, 1.2), new THREE.MeshBasicMaterial({ color: 0xff7a1a }));
+  fire.position.set(2.2, 1, -3.2);
+  sc.add(fire);
+  box(2.4, 0.7, 1.4, 0x6b4a2b, 2.2, 0.55, -3.2);
+  box(0.9, 0.7, 0.6, 0x30343c, -2.2, 0.6, -2.6);
+
+  const poring = (x, y, z, s) => {
+    const g = new THREE.Group();
+    const b = new THREE.Mesh(new THREE.SphereGeometry(0.9, 18, 14), M(0xff9fb8));
+    b.scale.y = 0.85;
+    g.add(b);
+    [-0.3, 0.3].forEach(e => {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), M(0x2a2040));
+      m.position.set(e, 0.1, 0.82);
+      g.add(m);
+    });
+    g.position.set(x, y, z);
+    g.scale.setScalar(s);
+    g.userData.y = y;
+    sc.add(g);
+    porings.push(g);
+  };
+  poring(-1.8, 7.9, -2.6, 1);
+  poring(0.3, 7.7, -2.2, 0.7);
+
+  /* Tower, stands, houses, trees */
+  box(5, 10, 5, 0x8c919c, -14, 5, -6);
+  box(5.4, 0.4, 5.4, 0x6b4a3a, -14, 10.2, -6);
+  const rc = new THREE.Mesh(new THREE.ConeGeometry(4.2, 3.2, 4), M(0x7a4a3a));
+  rc.position.set(-14, 12, -6);
+  rc.rotation.y = Math.PI / 4;
+  sc.add(rc);
+  box(1.2, 1.6, 0.1, 0xbcd8ee, -14, 6.5, -3.45);
+  OB.push([-16.5, -11.5, -8.5, -3.5]);
+
+  [10, 11.8].forEach(x => {
+    box(0.12, 3.4, 0.12, 0x5a3a22, x, 1.7, -1.5);
+    cyl(0.5, 0.7, 1.6, 0xaab3c2, x, 2.2, -1.5);
+    const h = new THREE.Mesh(new THREE.SphereGeometry(0.45, 10, 8), M(0xc4ccd8));
+    h.position.set(x, 3.4, -1.5);
+    sc.add(h);
+  });
+
+  const house = (x, z, c) => {
+    box(6, 3.4, 5, c, x, 1.7, z);
+    box(7, 0.3, 3.2, 0xb5503c, x, 4.2, z - 1.2, -0.7);
+    box(7, 0.3, 3.2, 0xa84636, x, 4.2, z + 1.2, 0.7);
+    box(1.2, 2, 0.1, 0x5a3a22, x, 1, z + 2.55);
+    box(1.2, 1, 0.1, 0xbcd8ee, x + 1.8, 2, z + 2.55);
+    OB.push([x - 3, x + 3, z - 2.5, z + 2.5]);
+  };
+  house(24, -4, 0xe8dcc0);
+  house(-27, 12, 0xd8c9a8);
+  house(26, 19, 0xe0d0b0);
+  house(-22, -26, 0xd0c0a0);
+  house(20, -34, 0xe8dcc0);
+
+  const bench = (x, z) => box(3, 1, 1.4, 0x7a5a3a, x, 0.5, z);
+  bench(-19, 2);
+  cyl(0.08, 0.08, 2.4, 0x555b66, -19, 2.2, 2);
+  const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.4, 12, 10), new THREE.MeshBasicMaterial({ color: 0xffe27a }));
+  lamp.position.set(-19, 3.5, 2);
+  sc.add(lamp);
+
+  bench(19, 3);
+  const orb = new THREE.Mesh(new THREE.SphereGeometry(0.35, 12, 10), new THREE.MeshBasicMaterial({ color: 0x7be8ff }));
+  orb.position.set(19, 1.5, 3);
+  sc.add(orb);
+
+  /* Pendulum pier */
+  box(10, 0.4, 6, 0x9a6b3a, -34, 0.2, -22);
+  [-37, -31].forEach(x => box(0.3, 5, 0.3, 0x5a3a22, x, 2.5, -22));
+  box(6.6, 0.3, 0.3, 0x5a3a22, -34, 5, -22);
+  [[-35.4, 3], [-32.6, 1.8]].forEach(([x, L]) => {
+    const g = new THREE.Group();
+    g.position.set(x, 5, -22);
+    const ln = cyl(0.04, 0.04, L, 0x333333, 0, -L / 2, 0);
+    sc.remove(ln);
+    g.add(ln);
+    const bob = new THREE.Mesh(new THREE.SphereGeometry(0.5, 14, 12), M(0xd04a4a));
+    bob.position.y = -L;
+    g.add(bob);
+    g.userData.L = L;
+    sc.add(g);
+    pends.push(g);
+  });
+
+  /* Garden */
+  [26, 29.5, 33].forEach((x, i) => {
+    box(2.6, 0.5, 2.6, 0x6b4a2b, x, 0.25, -23);
+    [0, 1, 2, 3].forEach(k => {
+      const h = [0.5, 1, 1.5, 1.9][i % 4] + k * 0.05;
+      const pc = new THREE.Mesh(new THREE.ConeGeometry(0.3, h + 0.4, 6), M(0x3fa84a));
+      pc.position.set(x - 0.8 + (k % 2) * 1.6, 0.5 + h / 2, -23.8 + Math.floor(k / 2) * 1.6);
+      sc.add(pc);
+    });
+  });
+
+  /* Magnet mountain */
+  const mt = new THREE.Mesh(new THREE.ConeGeometry(9, 12, 7), M(0x7a7f8a));
+  mt.position.set(3, 6, -44);
+  sc.add(mt);
+  bench(3, -39);
+  const nl = cyl(0.12, 0.12, 2.2, 0x9aa0aa, 3, 1.3, -39);
+  nl.rotation.z = Math.PI / 2;
+  const cl = cyl(0.3, 0.3, 1.2, 0xc87533, 3, 1.3, -39);
+  cl.rotation.z = Math.PI / 2;
+  [0, 1, 2].forEach(i => box(0.25, 0.08, 0.12, 0xdddddd, 4.8 + i * 0.4, 1.05, -38.7));
+
+  /* Trees */
+  let sd = 7;
+  const rnd = () => (sd = (sd * 9301 + 49297) % 233280) / 233280;
+  for (let i = 0; i < 110; i++) {
+    const x = rnd() * 92 - 46, z = rnd() * 88 - 44;
+    if (Math.abs(x) < 24 && z > -20 && z < 24) continue;
+    if (C.some(c => Math.hypot(c.p[0] - x, c.p[1] - z) < 9) || Math.hypot(x - 3, z + 40) < 14 || OB.some(o => x > o[0] - 4 && x < o[1] + 4 && z > o[2] - 4 && z < o[3] + 4)) continue;
+    const s = 0.8 + rnd() * 0.7;
+    cyl(0.3 * s, 0.4 * s, 1.6 * s, 0x7a5a3a, x, 0.8 * s, z);
+    const f = new THREE.Mesh(new THREE.ConeGeometry(1.6 * s, 3.6 * s, 8), M(0x3f8f45));
+    f.position.set(x, 3.2 * s, z);
+    sc.add(f);
+  }
+
+  /* Roblox-style character builder */
+  const fc = document.createElement('canvas');
+  fc.width = fc.height = 64;
+  const f = fc.getContext('2d');
+  f.fillStyle = '#f5cd30';
+  f.fillRect(0, 0, 64, 64);
+  f.fillStyle = '#1a1a1a';
+  f.fillRect(18, 20, 6, 10);
+  f.fillRect(40, 20, 6, 10);
+  f.lineWidth = 4;
+  f.strokeStyle = '#1a1a1a';
+  f.beginPath();
+  f.arc(32, 34, 14, 0.3, Math.PI - 0.3);
+  f.stroke();
+  const faceTex = new THREE.CanvasTexture(fc);
+
+  rbxBuilder = (shirt, pants, hair, ringColor) => {
+    const g = new THREE.Group(), Y = 0xf5cd30;
+    const hd = new THREE.Mesh(
+      new THREE.BoxGeometry(0.72, 0.72, 0.72),
+      [M(Y), M(Y), M(Y), M(Y), new THREE.MeshLambertMaterial({ map: faceTex }), M(Y)]
+    );
+    hd.position.y = 2.42;
+    g.add(hd);
+    const hr = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.22, 0.78), M(hair));
+    hr.position.y = 2.76;
+    g.add(hr);
+    const tr = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.5), M(shirt));
+    tr.position.y = 1.5;
+    g.add(tr);
+    const limb = (x, y, c1, c2, h1) => {
+      const p = new THREE.Group();
+      p.position.set(x, y, 0);
+      const a = new THREE.Mesh(new THREE.BoxGeometry(0.48, h1, 0.48), M(c1));
+      a.position.y = -h1 / 2;
+      p.add(a);
+      if (c2 != null) {
+        const b = new THREE.Mesh(new THREE.BoxGeometry(0.48, 1 - h1, 0.48), M(c2));
+        b.position.y = -h1 - (1 - h1) / 2;
+        p.add(b);
+      }
+      g.add(p);
+      return p;
+    };
+    g.userData = {
+      la: limb(-0.75, 2, shirt, Y, 0.65),
+      ra: limb(0.75, 2, shirt, Y, 0.65),
+      ll: limb(-0.25, 1, pants, null, 1),
+      rl: limb(0.25, 1, pants, null, 1)
+    };
+    if (ringColor) {
+      const r = new THREE.Mesh(
+        new THREE.RingGeometry(1.05, 1.28, 36),
+        new THREE.MeshBasicMaterial({ color: ringColor, side: THREE.DoubleSide })
+      );
+      r.rotation.x = -Math.PI / 2;
+      r.position.y = 0.05;
+      g.add(r);
+    }
+    sc.add(g);
+    return g;
+  };
+
+  animLimbs = (g, ph, a) => {
+    const u = g.userData, s = Math.sin(ph) * a;
+    u.la.rotation.x = s;
+    u.ra.rotation.x = -s;
+    u.ll.rotation.x = -s;
+    u.rl.rotation.x = s;
+  };
+
+  const myOut = OUTFITS[S.outfit];
+  pl = rbxBuilder(myOut.shirt, myOut.pants, myOut.hair, 0x34d399);
+  pl.position.set(P.x, 0, P.z);
+  pl.rotation.y = P.ry;
+
+  /* Local Player Floating Chat Bubble Tag */
+  myTag = document.createElement('div');
+  myTag.className = 'player-tag';
+  myTag.innerHTML = '<div class="chat-bubble" style="display:none"></div>';
+  stg.appendChild(myTag);
+
+  /* Quest NPCs */
+  C.forEach(c => {
+    const g = rbxBuilder(c.sh, c.pa, c.hair, null);
+    g.position.set(c.p[0], 0, c.p[1]);
+    npcs.push(g);
+    const s = document.createElement('div');
+    s.className = 'sign';
+    s.innerHTML = '<u>!</u>' + c.sg + '<div class="mk">!</div>';
+    stg.appendChild(s);
+    signs.push(s);
+  });
+
+  /* Tap ground to move / tap NPC */
+  const RC = new THREE.Raycaster(), PL = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+  cv.addEventListener('pointerdown', e => {
+    if (cs || $('#intro').style.display == 'flex') return;
+    $('#players-drawer').classList.remove('open');
+    const r = cv.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width * 2 - 1;
+    const ny = -((e.clientY - r.top) / r.height) * 2 + 1;
+    const i = C.findIndex(c => {
+      const v = new THREE.Vector3(c.p[0], 1.4, c.p[1]).project(cam);
+      return Math.hypot((v.x - nx) * r.width / 2, (v.y - ny) * r.height / 2) < r.width * 0.055;
+    });
+    if (i >= 0) return goNpc(i);
+    RC.setFromCamera({ x: nx, y: ny }, cam);
+    const pt = new THREE.Vector3();
+    if (RC.ray.intersectPlane(PL, pt)) {
+      P.tx = Math.max(-47, Math.min(47, pt.x));
+      P.tz = Math.max(-45, Math.min(45, pt.z));
+      P.pend = -1;
+    }
+  });
+
+  const mm = $('#mm').getContext('2d');
+  function drawMM() {
+    mm.fillStyle = '#25422c';
+    mm.fillRect(0, 0, 140, 140);
+    mm.fillStyle = '#9e8b70';
+    mm.fillRect(25 * 1.45, 26 * 1.45, 46 * 1.45, 40 * 1.45);
+
+    /* Quest NPCs on Radar */
+    C.forEach((c, i) => {
+      mm.fillStyle = S.stars[i] > 0 ? '#34d399' : '#fbbf24';
+      mm.beginPath();
+      mm.arc((c.p[0] + 48) * 1.45, (c.p[1] + 46) * 1.45, 4.2, 0, 7);
+      mm.fill();
+    });
+
+    /* Remote Live Players on Radar */
+    const now = Date.now();
+    Object.values(remoteMeshes).forEach(rm => {
+      if (now - rm.data.updatedAt > 16000) return;
+      mm.fillStyle = '#38bdf8';
+      mm.strokeStyle = '#0f172a';
+      mm.lineWidth = 1.5;
+      mm.beginPath();
+      mm.arc((rm.x + 48) * 1.45, (rm.z + 46) * 1.45, 4.5, 0, 7);
+      mm.fill();
+      mm.stroke();
+    });
+
+    /* Local Player on Radar */
+    mm.fillStyle = '#ffffff';
+    mm.strokeStyle = '#8b5cf6';
+    mm.lineWidth = 2.5;
+    mm.beginPath();
+    mm.arc((P.x + 48) * 1.45, (P.z + 46) * 1.45, 5, 0, 7);
+    mm.fill();
+    mm.stroke();
+  }
+
+  let last = performance.now();
+  const cp = new THREE.Vector3(0, 9, 22), V = new THREE.Vector3();
+
+  function loop(t) {
+    const d = Math.min(0.05, (t - last) / 1000);
+    last = t;
+    const busy = cs || $('#intro').style.display == 'flex';
+    let ix = (K.d || K.arrowright ? 1 : 0) - (K.a || K.arrowleft ? 1 : 0);
+    let iz = (K.s || K.arrowdown ? 1 : 0) - (K.w || K.arrowup ? 1 : 0);
+    if (Math.hypot(J.x, J.z) > 0.15) { ix = J.x; iz = J.z; }
+    let mv = false;
+
+    if (!busy && Math.hypot(ix, iz) > 0.1) {
+      const m = Math.hypot(ix, iz), k = Math.min(1, m);
+      P.x += ix / m * k * d * 8.2;
+      P.z += iz / m * k * d * 8.2;
+      P.tx = P.x;
+      P.tz = P.z;
+      P.pend = -1;
+      P.ry = Math.atan2(ix, iz);
+      pl.rotation.y = P.ry;
+      mv = true;
+    } else if (!busy) {
+      const dx = P.tx - P.x, dz = P.tz - P.z, di = Math.hypot(dx, dz);
+      if (di > 0.35) {
+        const s = Math.min(di, d * 8.2);
+        P.x += dx / di * s;
+        P.z += dz / di * s;
+        P.ry = Math.atan2(dx, dz);
+        pl.rotation.y = P.ry;
+        mv = true;
+      }
+      if (P.pend >= 0) {
+        const c = C[P.pend], nd = Math.hypot(c.p[0] - P.x, c.p[1] - P.z);
+        if (di <= 0.35 || nd < 3.2) {
+          const i = P.pend;
+          P.pend = -1;
+          P.ry = Math.atan2(c.p[0] - P.x, c.p[1] - P.z);
+          pl.rotation.y = P.ry;
+          P.tx = P.x;
+          P.tz = P.z;
+          mv = false;
+          openCase(i);
+        }
+      }
+    }
+
+    P.x = Math.max(-47, Math.min(47, P.x));
+    P.z = Math.max(-45, Math.min(45, P.z));
+    OB.forEach(o => {
+      const x0 = o[0] - 0.6, x1 = o[1] + 0.6, z0 = o[2] - 0.6, z1 = o[3] + 0.6;
+      if (P.x > x0 && P.x < x1 && P.z > z0 && P.z < z1) {
+        const a = [P.x - x0, x1 - P.x, P.z - z0, z1 - P.z], m = Math.min(...a), k = a.indexOf(m);
+        if (k == 0) P.x = x0;
+        else if (k == 1) P.x = x1;
+        else if (k == 2) P.z = z0;
+        else P.z = z1;
+      }
+    });
+
+    P.mv = mv;
+    P.amp += ((mv ? 0.9 : 0) - P.amp) * 0.2;
+    animLimbs(pl, t / 95, P.amp);
+    pl.position.set(P.x, mv ? Math.abs(Math.sin(t / 95)) * 0.08 : 0, P.z);
+
+    /* Project local player chat bubble */
+    const showMyBubble = myLastChat && (Date.now() - myChatAt < 5500);
+    if (showMyBubble) {
+      const pv = V.set(P.x, 3.25, P.z).project(cam);
+      myTag.style.left = (pv.x * 0.5 + 0.5) * 100 + '%';
+      myTag.style.top = (-pv.y * 0.5 + 0.5) * 100 + '%';
+      myTag.style.display = pv.z > 1 ? 'none' : 'flex';
+      const bb = myTag.firstElementChild;
+      bb.style.display = 'block';
+      bb.textContent = myLastChat;
+    } else {
+      myTag.style.display = 'none';
+    }
+
+    /* Smooth camera follow */
+    cp.lerp(V.set(P.x * 0.85, 8.2, P.z + 11.2), 0.08);
+    cam.position.copy(cp);
+    cam.lookAt(P.x * 0.85, 1.3, P.z - 2);
+
+    /* World idle animations */
+    porings.forEach((p, i) => p.position.y = p.userData.y + Math.sin(t / 400 + i * 2) * 0.15);
+    pends.forEach(g => g.rotation.z = 0.6 * Math.sin(t / 1000 * (3.4 / Math.sqrt(g.userData.L))));
+    npcs.forEach((n, i) => animLimbs(n, t / 500 + i, 0.12));
+
+    /* Update NPC floating signs */
+    C.forEach((c, i) => {
+      const v = V.set(c.p[0], 3.4, c.p[1]).project(cam);
+      const s = signs[i];
+      const dist = Math.hypot(c.p[0] - P.x, c.p[1] - P.z);
+      s.style.left = (v.x * 0.5 + 0.5) * 100 + '%';
+      s.style.top = (-v.y * 0.5 + 0.5) * 100 + '%';
+      s.style.display = (v.z > 1 || dist > 40) ? 'none' : 'flex';
+      const m = s.querySelector('.mk'), ok = S.stars[i] > 0;
+      m.textContent = ok ? '✓' : '!';
+      m.className = 'mk' + (ok ? ' ok' : '');
+    });
+
+    /* Update & Interpolate Live Remote Players */
+    const now = Date.now();
+    Object.entries(remoteMeshes).forEach(([uid, rm]) => {
+      const stale = now - (rm.data.updatedAt || 0) > 16000;
+      if (stale) {
+        rm.mesh.visible = false;
+        rm.tag.style.display = 'none';
+        return;
+      }
+      rm.mesh.visible = true;
+      const dx = rm.tx - rm.x, dz = rm.tz - rm.z;
+      const dist = Math.hypot(dx, dz);
+      rm.x += dx * 0.18;
+      rm.z += dz * 0.18;
+
+      /* Shortest angle lerp */
+      let diff = rm.try - rm.ry;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      rm.ry += diff * 0.2;
+
+      const isMoving = dist > 0.08 || rm.data.moving;
+      rm.amp += ((isMoving ? 0.9 : 0) - rm.amp) * 0.2;
+      animLimbs(rm.mesh, t / 95, rm.amp);
+      rm.mesh.position.set(rm.x, isMoving ? Math.abs(Math.sin(t / 95)) * 0.08 : 0, rm.z);
+      rm.mesh.rotation.y = rm.ry;
+
+      /* Project Remote Player Nameplate & Speech Bubble */
+      const pv = V.set(rm.x, 3.25, rm.z).project(cam);
+      const camDist = Math.hypot(rm.x - P.x, rm.z - P.z);
+      if (pv.z > 1 || camDist > 52) {
+        rm.tag.style.display = 'none';
+      } else {
+        rm.tag.style.display = 'flex';
+        rm.tag.style.left = (pv.x * 0.5 + 0.5) * 100 + '%';
+        rm.tag.style.top = (-pv.y * 0.5 + 0.5) * 100 + '%';
+        const hasChat = rm.data.chat && (now - (rm.data.chatAt || 0) < 5500);
+        rm.bubble.style.display = hasChat ? 'block' : 'none';
+        if (hasChat) rm.bubble.textContent = rm.data.chat;
+        rm.pill.innerHTML = `<b>Lv.${rm.data.lv || 1}</b> ${esc(rm.data.name || 'Explorer')} · ⭐${rm.data.stars || 0}`;
+      }
+    });
+
+    /* Throttled live sync broadcast */
+    if (myUid && S.name) {
+      const moved = Math.hypot(P.x - lastSent.x, P.z - lastSent.z) > 0.12 || Math.abs(P.ry - lastSent.ry) > 0.15;
+      if ((moved && now - lastSent.t > 120) || (now - lastSent.t > 4000)) {
+        pushState(false);
+      }
+    }
+
+    drawMM();
+    R.render(sc, cam);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+}
+
+/* ---------- REAL-TIME FIREBASE MULTIPLAYER ENGINE ---------- */
+let db = null, auth = null, myUid = null;
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'inquiry-world-live';
+const remotePlayers = {};
+const remoteMeshes = {};
+const lastSent = { x: 999, z: 999, ry: 0, t: 0 };
+
+async function initMultiplayer() {
+  const statusEl = $('#sync-status');
+  try {
+    if (typeof __firebase_config === 'undefined') {
+      statusEl.textContent = 'Local Mode';
+      return;
+    }
+    const firebaseConfig = JSON.parse(__firebase_config);
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+
+    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+      await signInWithCustomToken(auth, __initial_auth_token);
+    } else {
+      await signInAnonymously(auth);
+    }
+
+    myUid = auth.currentUser?.uid || ('exp_' + Math.random().toString(36).slice(2, 10));
+    statusEl.textContent = 'Live Sync';
+    statusEl.classList.remove('offline');
+
+    const playersCol = collection(db, 'artifacts', appId, 'public', 'data', 'players');
+    onSnapshot(playersCol, snap => {
+      const now = Date.now();
+      const activeIds = new Set();
+
+      snap.forEach(docSnap => {
+        const uid = docSnap.id;
+        if (uid === myUid) return;
+        const data = docSnap.data();
+        if (!data || !data.name) return;
+        activeIds.add(uid);
+        remotePlayers[uid] = data;
+
+        /* Check for new chat messages from remote players */
+        if (data.chat && data.chatAt && (now - data.chatAt < 8000)) {
+          const msgKey = uid + '_' + data.chatAt;
+          appendChatLine(msgKey, data.name, data.chat, false);
+        }
+
+        /* Create or update 3D mesh for remote player */
+        if (!remoteMeshes[uid] && rbxBuilder) {
+          const out = OUTFITS[(data.outfit || 0) % OUTFITS.length];
+          const mesh = rbxBuilder(out.shirt, out.pants, out.hair, 0x38bdf8);
+          mesh.position.set(data.x || 0, 0, data.z || 9);
+
+          const tag = document.createElement('div');
+          tag.className = 'player-tag';
+          const bubble = document.createElement('div');
+          bubble.className = 'chat-bubble';
+          bubble.style.display = 'none';
+          const pill = document.createElement('div');
+          pill.className = 'name-pill';
+          tag.appendChild(bubble);
+          tag.appendChild(pill);
+          stg.appendChild(tag);
+
+          remoteMeshes[uid] = {
+            mesh,
+            tag,
+            bubble,
+            pill,
+            x: data.x || 0,
+            z: data.z || 9,
+            ry: data.ry || 0,
+            tx: data.x || 0,
+            tz: data.z || 9,
+            try: data.ry || 0,
+            amp: 0,
+            data
+          };
+        } else if (remoteMeshes[uid]) {
+          const rm = remoteMeshes[uid];
+          rm.tx = data.x ?? rm.tx;
+          rm.tz = data.z ?? rm.tz;
+          rm.try = data.ry ?? rm.try;
+          rm.data = data;
+        }
+      });
+
+      /* Clean up disconnected players */
+      Object.keys(remoteMeshes).forEach(uid => {
+        if (!activeIds.has(uid)) {
+          sc.remove(remoteMeshes[uid].mesh);
+          remoteMeshes[uid].tag.remove();
+          delete remoteMeshes[uid];
+          delete remotePlayers[uid];
+        }
+      });
+
+      renderPlayersList();
+    }, err => {
+      console.warn('Multiplayer listener notice:', err);
+      statusEl.textContent = 'Reconnecting';
+      statusEl.classList.add('offline');
+    });
+
+    if (S.name) pushState(true);
+  } catch (err) {
+    console.warn('Multiplayer init fallback:', err);
+    statusEl.textContent = 'Offline';
+    statusEl.classList.add('offline');
+  }
+}
+
+function pushState(force = false) {
+  if (!db || !myUid || !S.name) return;
+  const now = Date.now();
+  if (!force && now - lastSent.t < 110) return;
+  lastSent.x = P.x;
+  lastSent.z = P.z;
+  lastSent.ry = P.ry;
+  lastSent.t = now;
+
+  const myRef = doc(db, 'artifacts', appId, 'public', 'data', 'players', myUid);
+  setDoc(myRef, {
+    name: S.name,
+    x: Math.round(P.x * 100) / 100,
+    z: Math.round(P.z * 100) / 100,
+    ry: Math.round(P.ry * 100) / 100,
+    moving: P.mv,
+    lv: lvl(),
+    stars: totalStars(),
+    outfit: S.outfit,
+    chat: myLastChat,
+    chatAt: myChatAt,
+    updatedAt: now
+  }, { merge: true }).catch(() => {});
+}
+
+/* ---------- STARTUP ---------- */
+function begin() {
+  hud();
+  renderPlayersList();
+  say('Walk with WASD, joystick, or tap the ground. Find characters with a !', 5500);
+  pushState(true);
+}
+
+if (window.THREE) {
+  init();
+  initMultiplayer();
+  if (S.name) {
+    begin();
+  } else {
+    $('#intro').style.display = 'flex';
+    $('#go').onclick = () => {
+      S.name = ($('#ni').value.trim() || 'Explorer');
+      save();
+      $('#intro').style.display = 'none';
+      begin();
+    };
+  }
+}
+</script>
+</body>
+</html>
