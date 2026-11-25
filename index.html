@@ -1521,7 +1521,7 @@ appendChatLine(id, c.name || 'Explorer', c.text || '', c.uid === myId, false);
 }
 });
 } else if (data && typeof data === 'object' && data.text) {
-const id = path.replace(/\
+const id = path.replace(/\//g, '');
 if (now - (data.ts || 0) < 300000) {
 appendChatLine(id, data.name || 'Explorer', data.text, data.uid === myId, false);
 }
@@ -1553,3 +1553,5 @@ begin();
 }
 }
 </script>
+</body>
+</html>
