@@ -1,4 +1,4 @@
-<!-- Developer: johnicebourne@gmail.com | Inquiry World v11 -->
+<!-- Developer: johnicebourne@gmail.com | Inquiry World v12 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -193,7 +193,7 @@ button:active{transform:scale(0.92);}
 <div id="stage">
 <canvas id="cv"></canvas>
 <div id="warp-fx">🌀 Warping...</div>
-<div id="detention-banner">🚨 DETENTION ROOM · Anti-Rapid-Guess Cooldown: <span id="det-timer">60s</span></div>
+<div id="detention-banner">🚨 DETENTION ROOM · Time-Out Remaining: <span id="det-timer">60s</span></div>
 <div class="hud glass-card" id="me">
 <div id="av-wrap">
 <div id="av">
@@ -646,15 +646,49 @@ let wrongClickTimes = [];
 function isInDetention() {
 return Date.now() < (S.detentionUntil || 0);
 }
-function triggerDetention() {
-S.detentionUntil = Date.now() + 60000;
-wrongClickTimes = [];
-save();
-$('#dlg').style.display = 'none';
-cs = null;
-enterDimension('detention');
-sendChat('🚨 Sent to Detention Room for 1 minute due to rapid guessing!', true);
-say('🚨 RAPID GUESS DETECTED! Sent to Detention Room for 1 minute. Read carefully next time!', 5500);
+const BAD_WORDS_REGEX = new RegExp(
+  '(' +
+    [
+      'n+i+g+a+', 'n+i+g+e+r+', 'n+1+g+a+', 'n+1+g+e+r+', 'n+e+g+r+o+',
+      'f+u+c+k+', 'f+v+c+k+', 'f+u+k+', 's+h+i+t+', 'b+i+t+c+h+', 'b+1+t+c+h+',
+      'c+u+n+t+', 'd+i+c+k+', 'c+o+c+k+', 'p+u+s+s+y+', 'w+h+o+r+e+', 's+l+u+t+',
+      'f+a+g+o*t*', 'r+e+t+a+r+d+', 'a+s+s+h+o+l+e+', 'm+o+t+h+e+r+f+',
+      'p+u+t+a+n+g*i*n*a*', 'p+u+t+a+', 'g+a+g+o+', 't+a+n+g+a+', 'b+o+b+o+',
+      'u+l+o+l+', 't+a+r+a+n+t+a+d+o+', 'k+a+n+t+o+t+', 't+i+t+i+', 'p+u+k+i+',
+      'k+u+p+a+l+', 'h+i+n+a+y+u+p+a+k+', 'l+e+c+h+e+',
+      'ค+ว+ย+', 'เ+ห+ี+้+ย+', 'ส+ั+ต+ว+์+', 'เ+ย+็+ด+', 'ห+ี+', 'ม+ึ+ง+', 'ก+ู+', 'อ+ี+ด+อ+ก+'
+    ].join('|') +
+  ')',
+  'i'
+);
+
+function containsBadWord(str) {
+  if (!str) return false;
+  const normalized = str.toLowerCase()
+    .replace(/[@4]/g, 'a')
+    .replace(/3/g, 'e')
+    .replace(/[1!|]/g, 'i')
+    .replace(/0/g, 'o')
+    .replace(/[$5]/g, 's')
+    .replace(/7/g, 't')
+    .replace(/[^a-z฀-๿]/g, '');
+  return BAD_WORDS_REGEX.test(str) || BAD_WORDS_REGEX.test(normalized);
+}
+
+function triggerDetention(reason = 'rapid') {
+  S.detentionUntil = Date.now() + 60000;
+  wrongClickTimes = [];
+  save();
+  $('#dlg').style.display = 'none';
+  cs = null;
+  enterDimension('detention');
+  if (reason === 'chat') {
+    sendChat('🚨 Sent to Detention Room for 1 minute due to inappropriate language!', true);
+    say('🚨 BAD WORDS BLOCKED! Sent to Detention Room for 1 minute. Keep chat respectful!', 5500);
+  } else {
+    sendChat('🚨 Sent to Detention Room for 1 minute due to rapid guessing!', true);
+    say('🚨 RAPID GUESS DETECTED! Sent to Detention Room for 1 minute. Read carefully next time!', 5500);
+  }
 }
 
 function openCase(qObj) {
@@ -1148,6 +1182,7 @@ const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;'
 const seenMsgs = new Set();
 function appendChatLine(id, name, text, isMe, isSys) {
 if (id && seenMsgs.has(id)) return;
+if (!isSys && containsBadWord(text)) return;
 if (id) seenMsgs.add(id);
 const feed = $('#chat-feed');
 const div = document.createElement('div');
@@ -1181,6 +1216,10 @@ sendChat(txt);
 function sendChat(text, isEvent = false) {
 const now = Date.now();
 const cleanText = text.slice(0, 60);
+if (!isEvent && containsBadWord(cleanText)) {
+triggerDetention('chat');
+return;
+}
 if (!isEvent) {
 myEmote = cleanText;
 myEmoteAt = now;
@@ -2502,7 +2541,8 @@ begin();
 $('#intro').style.display = 'flex';
 $('#go').onclick = () => {
 requestGameFullscreen();
-S.name = ($('#ni').value.trim() || 'Explorer');
+const rawName = $('#ni').value.trim() || 'Explorer';
+S.name = containsBadWord(rawName) ? 'Explorer' : rawName;
 save();
 $('#intro').style.display = 'none';
 begin();
