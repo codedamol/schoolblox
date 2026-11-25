@@ -1432,13 +1432,10 @@ button:active {
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script>
 // --- DEV CREDIT ---
-console.log("Web FPV Simulator Drone Flight Module developed by John (johnicebourne@gmail.com)");
+console.log("Web FPV Simulator & Inquiry World");
 
 const $ = s => document.querySelector(s);
 if (!window.THREE) { $('#err').style.display = 'flex'; }
@@ -1817,15 +1814,15 @@ $('#online-btn').onclick = () => {
 function renderPlayersList() {
   const list = $('#players-list');
   const now = Date.now();
-  const active = Object.entries(remotePlayers).filter(([, d]) => now - (d.updatedAt || 0) < 16000);
+  const active = Object.entries(remotePlayers).filter(([, d]) => now - (d.updatedAt || 0) < 15000);
   $('#online-cnt').textContent = 1 + active.length;
   let html = `<div class="pl-item" style="border-color:rgba(251,191,36,0.4)">
-    <span><i class="pl-swatch" style="background:${OUTFITS[S.outfit].hex}"></i><b>${esc(S.name || 'Explorer')}</b> (You)</span>
+    <span><i class="pl-swatch" style="background:${OUTFITS[S.outfit].hex}"></i><b>${esc(S.name || 'Explorer')}</b> (You) ${P.flying ? '🚁' : ''}</span>
     <span>Lv.${lvl()} · ⭐${totalStars()}</span>
   </div>`;
   active.forEach(([uid, d]) => {
-    const out = OUTFITS[d.outfit % OUTFITS.length] || OUTFITS[0];
-    html += `<button class="pl-item" type="button" data-uid="${uid}">
+    const out = OUTFITS[(d.outfit || 0) % OUTFITS.length] || OUTFITS[0];
+    html += `<button class="pl-item" type="button" data-uid="${esc(uid)}">
       <span><i class="pl-swatch" style="background:${out.hex}"></i><b>${esc(d.name || 'Explorer')}</b> ${d.flying ? '🚁' : ''}</span>
       <span>Lv.${d.lv || 1} · ⭐${d.stars || 0}</span>
     </button>`;
@@ -1835,6 +1832,7 @@ function renderPlayersList() {
     btn.onclick = () => {
       const rp = remotePlayers[btn.dataset.uid];
       if (rp) {
+        if (P.flying) toggleDrone(false);
         P.tx = rp.x;
         P.tz = rp.z + 1.5;
         P.pend = -1;
@@ -1868,7 +1866,7 @@ function sendChat(txt, silentFeed = false) {
   if (!clean) return;
   myLastChat = clean;
   myChatAt = Date.now();
-  const msgId = (myUid || 'local') + '_' + myChatAt;
+  const msgId = myUid + '_' + myChatAt;
   if (!silentFeed) appendChatLine(msgId, S.name || 'Explorer', clean, true);
   pushState(true);
 }
@@ -1948,6 +1946,21 @@ addEventListener('keyup', e => {
 let R, sc, cam, pl, myTag, signs = [], porings = [], npcs = [], pends = [];
 const OB = [];
 let rbxBuilder = null, animLimbs = null, droneBuilder = null;
+
+function init() {
+  R = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  sc = new THREE.Scene();
+  sc.background = new THREE.Color(0xa8d4ff);
+  sc.fog = new THREE.Fog(0xa8d4ff, 48, 125);
+  cam = new THREE.PerspectiveCamera(42, 16 / 9, 0.1, 220);
+
+  const fit = () => {
+    const w = stg.clientWidth || window.innerWidth;
+    const h = stg.clientHeight || window.innerHeight;
+    R.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    R.setSize(w, h, false);
+    cam.aspect = w / h;
+    cam.updateProjectionMatrix();
   };
   addEventListener('resize', fit);
   fit();
@@ -2605,7 +2618,7 @@ let rbxBuilder = null, animLimbs = null, droneBuilder = null;
     /* Update & Interpolate Live Remote Players */
     const now = Date.now();
     Object.entries(remoteMeshes).forEach(([uid, rm]) => {
-      const stale = now - (rm.data.updatedAt || 0) > 16000;
+      const stale = now - (rm.data.updatedAt || 0) > 15000;
       if (stale) {
         rm.mesh.visible = false;
         rm.tag.style.display = 'none';
@@ -2614,20 +2627,20 @@ let rbxBuilder = null, animLimbs = null, droneBuilder = null;
       rm.mesh.visible = true;
       const dx = rm.tx - rm.x, dy = rm.ty - rm.y, dz = rm.tz - rm.z;
       const dist = Math.hypot(dx, dy, dz);
-      rm.x += dx * 0.18;
-      rm.y += dy * 0.18;
-      rm.z += dz * 0.18;
-      rm.rx += (rm.trx - rm.rx) * 0.18;
-      rm.rz += (rm.trz - rm.rz) * 0.18;
+      rm.x += dx * 0.22;
+      rm.y += dy * 0.22;
+      rm.z += dz * 0.22;
+      rm.rx += (rm.trx - rm.rx) * 0.2;
+      rm.rz += (rm.trz - rm.rz) * 0.2;
 
       /* Shortest angle lerp */
       let diff = rm.try - rm.ry;
       while (diff < -Math.PI) diff += Math.PI * 2;
       while (diff > Math.PI) diff -= Math.PI * 2;
-      rm.ry += diff * 0.2;
+      rm.ry += diff * 0.22;
 
       const isFlying = Boolean(rm.data.flying) || rm.y > 0.35;
-      const isMoving = dist > 0.08 || rm.data.moving;
+      const isMoving = dist > 0.06 || rm.data.moving;
       rm.amp += ((isMoving ? 0.9 : 0) - rm.amp) * 0.2;
       animLimbs(rm.mesh, t / 95, rm.amp, isFlying, rm.rx);
       const bob = isFlying ? Math.sin(t / 180) * 0.1 : (isMoving ? Math.abs(Math.sin(t / 95)) * 0.08 : 0);
@@ -2638,7 +2651,7 @@ let rbxBuilder = null, animLimbs = null, droneBuilder = null;
       /* Project Remote Player Nameplate & Speech Bubble */
       const pv = V.set(rm.x, rm.y + (isFlying ? 4.0 : 3.25), rm.z).project(cam);
       const camDist = Math.hypot(rm.x - P.x, rm.y - P.y, rm.z - P.z);
-      if (pv.z > 1 || camDist > 68) {
+      if (pv.z > 1 || camDist > 75) {
         rm.tag.style.display = 'none';
       } else {
         rm.tag.style.display = 'flex';
@@ -2653,9 +2666,9 @@ let rbxBuilder = null, animLimbs = null, droneBuilder = null;
     });
 
     /* Throttled live sync broadcast */
-    if (myUid && S.name) {
-      const moved = Math.hypot(P.x - lastSent.x, P.y - lastSent.y, P.z - lastSent.z) > 0.12 || Math.abs(P.ry - lastSent.ry) > 0.15;
-      if ((moved && now - lastSent.t > 115) || (now - lastSent.t > 4000)) {
+    if (S.name) {
+      const moved = Math.hypot(P.x - lastSent.x, P.y - lastSent.y, P.z - lastSent.z) > 0.08 || Math.abs(P.ry - lastSent.ry) > 0.12;
+      if ((moved && now - lastSent.t > 90) || (now - lastSent.t > 2500)) {
         pushState(false);
       }
     }
@@ -2667,149 +2680,318 @@ let rbxBuilder = null, animLimbs = null, droneBuilder = null;
   requestAnimationFrame(loop);
 }
 
-/* ---------- REAL-TIME FIREBASE MULTIPLAYER ENGINE ---------- */
-let db = null, auth = null, myUid = null;
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'inquiry-world-live';
+/* ---------- ZERO-CONFIG REAL-TIME MULTIPLAYER (PeerJS Lobby + BroadcastChannel) ---------- */
+const HOST_ROOM_ID = 'iw-fpv-host-room-1';
+const myUid = 'exp_' + Math.random().toString(36).slice(2, 10);
 const remotePlayers = {};
 const remoteMeshes = {};
 const lastSent = { x: 999, y: 0, z: 999, ry: 0, t: 0 };
-    }
-    const firebaseConfig = JSON.parse(__firebase_config);
-    const app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-    db = getFirestore(app);
 
-    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-      await signInWithCustomToken(auth, __initial_auth_token);
-    } else {
-      await signInAnonymously(auth);
-    }
+let bc = null;
+let peer = null;
+let hostConn = null;
+let guestConns = new Map();
+let isRoomHost = false;
+let hasPeerSync = false;
+let hasTabSync = false;
 
-    myUid = auth.currentUser?.uid || ('exp_' + Math.random().toString(36).slice(2, 10));
-    statusEl.textContent = 'Live Sync';
+function updateSyncBadge() {
+  const statusEl = $('#sync-status');
+  if (!statusEl) return;
+  if (hasPeerSync) {
+    statusEl.textContent = isRoomHost ? 'Live Host' : 'Live P2P';
     statusEl.classList.remove('offline');
-
-    const playersCol = collection(db, 'artifacts', appId, 'public', 'data', 'players');
-    onSnapshot(playersCol, snap => {
-      const now = Date.now();
-      const activeIds = new Set();
-
-      snap.forEach(docSnap => {
-        const uid = docSnap.id;
-        if (uid === myUid) return;
-        const data = docSnap.data();
-        if (!data || !data.name) return;
-        activeIds.add(uid);
-        remotePlayers[uid] = data;
-
-        /* Check for new chat messages from remote players */
-        if (data.chat && data.chatAt && (now - data.chatAt < 8000)) {
-          const msgKey = uid + '_' + data.chatAt;
-          appendChatLine(msgKey, data.name, data.chat, false);
-        }
-
-        /* Create or update 3D mesh for remote player */
-        if (!remoteMeshes[uid] && rbxBuilder) {
-          const out = OUTFITS[(data.outfit || 0) % OUTFITS.length];
-          const mesh = rbxBuilder(out.shirt, out.pants, out.hair, 0x38bdf8, true);
-          mesh.position.set(data.x || 0, data.y || 0, data.z || 9);
-
-          const tag = document.createElement('div');
-          tag.className = 'player-tag';
-          const bubble = document.createElement('div');
-          bubble.className = 'chat-bubble';
-          bubble.style.display = 'none';
-          const pill = document.createElement('div');
-          pill.className = 'name-pill';
-          tag.appendChild(bubble);
-          tag.appendChild(pill);
-          stg.appendChild(tag);
-
-          remoteMeshes[uid] = {
-            mesh,
-            tag,
-            bubble,
-            pill,
-            x: data.x || 0,
-            y: data.y || 0,
-            z: data.z || 9,
-            ry: data.ry || 0,
-            rx: data.rx || 0,
-            rz: data.rz || 0,
-            tx: data.x || 0,
-            ty: data.y || 0,
-            tz: data.z || 9,
-            try: data.ry || 0,
-            trx: data.rx || 0,
-            trz: data.rz || 0,
-            amp: 0,
-            data
-          };
-        } else if (remoteMeshes[uid]) {
-          const rm = remoteMeshes[uid];
-          rm.tx = data.x ?? rm.tx;
-          rm.ty = data.y ?? 0;
-          rm.tz = data.z ?? rm.tz;
-          rm.try = data.ry ?? rm.try;
-          rm.trx = data.rx ?? 0;
-          rm.trz = data.rz ?? 0;
-          rm.data = data;
-        }
-      });
-
-      /* Clean up disconnected players */
-      Object.keys(remoteMeshes).forEach(uid => {
-        if (!activeIds.has(uid)) {
-          sc.remove(remoteMeshes[uid].mesh);
-          remoteMeshes[uid].tag.remove();
-          delete remoteMeshes[uid];
-          delete remotePlayers[uid];
-        }
-      });
-
-      renderPlayersList();
-    }, err => {
-      console.warn('Multiplayer listener notice:', err);
-      statusEl.textContent = 'Reconnecting';
-      statusEl.classList.add('offline');
-    });
-
-    if (S.name) pushState(true);
-  } catch (err) {
-    console.warn('Multiplayer init fallback:', err);
-    statusEl.textContent = 'Offline';
+  } else if (hasTabSync) {
+    statusEl.textContent = 'Tab Sync';
+    statusEl.classList.remove('offline');
+  } else {
+    statusEl.textContent = 'Solo Mode';
     statusEl.classList.add('offline');
   }
 }
 
-function pushState(force = false) {
-  if (!db || !myUid || !S.name) return;
+function handleIncomingPlayerState(uid, data) {
+  if (!uid || uid === myUid || !data || !data.name) return;
   const now = Date.now();
-  if (!force && now - lastSent.t < 110) return;
+  data.updatedAt = now;
+  remotePlayers[uid] = data;
+
+  /* Display remote chat messages in the live chat log */
+  if (data.chat && data.chatAt && (now - data.chatAt < 8000)) {
+    appendChatLine(uid + '_' + data.chatAt, data.name, data.chat, false);
+  }
+
+  /* Spawn or update 3D avatar & drone for remote player */
+  if (!remoteMeshes[uid] && rbxBuilder && sc) {
+    const out = OUTFITS[(data.outfit || 0) % OUTFITS.length];
+    const mesh = rbxBuilder(out.shirt, out.pants, out.hair, 0x38bdf8, true);
+    mesh.position.set(data.x || 0, data.y || 0, data.z || 9);
+
+    const tag = document.createElement('div');
+    tag.className = 'player-tag';
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    bubble.style.display = 'none';
+    const pill = document.createElement('div');
+    pill.className = 'name-pill';
+    tag.appendChild(bubble);
+    tag.appendChild(pill);
+    stg.appendChild(tag);
+
+    remoteMeshes[uid] = {
+      mesh,
+      tag,
+      bubble,
+      pill,
+      x: data.x || 0,
+      y: data.y || 0,
+      z: data.z || 9,
+      ry: data.ry || 0,
+      rx: data.rx || 0,
+      rz: data.rz || 0,
+      tx: data.x || 0,
+      ty: data.y || 0,
+      tz: data.z || 9,
+      try: data.ry || 0,
+      trx: data.rx || 0,
+      trz: data.rz || 0,
+      amp: 0,
+      data
+    };
+    renderPlayersList();
+  } else if (remoteMeshes[uid]) {
+    const rm = remoteMeshes[uid];
+    rm.tx = data.x ?? rm.tx;
+    rm.ty = data.y ?? 0;
+    rm.tz = data.z ?? rm.tz;
+    rm.try = data.ry ?? rm.try;
+    rm.trx = data.rx ?? 0;
+    rm.trz = data.rz ?? 0;
+    rm.data = data;
+  }
+}
+
+function removeRemotePlayer(uid) {
+  if (!uid) return;
+  if (remoteMeshes[uid]) {
+    if (sc) sc.remove(remoteMeshes[uid].mesh);
+    remoteMeshes[uid].tag.remove();
+    delete remoteMeshes[uid];
+  }
+  delete remotePlayers[uid];
+  renderPlayersList();
+}
+
+function initMultiplayer() {
+  updateSyncBadge();
+
+  /* 1. Same-Device Cross-Tab Sync via BroadcastChannel */
+  try {
+    if ('BroadcastChannel' in window) {
+      bc = new BroadcastChannel('inquiry-world-live');
+      bc.onmessage = e => {
+        const msg = e.data;
+        if (!msg || msg.uid === myUid) return;
+        hasTabSync = true;
+        updateSyncBadge();
+        if (msg.type === 'leave') {
+          removeRemotePlayer(msg.uid);
+        } else if (msg.type === 'state') {
+          handleIncomingPlayerState(msg.uid, msg.state);
+        }
+      };
+    }
+  } catch (e) {}
+
+  /* 2. Cross-Device WebRTC Lobby via PeerJS (Auto-Host Promotion) */
+  try {
+    if (!window.Peer) return;
+
+    const relayToGuests = (packet, excludePeerId) => {
+      guestConns.forEach((conn, pid) => {
+        if (pid !== excludePeerId && conn && conn.open) {
+          try { conn.send(packet); } catch (e) {}
+        }
+      });
+    };
+
+    const startAsGuest = () => {
+      if (peer) { try { peer.destroy(); } catch (e) {} }
+      isRoomHost = false;
+      peer = new Peer(myUid, { debug: 0 });
+
+      peer.on('open', () => {
+        const conn = peer.connect(HOST_ROOM_ID, { reliable: false });
+        hostConn = conn;
+
+        conn.on('open', () => {
+          hasPeerSync = true;
+          updateSyncBadge();
+          pushState(true);
+        });
+
+        conn.on('data', pkt => {
+          if (!pkt) return;
+          if (pkt.type === 'state') {
+            handleIncomingPlayerState(pkt.uid, pkt.state);
+          } else if (pkt.type === 'leave') {
+            removeRemotePlayer(pkt.uid);
+          }
+        });
+
+        const promoteToHost = () => {
+          hasPeerSync = false;
+          hostConn = null;
+          updateSyncBadge();
+          setTimeout(tryClaimHost, 350 + Math.random() * 650);
+        };
+
+        conn.on('close', promoteToHost);
+        conn.on('error', promoteToHost);
+      });
+
+      peer.on('error', err => {
+        if (err && err.type === 'peer-unavailable') {
+          setTimeout(tryClaimHost, 400 + Math.random() * 500);
+        }
+      });
+    };
+
+    const tryClaimHost = () => {
+      if (peer) { try { peer.destroy(); } catch (e) {} }
+      const hostPeer = new Peer(HOST_ROOM_ID, { debug: 0 });
+      peer = hostPeer;
+
+      hostPeer.on('open', () => {
+        isRoomHost = true;
+        hasPeerSync = true;
+        guestConns.clear();
+        updateSyncBadge();
+        pushState(true);
+      });
+
+      hostPeer.on('connection', conn => {
+        guestConns.set(conn.peer, conn);
+        conn.on('open', () => {
+          /* Send current host state + all known active players to newly joined guest */
+          const myPkt = buildStatePacket();
+          if (myPkt) {
+            try { conn.send(myPkt); } catch (e) {}
+          }
+          Object.entries(remotePlayers).forEach(([uid, st]) => {
+            try { conn.send({ type: 'state', uid, state: st }); } catch (e) {}
+          });
+        });
+
+        conn.on('data', pkt => {
+          if (!pkt) return;
+          if (pkt.type === 'state') {
+            handleIncomingPlayerState(pkt.uid, pkt.state);
+            relayToGuests(pkt, conn.peer);
+          } else if (pkt.type === 'leave') {
+            removeRemotePlayer(pkt.uid);
+            relayToGuests(pkt, conn.peer);
+          }
+        });
+
+        const onGuestDrop = () => {
+          const leftUid = conn.metadata?.uid;
+          guestConns.delete(conn.peer);
+          if (leftUid) {
+            removeRemotePlayer(leftUid);
+            relayToGuests({ type: 'leave', uid: leftUid }, conn.peer);
+          }
+        };
+        conn.on('close', onGuestDrop);
+        conn.on('error', onGuestDrop);
+      });
+
+      hostPeer.on('error', err => {
+        if (err && err.type === 'unavailable-id') {
+          startAsGuest();
+        } else {
+          hasPeerSync = false;
+          updateSyncBadge();
+        }
+      });
+    };
+
+    tryClaimHost();
+
+    /* Periodic cleanup for disconnected peers */
+    setInterval(() => {
+      const now = Date.now();
+      let changed = false;
+      Object.keys(remotePlayers).forEach(uid => {
+        if (now - (remotePlayers[uid].updatedAt || 0) > 15000) {
+          removeRemotePlayer(uid);
+          changed = true;
+        }
+      });
+      if (changed) renderPlayersList();
+    }, 3000);
+
+    addEventListener('beforeunload', () => {
+      const bye = { type: 'leave', uid: myUid };
+      try { if (bc) bc.postMessage(bye); } catch (e) {}
+      try { if (hostConn && hostConn.open) hostConn.send(bye); } catch (e) {}
+    });
+  } catch (e) {
+    updateSyncBadge();
+  }
+}
+
+function buildStatePacket() {
+  if (!S.name) return null;
+  return {
+    type: 'state',
+    uid: myUid,
+    state: {
+      name: S.name,
+      x: Math.round(P.x * 100) / 100,
+      y: Math.round(P.y * 100) / 100,
+      z: Math.round(P.z * 100) / 100,
+      ry: Math.round(P.ry * 100) / 100,
+      rx: Math.round(P.rx * 100) / 100,
+      rz: Math.round(P.rz * 100) / 100,
+      flying: P.flying,
+      moving: P.mv,
+      lv: lvl(),
+      stars: totalStars(),
+      outfit: S.outfit,
+      chat: myLastChat,
+      chatAt: myChatAt,
+      updatedAt: Date.now()
+    }
+  };
+}
+
+function pushState(force = false) {
+  if (!S.name) return;
+  const now = Date.now();
+  if (!force && now - lastSent.t < 85) return;
   lastSent.x = P.x;
   lastSent.y = P.y;
   lastSent.z = P.z;
   lastSent.ry = P.ry;
   lastSent.t = now;
 
-  const myRef = doc(db, 'artifacts', appId, 'public', 'data', 'players', myUid);
-  setDoc(myRef, {
-    name: S.name,
-    x: Math.round(P.x * 100) / 100,
-    y: Math.round(P.y * 100) / 100,
-    z: Math.round(P.z * 100) / 100,
-    ry: Math.round(P.ry * 100) / 100,
-    rx: Math.round(P.rx * 100) / 100,
-    rz: Math.round(P.rz * 100) / 100,
-    flying: P.flying,
-    moving: P.mv,
-    lv: lvl(),
-    stars: totalStars(),
-    outfit: S.outfit,
-    chat: myLastChat,
-    chatAt: myChatAt,
-    updatedAt: now
-  }, { merge: true }).catch(() => {});
+  const pkt = buildStatePacket();
+  if (!pkt) return;
+
+  try {
+    if (bc) bc.postMessage(pkt);
+  } catch (e) {}
+
+  try {
+    if (isRoomHost) {
+      guestConns.forEach(conn => {
+        if (conn && conn.open) conn.send(pkt);
+      });
+    } else if (hostConn && hostConn.open) {
+      hostConn.send(pkt);
+    }
+  } catch (e) {}
 }
 
 /* ---------- STARTUP ---------- */
@@ -2822,7 +3004,6 @@ function begin() {
 
 if (window.THREE) {
   init();
-  initMultiplayer();
   if (S.name) {
     begin();
   } else {
@@ -2834,6 +3015,9 @@ if (window.THREE) {
       begin();
     };
   }
+  try {
+    initMultiplayer();
+  } catch (e) {}
 }
 </script>
 </body>
