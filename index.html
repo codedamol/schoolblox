@@ -1066,6 +1066,7 @@ render();
 }
 
 function infoPanel(h) {
+stopPvpLoop();
 $('#pn').innerHTML = h + '<br><button class="btn" id="cl">Close</button>';
 $('#dlg').style.display = 'flex';
 cs = null;
@@ -1327,6 +1328,7 @@ say('Walk up to an NPC (!) or glowing Portal!', 2500);
 return;
 }
 if (near.type === 'quest') openCase(near.item);
+else if (near.type === 'pvp') openPvpGame(near.item.id);
 else enterDimension(near.item.target);
 };
 
@@ -1360,12 +1362,7 @@ cancelAnimationFrame(activePvpLoop);
 activePvpLoop = null;
 }
 }
-const origDlgClose = $('#dlg-close').onclick;
-$('#dlg-close').onclick = () => {
-stopPvpLoop();
-if (origDlgClose) origDlgClose();
-else { cs = null; $('#dlg').style.display = 'none'; }
-};
+
 
 function recordPvpWin(gameKey, label) {
 S.pvpWins = S.pvpWins || { graphwars: 0, football: 0, basketball: 0, dronerace: 0 };
@@ -1393,7 +1390,8 @@ if (gameId === 'dronerace') {
 $('#pn').innerHTML = '<h2>🚁 3D Drone Racing Circuit</h2>' +
 '<p style="color:#cbd5e1;font-size:0.92em">Fly your drone through all <b>6 glowing sky rings</b> in order as fast as possible! Beat the <b>28.0s</b> pro record to win.</p>' +
 '<div class="pvp-scorebar"><span>🏁 Opponent: ' + opp + '</span><span>🏆 Wins: ' + (S.pvpWins.dronerace || 0) + '</span></div>' +
-'<button class="opt good" id="start-drone-race" style="text-align:center;font-weight:800">🚀 Launch Drone & Start 6-Ring Race!</button>';
+'<button class="opt good" id="start-drone-race" style="text-align:center;font-weight:800">🚀 Launch Drone & Start 6-Ring Race!</button><button class="btn" id="pvp-exit" style="background:#475569;margin-left:0.5em">Close</button>';
+$('#pvp-exit').onclick = () => { stopPvpLoop(); cs = null; $('#dlg').style.display = 'none'; };
 $('#start-drone-race').onclick = () => {
 cs = null;
 $('#dlg').style.display = 'none';
@@ -1410,7 +1408,8 @@ $('#pn').innerHTML = '<h2>📈 Graph Wars · Coordinate Artillery</h2>' +
 '<div class="pvp-slider-row"><label>Slope <b>m</b>: <span id="gw-m-v">0.8</span></label><input id="gw-m" type="range" min="-2.5" max="2.5" step="0.1" value="0.8"></div>' +
 '<div class="pvp-slider-row"><label>Curve <b>a</b> (ax²): <span id="gw-a-v">-0.04</span></label><input id="gw-a" type="range" min="-0.15" max="0.15" step="0.01" value="-0.04"></div>' +
 '</div></div>' +
-'<button class="opt good" id="gw-fire" style="text-align:center;font-weight:800">💥 Fire Equation y = ax² + mx!</button>';
+'<div style="display:flex;gap:0.5em"><button class="opt good" id="gw-fire" style="flex:2;text-align:center;font-weight:800">💥 Fire Equation y = ax² + mx!</button><button class="opt" id="pvp-exit" style="flex:1;text-align:center">Exit</button></div>';
+$('#pvp-exit').onclick = () => { stopPvpLoop(); cs = null; $('#dlg').style.display = 'none'; };
 
 const cv2 = $('#pvp-cv'), ctx = cv2.getContext('2d');
 const p1 = { x: -10, y: Math.round((Math.random() * 6 - 3)) };
@@ -1531,7 +1530,8 @@ $('#pn').innerHTML = '<h2>⚽ PVP Penalty & Free-Kick Shootout</h2>' +
 '<div class="pvp-slider-row"><label>Target X: <span id="fb-x-v">0</span></label><input id="fb-x" type="range" min="-150" max="150" value="0"></div>' +
 '<div class="pvp-slider-row"><label>Spin Curve: <span id="fb-c-v">0</span></label><input id="fb-c" type="range" min="-90" max="90" value="0"></div>' +
 '</div></div>' +
-'<button class="opt good" id="fb-kick" style="text-align:center;font-weight:800">⚽ Strike Free Kick! (First to 3 Goals)</button>';
+'<div style="display:flex;gap:0.5em"><button class="opt good" id="fb-kick" style="flex:2;text-align:center;font-weight:800">⚽ Strike Free Kick! (First to 3 Goals)</button><button class="opt" id="pvp-exit" style="flex:1;text-align:center">Exit</button></div>';
+$('#pvp-exit').onclick = () => { stopPvpLoop(); cs = null; $('#dlg').style.display = 'none'; };
 
 const cv2 = $('#pvp-cv'), ctx = cv2.getContext('2d');
 let myG = 0, oppG = 0, kicking = false, keeperX = 260, keeperDir = 3.2;
@@ -1621,7 +1621,8 @@ $('#pn').innerHTML = '<h2>🏀 PVP 3-Point Arc Shootout</h2>' +
 '<div class="pvp-slider-row"><label>Launch Angle: <span id="bb-a-v">52</span>°</label><input id="bb-a" type="range" min="30" max="75" value="52"></div>' +
 '<div class="pvp-slider-row"><label>Shot Power: <span id="bb-p-v">72</span>%</label><input id="bb-p" type="range" min="45" max="100" value="72"></div>' +
 '</div></div>' +
-'<button class="opt good" id="bb-shoot" style="text-align:center;font-weight:800">🏀 Shoot 3-Pointer! (First to 9 Pts)</button>';
+'<div style="display:flex;gap:0.5em"><button class="opt good" id="bb-shoot" style="flex:2;text-align:center;font-weight:800">🏀 Shoot 3-Pointer! (First to 9 Pts)</button><button class="opt" id="pvp-exit" style="flex:1;text-align:center">Exit</button></div>';
+$('#pvp-exit').onclick = () => { stopPvpLoop(); cs = null; $('#dlg').style.display = 'none'; };
 
 const cv2 = $('#pvp-cv'), ctx = cv2.getContext('2d');
 let myPts = 0, oppPts = 0, shot = null, hoopY = 74, hoopDir = 0.7;
