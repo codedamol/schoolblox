@@ -885,6 +885,170 @@ button:active {
   bottom: 0.5em;
 }
 
+#drone-btn {
+  right: 5.5em;
+  bottom: 9.2em;
+  border-color: rgba(56, 189, 248, 0.55);
+}
+
+#drone-btn.active {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.65), rgba(99, 102, 241, 0.85));
+  border-color: #fff;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.65);
+}
+
+/* ---------- DRONE TELEMETRY OSD & FLIGHT CONTROLS ---------- */
+#drone-osd {
+  position: absolute;
+  top: 5.8em;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  align-items: center;
+  gap: 0.9em;
+  padding: 0.5em 1.1em;
+  border-radius: 99px;
+  z-index: 4;
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+#drone-osd.active {
+  display: flex;
+  animation: popIn 0.2s ease-out;
+}
+
+.osd-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 4.2em;
+}
+
+.osd-stat small {
+  font-size: 0.6em;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--accent-secondary);
+  text-transform: uppercase;
+}
+
+.osd-stat b {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 1.05em;
+  color: #fff;
+}
+
+#osd-horizon {
+  width: 2.8em;
+  height: 2.8em;
+  border-radius: 50%;
+  border: 2px solid rgba(56, 189, 248, 0.7);
+  background: rgba(15, 23, 42, 0.7);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#osd-hbar {
+  width: 140%;
+  height: 2px;
+  background: #34d399;
+  box-shadow: 0 0 6px #34d399;
+  transition: transform 0.08s linear;
+}
+
+#fpv-toggle {
+  background: rgba(56, 189, 248, 0.22);
+  border: 1px solid rgba(56, 189, 248, 0.55);
+  color: #fff;
+  border-radius: 99px;
+  padding: 0.35em 0.8em;
+  font-size: 0.78em;
+  font-weight: 800;
+}
+
+#fpv-toggle.on {
+  background: linear-gradient(135deg, #0284c7, #6366f1);
+  border-color: #fff;
+}
+
+#fpv-reticle {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+#fpv-reticle.active {
+  display: flex;
+}
+
+#fpv-reticle::before {
+  content: '+';
+  font-size: 2.4em;
+  font-weight: 300;
+  color: rgba(52, 211, 153, 0.75);
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+}
+
+#flight-pad {
+  position: absolute;
+  right: 1.4em;
+  bottom: 14.8em;
+  display: none;
+  flex-direction: column;
+  gap: 0.55em;
+  z-index: 4;
+}
+
+#flight-pad.active {
+  display: flex;
+}
+
+.flt-row {
+  display: flex;
+  gap: 0.5em;
+  justify-content: flex-end;
+}
+
+.flt-btn {
+  width: 3.6em;
+  height: 3.4em;
+  border-radius: 1em;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(56, 189, 248, 0.45);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.flt-btn:active, .flt-btn.pressed {
+  background: rgba(56, 189, 248, 0.45);
+  border-color: #fff;
+  transform: scale(0.93);
+}
+
+.flt-btn span {
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.flt-btn small {
+  font-size: 0.55em;
+  color: var(--text-muted);
+  margin-top: 0.15em;
+}
+
 /* ---------- QUEST & INTRO MODALS ---------- */
 #dlg, #intro {
   position: absolute;
@@ -1177,6 +1341,31 @@ button:active {
     <!-- FLOATING CAPTION -->
     <div class="hud" id="cap"></div>
 
+    <!-- FPV COCKPIT RETICLE -->
+    <div id="fpv-reticle"></div>
+
+    <!-- DRONE TELEMETRY OSD BAR -->
+    <div class="hud glass-card" id="drone-osd">
+      <div id="osd-horizon"><div id="osd-hbar"></div></div>
+      <div class="osd-stat"><small>Speed</small><b id="osd-spd">0.0 km/h</b></div>
+      <div class="osd-stat"><small>Altitude</small><b id="osd-alt">0.0 m</b></div>
+      <div class="osd-stat"><small>Throttle</small><b id="osd-thr">0%</b></div>
+      <div class="osd-stat"><small>Flight</small><b id="osd-tmr">00:00</b></div>
+      <button id="fpv-toggle" type="button">📹 FPV View</button>
+    </div>
+
+    <!-- TOUCH / QUICK FLIGHT CONTROLS -->
+    <div id="flight-pad">
+      <div class="flt-row">
+        <button class="flt-btn" type="button" id="btn-yaw-l"><span>↺</span><small>Yaw L</small></button>
+        <button class="flt-btn" type="button" id="btn-asc"><span>▲</span><small>Up</small></button>
+      </div>
+      <div class="flt-row">
+        <button class="flt-btn" type="button" id="btn-yaw-r"><span>↻</span><small>Yaw R</small></button>
+        <button class="flt-btn" type="button" id="btn-dsc"><span>▼</span><small>Down</small></button>
+      </div>
+    </div>
+
     <!-- VIRTUAL JOYSTICK -->
     <div class="hud" id="joy"><div id="knob"></div></div>
 
@@ -1216,6 +1405,7 @@ button:active {
 
     <!-- BOTTOM-RIGHT RPG ACTION ORBS -->
     <div id="actions-right">
+      <button class="act-orb" id="drone-btn" aria-label="Toggle Drone Flight"><span>🚁</span><em>Drone</em></button>
       <button class="act-orb" id="auto" aria-label="Auto-Guide"><span>⚔️</span><em>Auto</em></button>
       <button class="act-orb" id="tg" aria-label="Nearest NPC"><span>🎯</span><em>Target</em></button>
       <button class="act-orb" id="rf" aria-label="Stop"><span>🛑</span><em>Stop</em></button>
@@ -1246,6 +1436,9 @@ button:active {
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 import { getFirestore, doc, setDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// --- DEV CREDIT ---
+console.log("Web FPV Simulator Drone Flight Module developed by John (johnicebourne@gmail.com)");
 
 const $ = s => document.querySelector(s);
 if (!window.THREE) { $('#err').style.display = 'flex'; }
@@ -1541,10 +1734,79 @@ $('#atk').onclick = () => {
 };
 
 function goNpc(i) {
+  if (P.flying) toggleDrone(false);
   P.tx = C[i].a[0];
   P.tz = C[i].a[1];
   P.pend = i;
 }
+
+/* ---------- DRONE FLIGHT MODE CONTROLS ---------- */
+function toggleDrone(forceState) {
+  const next = typeof forceState === 'boolean' ? forceState : !P.flying;
+  if (P.flying === next) return;
+  P.flying = next;
+  P.pend = -1;
+  P.tx = P.x;
+  P.tz = P.z;
+
+  const btn = $('#drone-btn');
+  const osd = $('#drone-osd');
+  const pad = $('#flight-pad');
+  const ret = $('#fpv-reticle');
+
+  if (P.flying) {
+    P.y = Math.max(P.y, 1.8);
+    P.vy = 2.5;
+    P.vx = 0;
+    P.vz = 0;
+    P.flightStart = Date.now();
+    if (pl && pl.userData.drone) pl.userData.drone.visible = true;
+    btn.classList.add('active');
+    osd.classList.add('active');
+    pad.classList.add('active');
+    ret.classList.toggle('active', P.fpv);
+    say('🚁 Drone Mode ON! Space/Up to climb, Shift/Down to descend, Q/E to yaw.', 4500);
+  } else {
+    P.fpv = false;
+    P.vx = P.vy = P.vz = P.rx = P.rz = 0;
+    $('#fpv-toggle').classList.remove('on');
+    $('#fpv-toggle').textContent = '📹 FPV View';
+    btn.classList.remove('active');
+    osd.classList.remove('active');
+    pad.classList.remove('active');
+    ret.classList.remove('active');
+    say('Landed back on foot.', 2200);
+  }
+  pushState(true);
+}
+
+$('#drone-btn').onclick = () => toggleDrone();
+
+$('#fpv-toggle').onclick = () => {
+  if (!P.flying) return;
+  P.fpv = !P.fpv;
+  const btn = $('#fpv-toggle');
+  btn.classList.toggle('on', P.fpv);
+  btn.textContent = P.fpv ? '🎥 3rd-Person' : '📹 FPV View';
+  $('#fpv-reticle').classList.toggle('active', P.fpv);
+  say(P.fpv ? '📹 FPV Cockpit Camera active' : '🎥 3rd-Person Chase Camera', 2000);
+};
+
+/* Holdable touch/mouse bindings for Ascend, Descend, Yaw Left, Yaw Right */
+const holdKeys = { up: false, down: false, yawL: false, yawR: false };
+function bindHoldBtn(id, prop) {
+  const el = $(id);
+  const start = e => { e.preventDefault(); holdKeys[prop] = true; el.classList.add('pressed'); };
+  const end = () => { holdKeys[prop] = false; el.classList.remove('pressed'); };
+  el.addEventListener('pointerdown', start);
+  el.addEventListener('pointerup', end);
+  el.addEventListener('pointerleave', end);
+  el.addEventListener('pointercancel', end);
+}
+bindHoldBtn('#btn-asc', 'up');
+bindHoldBtn('#btn-dsc', 'down');
+bindHoldBtn('#btn-yaw-l', 'yawL');
+bindHoldBtn('#btn-yaw-r', 'yawR');
 
 /* ---------- ONLINE PLAYERS DRAWER ---------- */
 $('#online-btn').onclick = () => {
@@ -1564,7 +1826,7 @@ function renderPlayersList() {
   active.forEach(([uid, d]) => {
     const out = OUTFITS[d.outfit % OUTFITS.length] || OUTFITS[0];
     html += `<button class="pl-item" type="button" data-uid="${uid}">
-      <span><i class="pl-swatch" style="background:${out.hex}"></i><b>${esc(d.name || 'Explorer')}</b></span>
+      <span><i class="pl-swatch" style="background:${out.hex}"></i><b>${esc(d.name || 'Explorer')}</b> ${d.flying ? '🚁' : ''}</span>
       <span>Lv.${d.lv || 1} · ⭐${d.stars || 0}</span>
     </button>`;
   });
@@ -1631,7 +1893,14 @@ $('#chat-toggle').onclick = () => {
 
 /* ---------- INPUT: JOYSTICK + KEYS ---------- */
 const cv = $('#cv'), stg = $('#stage');
-const P = { x: 0, z: 9, tx: 0, tz: 9, ry: Math.PI, pend: -1, amp: 0, mv: false };
+const P = {
+  x: 0, y: 0, z: 9,
+  tx: 0, tz: 9,
+  vx: 0, vy: 0, vz: 0,
+  ry: Math.PI, rx: 0, rz: 0,
+  pend: -1, amp: 0, mv: false,
+  flying: false, fpv: false, flightStart: 0
+};
 const J = { x: 0, z: 0 }, K = {};
 
 (() => {
@@ -1656,29 +1925,29 @@ const J = { x: 0, z: 0 }, K = {};
 addEventListener('keydown', e => {
   if (document.activeElement === $('#chat-in') || document.activeElement === $('#ni')) return;
   if (e.key === 'Enter') { $('#chat-in').focus(); return; }
-  K[e.key.toLowerCase()] = 1;
+  const kl = e.key.toLowerCase();
+  if (kl === 'f' && !e.repeat && !cs && $('#intro').style.display !== 'flex') {
+    toggleDrone();
+    return;
+  }
+  if (e.key === ' ') {
+    K.space = 1;
+    if (P.flying) e.preventDefault();
+  }
+  if (e.key === 'Shift') K.shift = 1;
+  K[kl] = 1;
   if (e.key.startsWith('Arrow')) e.preventDefault();
 });
-addEventListener('keyup', e => K[e.key.toLowerCase()] = 0);
+addEventListener('keyup', e => {
+  if (e.key === ' ') K.space = 0;
+  if (e.key === 'Shift') K.shift = 0;
+  K[e.key.toLowerCase()] = 0;
+});
 
 /* ---------- 3D WORLD & ROBLOX CHARACTER FACTORY ---------- */
 let R, sc, cam, pl, myTag, signs = [], porings = [], npcs = [], pends = [];
 const OB = [];
-let rbxBuilder = null, animLimbs = null;
-
-function init() {
-  R = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
-  sc = new THREE.Scene();
-  sc.background = new THREE.Color(0xa8d4ff);
-  sc.fog = new THREE.Fog(0xa8d4ff, 48, 120);
-  cam = new THREE.PerspectiveCamera(38, 16 / 9, 0.1, 200);
-
-  const fit = () => {
-    const w = stg.clientWidth, h = stg.clientHeight;
-    R.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
-    R.setSize(w, h, false);
-    cam.aspect = w / h;
-    cam.updateProjectionMatrix();
+let rbxBuilder = null, animLimbs = null, droneBuilder = null;
   };
   addEventListener('resize', fit);
   fit();
@@ -1904,7 +2173,66 @@ function init() {
   f.stroke();
   const faceTex = new THREE.CanvasTexture(fc);
 
-  rbxBuilder = (shirt, pants, hair, ringColor) => {
+  /* Detailed 3D Quadcopter Drone Factory */
+  droneBuilder = accentColor => {
+    const dg = new THREE.Group();
+    const bodyMat = new THREE.MeshLambertMaterial({ color: 0x1e293b });
+    const trimMat = new THREE.MeshLambertMaterial({ color: accentColor || 0x38bdf8 });
+    const propMat = new THREE.MeshBasicMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.78 });
+
+    // Central fuselage & canopy
+    const core = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.24, 1.15), bodyMat);
+    dg.add(core);
+    const canopy = new THREE.Mesh(new THREE.BoxGeometry(0.65, 0.16, 0.7), trimMat);
+    canopy.position.set(0, 0.16, 0.05);
+    dg.add(canopy);
+
+    // Front FPV camera lens & LED
+    const camPod = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.2, 0.22), new THREE.MeshBasicMaterial({ color: 0x34d399 }));
+    camPod.position.set(0, 0.02, 0.62);
+    dg.add(camPod);
+
+    // Harness tether bar connecting down to character shoulders
+    const tether = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.55, 8), bodyMat);
+    tether.position.set(0, -0.32, 0);
+    dg.add(tether);
+
+    // 4 Diagonal Carbon Arms + Motors + Spinning Rotors
+    const rotors = [];
+    const armCoords = [
+      [-0.85, 0.85, Math.PI / 4],
+      [0.85, 0.85, -Math.PI / 4],
+      [-0.85, -0.85, -Math.PI / 4],
+      [0.85, -0.85, Math.PI / 4]
+    ];
+    armCoords.forEach(([ax, az, rot], idx) => {
+      const arm = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.08, 1.35), bodyMat);
+      arm.position.set(ax * 0.5, 0.02, az * 0.5);
+      arm.rotation.y = rot;
+      dg.add(arm);
+
+      const motor = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.16, 10), trimMat);
+      motor.position.set(ax, 0.08, az);
+      dg.add(motor);
+
+      // Rotor blade cross + blur disc
+      const rotorGrp = new THREE.Group();
+      rotorGrp.position.set(ax, 0.19, az);
+      const blade = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.02, 0.1), propMat);
+      const disc = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.48, 0.48, 0.01, 16),
+        new THREE.MeshBasicMaterial({ color: idx < 2 ? 0x38bdf8 : 0xa855f7, transparent: true, opacity: 0.22 })
+      );
+      rotorGrp.add(blade, disc);
+      dg.add(rotorGrp);
+      rotors.push(rotorGrp);
+    });
+
+    dg.userData.rotors = rotors;
+    return dg;
+  };
+
+  rbxBuilder = (shirt, pants, hair, ringColor, withDrone = false) => {
     const g = new THREE.Group(), Y = 0xf5cd30;
     const hd = new THREE.Mesh(
       new THREE.BoxGeometry(0.72, 0.72, 0.72),
@@ -1946,13 +2274,44 @@ function init() {
       r.rotation.x = -Math.PI / 2;
       r.position.y = 0.05;
       g.add(r);
+      g.userData.ring = r;
+    }
+    if (withDrone && droneBuilder) {
+      const dr = droneBuilder(shirt);
+      dr.position.set(0, 3.38, 0);
+      dr.visible = false;
+      g.add(dr);
+      g.userData.drone = dr;
     }
     sc.add(g);
     return g;
   };
 
-  animLimbs = (g, ph, a) => {
-    const u = g.userData, s = Math.sin(ph) * a;
+  animLimbs = (g, ph, a, isFlying = false, tiltX = 0) => {
+    const u = g.userData;
+    if (isFlying) {
+      // Arms reach up to hold drone harness, legs dangle dynamically with forward speed
+      u.la.rotation.x = -2.65;
+      u.ra.rotation.x = -2.65;
+      u.la.rotation.z = 0.18;
+      u.ra.rotation.z = -0.18;
+      const sway = Math.sin(ph * 0.6) * 0.14;
+      u.ll.rotation.x = 0.25 + tiltX * 1.4 + sway;
+      u.rl.rotation.x = 0.15 + tiltX * 1.4 - sway;
+      if (u.ring) u.ring.visible = false;
+      if (u.drone) {
+        u.drone.visible = true;
+        u.drone.userData.rotors.forEach((rt, idx) => {
+          rt.rotation.y += (idx % 2 === 0 ? 0.55 : -0.55);
+        });
+      }
+      return;
+    }
+    u.la.rotation.z = 0;
+    u.ra.rotation.z = 0;
+    if (u.ring) u.ring.visible = true;
+    if (u.drone) u.drone.visible = false;
+    const s = Math.sin(ph) * a;
     u.la.rotation.x = s;
     u.ra.rotation.x = -s;
     u.ll.rotation.x = -s;
@@ -1960,7 +2319,7 @@ function init() {
   };
 
   const myOut = OUTFITS[S.outfit];
-  pl = rbxBuilder(myOut.shirt, myOut.pants, myOut.hair, 0x34d399);
+  pl = rbxBuilder(myOut.shirt, myOut.pants, myOut.hair, 0x34d399, true);
   pl.position.set(P.x, 0, P.z);
   pl.rotation.y = P.ry;
 
@@ -2054,7 +2413,90 @@ function init() {
     if (Math.hypot(J.x, J.z) > 0.15) { ix = J.x; iz = J.z; }
     let mv = false;
 
-    if (!busy && Math.hypot(ix, iz) > 0.1) {
+    if (!busy && P.flying) {
+      /* ---------- DRONE FLIGHT PHYSICS (Inspired by Web FPV Simulator) ---------- */
+      const yawInput = ((K.q || holdKeys.yawL) ? 1 : 0) - ((K.e || holdKeys.yawR) ? 1 : 0);
+      P.ry += yawInput * 2.2 * d;
+
+      const ascend = K.space || holdKeys.up;
+      const descend = K.shift || holdKeys.down;
+
+      // Vertical thrust vs gravity
+      if (ascend) P.vy += 24 * d;
+      if (descend) P.vy -= 22 * d;
+      P.vy += -9.8 * d; // Gravity
+      // Hover stabilization assist when neither ascend nor descend is held
+      if (!ascend && !descend && P.y > 0.3) {
+        P.vy += (9.8 - P.vy * 3.2) * d;
+      }
+
+      // Horizontal thrust relative to drone/camera orientation
+      const fwdX = Math.sin(P.ry), fwdZ = Math.cos(P.ry);
+      const rightX = -Math.cos(P.ry), rightZ = Math.sin(P.ry);
+
+      if (P.fpv) {
+        // FPV Cockpit mode: W/Up pitches forward along drone nose, A/D strafes
+        const throttleFwd = -iz;
+        const strafe = ix;
+        P.vx += (fwdX * throttleFwd + rightX * strafe) * 28 * d;
+        P.vz += (fwdZ * throttleFwd + rightZ * strafe) * 28 * d;
+      } else {
+        // 3rd-person world-aligned flight + auto-turn toward flight vector
+        if (Math.hypot(ix, iz) > 0.1) {
+          const m = Math.hypot(ix, iz), k = Math.min(1, m);
+          P.vx += (ix / m * k) * 28 * d;
+          P.vz += (iz / m * k) * 28 * d;
+          if (!yawInput) {
+            const targetYaw = Math.atan2(ix, iz);
+            let diff = targetYaw - P.ry;
+            while (diff < -Math.PI) diff += Math.PI * 2;
+            while (diff > Math.PI) diff -= Math.PI * 2;
+            P.ry += diff * 0.12;
+          }
+        }
+      }
+
+      // Air drag
+      const drag = Math.pow(0.18, d);
+      P.vx *= drag;
+      P.vy *= Math.pow(0.28, d);
+      P.vz *= drag;
+
+      P.x += P.vx * d;
+      P.y += P.vy * d;
+      P.z += P.vz * d;
+
+      // Altitude ceiling & ground touchdown
+      if (P.y > 42) { P.y = 42; P.vy = Math.min(0, P.vy); }
+      if (P.y <= 0.05 && !ascend) {
+        P.y = 0;
+        toggleDrone(false);
+      } else if (P.y < 0.2) {
+        P.y = 0.2;
+        P.vy = Math.max(0, P.vy);
+      }
+
+      // Compute local-space velocity for realistic drone pitch (rx) & roll (rz)
+      const localFwd = P.vx * fwdX + P.vz * fwdZ;
+      const localRight = P.vx * rightX + P.vz * rightZ;
+      P.rx = THREE.MathUtils.lerp(P.rx, Math.max(-0.48, Math.min(0.48, localFwd * 0.032)), 0.15);
+      P.rz = THREE.MathUtils.lerp(P.rz, Math.max(-0.48, Math.min(0.48, -localRight * 0.032)), 0.15);
+      mv = Math.hypot(P.vx, P.vy, P.vz) > 0.4;
+
+      // Update Live Telemetry OSD
+      const spdKmh = Math.hypot(P.vx, P.vy, P.vz) * 3.6;
+      const thrPct = ascend ? 100 : descend ? 15 : Math.min(95, Math.round(48 + spdKmh * 0.6));
+      $('#osd-spd').textContent = spdKmh.toFixed(1) + ' km/h';
+      $('#osd-alt').textContent = P.y.toFixed(1) + ' m';
+      $('#osd-thr').textContent = thrPct + '%';
+      const elp = Date.now() - P.flightStart;
+      const mmStr = String(Math.floor(elp / 60000)).padStart(2, '0');
+      const ssStr = String(Math.floor((elp % 60000) / 1000)).padStart(2, '0');
+      $('#osd-tmr').textContent = mmStr + ':' + ssStr;
+      $('#osd-hbar').style.transform = `translateY(${P.rx * 28}px) rotate(${-P.rz * 57.3}deg)`;
+
+    } else if (!busy && Math.hypot(ix, iz) > 0.1) {
+      P.y = 0; P.rx = 0; P.rz = 0;
       const m = Math.hypot(ix, iz), k = Math.min(1, m);
       P.x += ix / m * k * d * 8.2;
       P.z += iz / m * k * d * 8.2;
@@ -2062,16 +2504,15 @@ function init() {
       P.tz = P.z;
       P.pend = -1;
       P.ry = Math.atan2(ix, iz);
-      pl.rotation.y = P.ry;
       mv = true;
     } else if (!busy) {
+      P.y = 0; P.rx = 0; P.rz = 0;
       const dx = P.tx - P.x, dz = P.tz - P.z, di = Math.hypot(dx, dz);
       if (di > 0.35) {
         const s = Math.min(di, d * 8.2);
         P.x += dx / di * s;
         P.z += dz / di * s;
         P.ry = Math.atan2(dx, dz);
-        pl.rotation.y = P.ry;
         mv = true;
       }
       if (P.pend >= 0) {
@@ -2080,7 +2521,6 @@ function init() {
           const i = P.pend;
           P.pend = -1;
           P.ry = Math.atan2(c.p[0] - P.x, c.p[1] - P.z);
-          pl.rotation.y = P.ry;
           P.tx = P.x;
           P.tz = P.z;
           mv = false;
@@ -2091,26 +2531,31 @@ function init() {
 
     P.x = Math.max(-47, Math.min(47, P.x));
     P.z = Math.max(-45, Math.min(45, P.z));
-    OB.forEach(o => {
-      const x0 = o[0] - 0.6, x1 = o[1] + 0.6, z0 = o[2] - 0.6, z1 = o[3] + 0.6;
-      if (P.x > x0 && P.x < x1 && P.z > z0 && P.z < z1) {
-        const a = [P.x - x0, x1 - P.x, P.z - z0, z1 - P.z], m = Math.min(...a), k = a.indexOf(m);
-        if (k == 0) P.x = x0;
-        else if (k == 1) P.x = x1;
-        else if (k == 2) P.z = z0;
-        else P.z = z1;
-      }
-    });
+    if (!P.flying || P.y < 4.5) {
+      OB.forEach(o => {
+        const x0 = o[0] - 0.6, x1 = o[1] + 0.6, z0 = o[2] - 0.6, z1 = o[3] + 0.6;
+        if (P.x > x0 && P.x < x1 && P.z > z0 && P.z < z1) {
+          const a = [P.x - x0, x1 - P.x, P.z - z0, z1 - P.z], m = Math.min(...a), k = a.indexOf(m);
+          if (k == 0) P.x = x0;
+          else if (k == 1) P.x = x1;
+          else if (k == 2) P.z = z0;
+          else P.z = z1;
+        }
+      });
+    }
 
     P.mv = mv;
     P.amp += ((mv ? 0.9 : 0) - P.amp) * 0.2;
-    animLimbs(pl, t / 95, P.amp);
-    pl.position.set(P.x, mv ? Math.abs(Math.sin(t / 95)) * 0.08 : 0, P.z);
+    animLimbs(pl, t / 95, P.amp, P.flying, P.rx);
+    const hoverBob = P.flying ? Math.sin(t / 180) * 0.1 : (mv ? Math.abs(Math.sin(t / 95)) * 0.08 : 0);
+    pl.position.set(P.x, P.y + hoverBob, P.z);
+    pl.rotation.order = 'YXZ';
+    pl.rotation.set(P.rx, P.ry, P.rz);
 
     /* Project local player chat bubble */
     const showMyBubble = myLastChat && (Date.now() - myChatAt < 5500);
-    if (showMyBubble) {
-      const pv = V.set(P.x, 3.25, P.z).project(cam);
+    if (showMyBubble && !P.fpv) {
+      const pv = V.set(P.x, P.y + (P.flying ? 4.0 : 3.25), P.z).project(cam);
       myTag.style.left = (pv.x * 0.5 + 0.5) * 100 + '%';
       myTag.style.top = (-pv.y * 0.5 + 0.5) * 100 + '%';
       myTag.style.display = pv.z > 1 ? 'none' : 'flex';
@@ -2121,10 +2566,23 @@ function init() {
       myTag.style.display = 'none';
     }
 
-    /* Smooth camera follow */
-    cp.lerp(V.set(P.x * 0.85, 8.2, P.z + 11.2), 0.08);
-    cam.position.copy(cp);
-    cam.lookAt(P.x * 0.85, 1.3, P.z - 2);
+    /* Camera Controller: FPV Cockpit vs 3rd-Person Chase */
+    if (P.flying && P.fpv) {
+      const fwdX = Math.sin(P.ry), fwdZ = Math.cos(P.ry);
+      cam.position.set(P.x + fwdX * 0.75, P.y + 3.45, P.z + fwdZ * 0.75);
+      cam.lookAt(
+        P.x + fwdX * 14,
+        P.y + 3.45 - Math.sin(P.rx) * 14,
+        P.z + fwdZ * 14
+      );
+      cam.rotation.z = -P.rz * 0.7;
+    } else {
+      const camY = P.flying ? 8.8 + P.y * 0.92 : 8.2;
+      const camZ = P.flying ? P.z + 12.8 : P.z + 11.2;
+      cp.lerp(V.set(P.x * 0.85, camY, camZ), 0.09);
+      cam.position.copy(cp);
+      cam.lookAt(P.x * 0.85, 1.3 + P.y * 0.85, P.z - 2);
+    }
 
     /* World idle animations */
     porings.forEach((p, i) => p.position.y = p.userData.y + Math.sin(t / 400 + i * 2) * 0.15);
@@ -2154,10 +2612,13 @@ function init() {
         return;
       }
       rm.mesh.visible = true;
-      const dx = rm.tx - rm.x, dz = rm.tz - rm.z;
-      const dist = Math.hypot(dx, dz);
+      const dx = rm.tx - rm.x, dy = rm.ty - rm.y, dz = rm.tz - rm.z;
+      const dist = Math.hypot(dx, dy, dz);
       rm.x += dx * 0.18;
+      rm.y += dy * 0.18;
       rm.z += dz * 0.18;
+      rm.rx += (rm.trx - rm.rx) * 0.18;
+      rm.rz += (rm.trz - rm.rz) * 0.18;
 
       /* Shortest angle lerp */
       let diff = rm.try - rm.ry;
@@ -2165,16 +2626,19 @@ function init() {
       while (diff > Math.PI) diff -= Math.PI * 2;
       rm.ry += diff * 0.2;
 
+      const isFlying = Boolean(rm.data.flying) || rm.y > 0.35;
       const isMoving = dist > 0.08 || rm.data.moving;
       rm.amp += ((isMoving ? 0.9 : 0) - rm.amp) * 0.2;
-      animLimbs(rm.mesh, t / 95, rm.amp);
-      rm.mesh.position.set(rm.x, isMoving ? Math.abs(Math.sin(t / 95)) * 0.08 : 0, rm.z);
-      rm.mesh.rotation.y = rm.ry;
+      animLimbs(rm.mesh, t / 95, rm.amp, isFlying, rm.rx);
+      const bob = isFlying ? Math.sin(t / 180) * 0.1 : (isMoving ? Math.abs(Math.sin(t / 95)) * 0.08 : 0);
+      rm.mesh.position.set(rm.x, rm.y + bob, rm.z);
+      rm.mesh.rotation.order = 'YXZ';
+      rm.mesh.rotation.set(isFlying ? rm.rx : 0, rm.ry, isFlying ? rm.rz : 0);
 
       /* Project Remote Player Nameplate & Speech Bubble */
-      const pv = V.set(rm.x, 3.25, rm.z).project(cam);
-      const camDist = Math.hypot(rm.x - P.x, rm.z - P.z);
-      if (pv.z > 1 || camDist > 52) {
+      const pv = V.set(rm.x, rm.y + (isFlying ? 4.0 : 3.25), rm.z).project(cam);
+      const camDist = Math.hypot(rm.x - P.x, rm.y - P.y, rm.z - P.z);
+      if (pv.z > 1 || camDist > 68) {
         rm.tag.style.display = 'none';
       } else {
         rm.tag.style.display = 'flex';
@@ -2183,14 +2647,15 @@ function init() {
         const hasChat = rm.data.chat && (now - (rm.data.chatAt || 0) < 5500);
         rm.bubble.style.display = hasChat ? 'block' : 'none';
         if (hasChat) rm.bubble.textContent = rm.data.chat;
-        rm.pill.innerHTML = `<b>Lv.${rm.data.lv || 1}</b> ${esc(rm.data.name || 'Explorer')} · ⭐${rm.data.stars || 0}`;
+        const flyBadge = isFlying ? ` 🚁 ${Math.round(rm.y)}m` : '';
+        rm.pill.innerHTML = `<b>Lv.${rm.data.lv || 1}</b> ${esc(rm.data.name || 'Explorer')}${flyBadge} · ⭐${rm.data.stars || 0}`;
       }
     });
 
     /* Throttled live sync broadcast */
     if (myUid && S.name) {
-      const moved = Math.hypot(P.x - lastSent.x, P.z - lastSent.z) > 0.12 || Math.abs(P.ry - lastSent.ry) > 0.15;
-      if ((moved && now - lastSent.t > 120) || (now - lastSent.t > 4000)) {
+      const moved = Math.hypot(P.x - lastSent.x, P.y - lastSent.y, P.z - lastSent.z) > 0.12 || Math.abs(P.ry - lastSent.ry) > 0.15;
+      if ((moved && now - lastSent.t > 115) || (now - lastSent.t > 4000)) {
         pushState(false);
       }
     }
@@ -2207,14 +2672,7 @@ let db = null, auth = null, myUid = null;
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'inquiry-world-live';
 const remotePlayers = {};
 const remoteMeshes = {};
-const lastSent = { x: 999, z: 999, ry: 0, t: 0 };
-
-async function initMultiplayer() {
-  const statusEl = $('#sync-status');
-  try {
-    if (typeof __firebase_config === 'undefined') {
-      statusEl.textContent = 'Local Mode';
-      return;
+const lastSent = { x: 999, y: 0, z: 999, ry: 0, t: 0 };
     }
     const firebaseConfig = JSON.parse(__firebase_config);
     const app = initializeApp(firebaseConfig);
@@ -2253,8 +2711,8 @@ async function initMultiplayer() {
         /* Create or update 3D mesh for remote player */
         if (!remoteMeshes[uid] && rbxBuilder) {
           const out = OUTFITS[(data.outfit || 0) % OUTFITS.length];
-          const mesh = rbxBuilder(out.shirt, out.pants, out.hair, 0x38bdf8);
-          mesh.position.set(data.x || 0, 0, data.z || 9);
+          const mesh = rbxBuilder(out.shirt, out.pants, out.hair, 0x38bdf8, true);
+          mesh.position.set(data.x || 0, data.y || 0, data.z || 9);
 
           const tag = document.createElement('div');
           tag.className = 'player-tag';
@@ -2273,19 +2731,28 @@ async function initMultiplayer() {
             bubble,
             pill,
             x: data.x || 0,
+            y: data.y || 0,
             z: data.z || 9,
             ry: data.ry || 0,
+            rx: data.rx || 0,
+            rz: data.rz || 0,
             tx: data.x || 0,
+            ty: data.y || 0,
             tz: data.z || 9,
             try: data.ry || 0,
+            trx: data.rx || 0,
+            trz: data.rz || 0,
             amp: 0,
             data
           };
         } else if (remoteMeshes[uid]) {
           const rm = remoteMeshes[uid];
           rm.tx = data.x ?? rm.tx;
+          rm.ty = data.y ?? 0;
           rm.tz = data.z ?? rm.tz;
           rm.try = data.ry ?? rm.try;
+          rm.trx = data.rx ?? 0;
+          rm.trz = data.rz ?? 0;
           rm.data = data;
         }
       });
@@ -2320,6 +2787,7 @@ function pushState(force = false) {
   const now = Date.now();
   if (!force && now - lastSent.t < 110) return;
   lastSent.x = P.x;
+  lastSent.y = P.y;
   lastSent.z = P.z;
   lastSent.ry = P.ry;
   lastSent.t = now;
@@ -2328,8 +2796,12 @@ function pushState(force = false) {
   setDoc(myRef, {
     name: S.name,
     x: Math.round(P.x * 100) / 100,
+    y: Math.round(P.y * 100) / 100,
     z: Math.round(P.z * 100) / 100,
     ry: Math.round(P.ry * 100) / 100,
+    rx: Math.round(P.rx * 100) / 100,
+    rz: Math.round(P.rz * 100) / 100,
+    flying: P.flying,
     moving: P.mv,
     lv: lvl(),
     stars: totalStars(),
@@ -2344,7 +2816,7 @@ function pushState(force = false) {
 function begin() {
   hud();
   renderPlayersList();
-  say('Walk with WASD, joystick, or tap the ground. Find characters with a !', 5500);
+  say('Walk with WASD, joystick, or press F / 🚁 Drone to fly across the world!', 5500);
   pushState(true);
 }
 
