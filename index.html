@@ -460,7 +460,19 @@ try { sessionStorage.setItem('iw_uid', myId); } catch (e) {}
 const save = () => {
 try { localStorage.setItem('iw1', JSON.stringify(S)); } catch (e) {}
 };
-const lvl = () => 1 + Math.floor(S.xp / 60);
+const xpReqForLv = lv => 120 + (lv - 1) * 55;
+function getLevelInfo(totalXp = S.xp) {
+let lv = 1;
+let rem = Math.max(0, Math.floor(totalXp));
+while (lv < 100) {
+const req = xpReqForLv(lv);
+if (rem < req) return { lv, cur: rem, req };
+rem -= req;
+lv++;
+}
+return { lv: 100, cur: rem, req: xpReqForLv(99) };
+}
+const lvl = () => getLevelInfo().lv;
 const totalStars = () => S.stars.reduce((a, b) => a + b, 0);
 const availStars = () => Math.max(0, totalStars() - (S.spentStars || 0));
 
@@ -481,9 +493,9 @@ $('#nm').textContent = (lvl() >= 100 ? '👑 ' : '') + (S.name || 'Explorer');
 $('#lv').textContent = lvl();
 $('#hp i').style.width = S.hp + '%';
 $('#hp-txt').textContent = S.hp + '/100';
-const xpMod = S.xp % 60;
-$('#xp i').style.width = (xpMod / 60 * 100) + '%';
-$('#xp-txt').textContent = xpMod + '/60';
+const lInfo = getLevelInfo();
+$('#xp i').style.width = (lInfo.lv >= 100 ? 100 : Math.min(100, (lInfo.cur / lInfo.req * 100))) + '%';
+$('#xp-txt').textContent = lInfo.lv >= 100 ? 'MAX' : (lInfo.cur + '/' + lInfo.req);
 $('#tot').textContent = availStars();
 $('#badge').textContent = S.stars.filter(x => x > 0).length;
 $('#av-shirt').setAttribute('fill', OUTFITS[S.outfit].hex);
@@ -1003,7 +1015,10 @@ pn.innerHTML = h;
 pn.querySelectorAll('.opt').forEach(b => b.onclick = () => {
 const o = cs.opts.l[b.dataset.k];
 if (o.ok) {
-S.xp += 10;
+const isFirstClear = (S.stars[cs.i] || 0) === 0;
+const stepXp = isFirstClear ? 35 : 5;
+cs.earnedXp = (cs.earnedXp || 0) + stepXp;
+S.xp += stepXp;
 cs.s++;
 cs.opts = null;
 cs.stepShownAt = Date.now();
@@ -1029,15 +1044,36 @@ $('#fb').textContent = '⚠️ Not quite (' + wrongClickTimes.length + '/3 rapid
 return;
 }
 const st = cs.m == 0 ? 3 : cs.m <= 2 ? 2 : 1;
-S.stars[cs.i] = Math.max(S.stars[cs.i], st);
-S.xp += 30;
+const prevStars = S.stars[cs.i] || 0;
+S.stars[cs.i] = Math.max(prevStars, st);
+if (!S.questLastXpAt) S.questLastXpAt = {};
+const nowDone = Date.now();
+const onCooldown = prevStars > 0 && (nowDone - (S.questLastXpAt[cs.i] || 0) < 90000);
+let bonusXp = 0;
+if (prevStars === 0) {
+bonusXp = 210 + st * 30; // First-time mastery: 350 to 440 total XP
+S.questLastXpAt[cs.i] = nowDone;
+} else if (st > prevStars) {
+bonusXp = (st - prevStars) * 60; // Star upgrade bonus
+S.questLastXpAt[cs.i] = nowDone;
+} else if (!onCooldown) {
+bonusXp = 35; // Practice replay XP (90s cooldown per NPC to stop spamming)
+S.questLastXpAt[cs.i] = nowDone;
+}
+const totalRunXp = (cs.earnedXp || 0) + bonusXp;
+S.xp += bonusXp;
 S.hp = 100;
 hud();
 save();
 pushState(true);
 sendChat('⭐ Solved ' + c.t + ' in ' + c.sub + ' Dimension (' + st + '/3 stars)!', true);
+const modeNote = prevStars === 0
+? 'First-Clear Mastery Bonus!'
+: onCooldown
+? 'Practice Cooldown (wait 90s on this NPC for full replay XP)'
+: 'Practice Review Run';
 pn.innerHTML = '<h2>' + c.sub + ' Quest Complete!</h2><div>' + star(st) + '</div><p>You mastered <b>' + c.t +
-'</b> (' + c.sub + '). +40 XP. Wrong answers: ' + cs.m + '.</p><button class="btn" id="cl">Continue Exploring</button>';
+'</b> (' + c.sub + '). <b>+' + totalRunXp + ' XP</b> <small style="color:#a5b4fc">(' + modeNote + ')</small>. Wrong answers: ' + cs.m + '.</p><button class="btn" id="cl">Continue Exploring</button>';
 $('#cl').onclick = () => {
 $('#dlg').style.display = 'none';
 cs = null;
@@ -1055,7 +1091,10 @@ if (n >= 3) {
 b.style.display = 'inline-block';
 b.onclick = () => {
 cs.s++;
-S.xp += 10;
+const isFirstClear = (S.stars[cs.i] || 0) === 0;
+const stepXp = isFirstClear ? 35 : 5;
+cs.earnedXp = (cs.earnedXp || 0) + stepXp;
+S.xp += stepXp;
 hud();
 save();
 pushState(true);
@@ -1273,7 +1312,7 @@ $('#i4').onclick = () => infoPanel('<h2>Inquiry World v13 · Explorer Guide</h2>
 $('#i5').onclick = () => {
 infoPanel('<h2>Reset progress?</h2><p>This erases your stars and XP on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
 $('#rs').onclick = () => {
-S = { name: S.name, xp: 0, stars: Array(32).fill(0), pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 }, spentStars: 0, ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0 };
+S = { name: S.name, xp: 0, stars: Array(32).fill(0), questLastXpAt: {}, pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 }, spentStars: 0, ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0 };
 rebuildLocalAvatar();
 save();
 hud();
@@ -1363,14 +1402,18 @@ activePvpLoop = null;
 }
 
 
+let lastPvpXpAt = 0;
 function recordPvpWin(gameKey, label) {
 S.pvpWins = S.pvpWins || { graphwars: 0, football: 0, basketball: 0, dronerace: 0 };
 S.pvpWins[gameKey] = (S.pvpWins[gameKey] || 0) + 1;
-S.xp += 350;
+const now = Date.now();
+const gain = (now - lastPvpXpAt >= 45000) ? 140 : 35;
+lastPvpXpAt = now;
+S.xp += gain;
 save();
 hud();
 pushState(true);
-say('🏆 Victory in ' + label + '! +350 XP · Total Wins: ' + S.pvpWins[gameKey], 4500);
+say('🏆 Victory in ' + label + '! +' + gain + ' XP · Total Wins: ' + S.pvpWins[gameKey], 4500);
 }
 
 function getPvpOpponentName() {
@@ -3263,6 +3306,15 @@ say('✅ Ring ' + droneRace.ringIdx + '/' + droneRace.rings.length + ' cleared!'
 }
 }
 
+if (!window._lastExploreXpAt) window._lastExploreXpAt = now;
+if ((mv || P.flying) && !busy && !isInDetention() && now - window._lastExploreXpAt >= 45000) {
+window._lastExploreXpAt = now;
+if (lvl() < 100) {
+S.xp += P.flying ? 30 : 20;
+hud();
+save();
+}
+}
 const interval = (mv || P.flying) ? 150 : 2000;
 if (now - lastPushTime > interval) {
 pushState(false);
