@@ -196,7 +196,7 @@ button:active{transform:scale(0.92);}
 </div>
 <div class="hud" id="tr">
 <div id="top-pills">
-<div class="glass-card stat-pill stars">⭐ <span id="tot">0</span>/18</div>
+<div class="glass-card stat-pill stars">⭐ <span id="tot">0</span>/36</div>
 <button class="glass-card stat-pill online-btn" id="online-btn" aria-label="Online Players">
 <span class="pulse-green"></span>
 <span id="online-cnt">1</span> Online
@@ -274,7 +274,7 @@ button:active{transform:scale(0.92);}
 <div id="intro">
 <div class="panel" style="max-width:29em">
 <h2>Welcome to Inquiry World!</h2>
-<p style="color:#cbd5e1;line-height:1.45">Roam the open world, fly drones with other live explorers, and solve 6 science mysteries with characters marked with <b>!</b> above their heads.</p>
+<p style="color:#cbd5e1;line-height:1.45">Roam the open world, fly drones with other live explorers, and solve 12 quests across <b>Science</b>, <b>Math</b>, and <b>English</b> with characters marked with <b>!</b> above their heads.</p>
 <label style="font-weight:700;font-size:0.92em">Your Explorer Nickname:
 <input id="ni" maxlength="14" placeholder="Explorer">
 </label>
@@ -300,14 +300,14 @@ const OUTFITS = [
 let S = {
 name: '',
 xp: 0,
-stars: [0, 0, 0, 0, 0, 0],
+stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 hp: 100,
 outfit: Math.floor(Math.random() * OUTFITS.length)
 };
 try {
 Object.assign(S, JSON.parse(localStorage.getItem('iw1') || '{}'));
 } catch (e) {}
-while (S.stars.length < 6) S.stars.push(0);
+while (S.stars.length < 12) S.stars.push(0);
 if (typeof S.outfit !== 'number' || !OUTFITS[S.outfit]) S.outfit = 0;
 let myId = '';
 try { myId = sessionStorage.getItem('iw_uid') || ''; } catch (e) {}
@@ -334,6 +334,7 @@ $('#av-shirt').setAttribute('fill', OUTFITS[S.outfit].hex);
 }
 const C = [
 {
+sub: 'Science', icon: '🔬',
 n: 'Master Forge', sg: 'RAMP RACE', p: [0, -2.6], a: [0, 1], hair: 0xe8643c, sh: 0xefe3c8, pa: 0x6b4a2b, t: 'Ramp Race',
 story: 'A robot car rolls down a ramp. Sometimes it rolls far, sometimes only a little. Why?',
 o: ['The ramp height is different on each run', 'The car is red', 'The forge is noisy'],
@@ -344,6 +345,7 @@ c: ['Distance increases as ramp height increases', 'Distance decreases as ramp h
 tip: 'Fair test: change only one thing (the height). Keep the same car and floor.'
 },
 {
+sub: 'Science', icon: '🔬',
 n: 'Tech Mira', sg: 'LIGHT LAB', p: [-16, 3], a: [-13.8, 5.6], hair: 0xf0a030, sh: 0xb86a4a, pa: 0x3a3a52, t: 'Light Sensor',
 story: 'A robot reads light with a sensor. When the lamp is moved away, the reading changes.',
 o: ['The reading changes when the lamp distance changes', 'The lamp is heavy', 'The wire is blue'],
@@ -354,6 +356,7 @@ c: ['The reading drops as the lamp moves away', 'The reading rises as the lamp m
 tip: 'Test in a dark room so the test stays fair.'
 },
 {
+sub: 'Science', icon: '🔬',
 n: 'Dr. Volt', sg: 'BATTERY LAB', p: [16, 4], a: [13.8, 6.6], hair: 0x8a6be8, sh: 0xf2f2f2, pa: 0x5a8fe8, t: 'Battery Power',
 story: 'A robot has a motor. Dr. Volt added more batteries and it seemed to spin faster.',
 o: ['The motor seems faster with more batteries', 'The lab coat is big', 'The lab is warm'],
@@ -364,6 +367,7 @@ c: ['Motor speed rises as batteries increase', 'Motor speed falls as batteries i
 tip: 'Use the same motor and the same load each time.'
 },
 {
+sub: 'Science', icon: '🔬',
 n: 'Captain Swing', sg: 'PENDULUM PIER', p: [-34, -18], a: [-31.8, -15.4], hair: 0x2b2b2b, sh: 0x2c5fa8, pa: 0xf2f2f2, t: 'Pendulum Pier',
 story: 'Swings on the pier take different amounts of time to go back and forth. Does the rope length matter?',
 o: ['Swings with different rope lengths take different times', 'The pier is made of wood', 'The seagulls are loud'],
@@ -374,6 +378,7 @@ c: ['Longer pendulums take longer for each swing', 'Longer pendulums swing faste
 tip: 'Release from the same angle each time and use the same weight.'
 },
 {
+sub: 'Science', icon: '🔬',
 n: 'Gardener Fern', sg: 'GARDEN LAB', p: [30, -18], a: [27.8, -15.4], hair: 0x6b4a2b, sh: 0x3fa84a, pa: 0x8a6b3a, t: 'Garden Growth',
 story: 'Identical bean plants got different amounts of water for two weeks. Now their heights are not the same.',
 o: ['The plants got different amounts of water', 'The pots are round', 'The gardener wears a hat'],
@@ -384,6 +389,7 @@ c: ['More water helped growth, but extra water gave less and less benefit', 'Wat
 tip: 'Same soil, same light, same seeds. Only the water changes.'
 },
 {
+sub: 'Science', icon: '🔬',
 n: 'Prof. Magnus', sg: 'MAGNET MOUNTAIN', p: [3, -36], a: [0.8, -33.4], hair: 0xcfcfcf, sh: 0xd04a4a, pa: 0x333a4a, t: 'Electromagnet',
 story: 'Prof. Magnus wraps wire around a nail and connects a battery. The nail becomes a magnet and picks up paper clips.',
 o: ['Different numbers of coils pick up different numbers of clips', 'The nail is long', 'The mountain is big'],
@@ -392,6 +398,72 @@ h: ['More coils will pick up more paper clips', 'More coils will pick up fewer p
 v: { n: 'Wire coils', u: 'coils', L: [5, 10, 15, 20, 25], R: [2, 4, 7, 9, 12], ru: 'clips' },
 c: ['More coils picked up more paper clips', 'More coils picked up fewer paper clips', 'The number of clips stayed the same'],
 tip: 'Use the same nail and the same battery every time.'
+},
+{
+sub: 'Science', icon: '🔬',
+n: 'Dr. Nova', sg: 'SOLAR OBSERVATORY', p: [-10, -24], a: [-10, -21.4], hair: 0x38bdf8, sh: 0x1e3a8a, pa: 0x0f172a, t: 'Solar Panel Tilt',
+story: 'Dr. Nova tilts a solar panel toward the sun at different angles and measures the electricity produced.',
+o: ['Different panel tilt angles produce different amounts of power', 'The observatory roof is blue', 'The clouds look fluffy'],
+q: ['How does solar panel tilt angle affect electrical power output?', 'What time did Dr. Nova wake up?', 'Is the solar panel heavy?'],
+h: ['Facing closer to 45° toward the sun produces more power', 'Tilting the panel away produces more power', 'Tilt angle has no effect on power'],
+v: { n: 'Tilt angle', u: 'deg', L: [0, 15, 30, 45, 60], R: [32, 58, 84, 98, 76], ru: 'W' },
+c: ['Power peaked at 45° when facing the sun directly', 'Flat 0° always gives maximum power', 'Angle never changes power'],
+tip: 'Keep the sunlight brightness constant while testing each angle.'
+},
+{
+sub: 'Science', icon: '🔬',
+n: 'Chef Boyle', sg: 'THERMAL KITCHEN', p: [14, -22], a: [14, -19.4], hair: 0xf97316, sh: 0xffffff, pa: 0x374151, t: 'Melting Ice',
+story: 'Chef Boyle adds different amounts of salt to crushed ice and records how fast the ice melts.',
+o: ['Ice with more salt melts in fewer minutes', 'The bowl is made of glass', 'The kitchen smells like soup'],
+q: ['How does the amount of salt affect how fast ice melts?', 'Who bought the ice cubes?', 'What color is the spoon?'],
+h: ['Adding more salt will make the ice melt faster', 'Adding salt will keep ice frozen forever', 'Salt has no effect on melting'],
+v: { n: 'Salt added', u: 'g', L: [0, 5, 10, 15, 20], R: [24, 18, 13, 9, 6], ru: 'min' },
+c: ['More salt lowered the freezing point and melted the ice faster', 'More salt made melting take longer', 'All bowls melted at the exact same time'],
+tip: 'Use the exact same mass of ice and room temperature for each bowl.'
+},
+{
+sub: 'Math', icon: '📐',
+n: 'Archimedes Jr.', sg: 'MATH PLAZA', p: [-24, 24], a: [-22, 21.6], hair: 0xfde047, sh: 0x0284c7, pa: 0x1e293b, t: 'Ratio & Speed',
+story: 'A delivery drone flies at a steady speed. Archimedes Jr. tracks how far it travels over different numbers of minutes.',
+o: ['Distance grows proportionally as flight minutes increase', 'The drone has four propellers', 'The sky is clear today'],
+q: ['How does flight time affect total distance at constant speed?', 'What brand is the remote controller?', 'Why is the drone painted blue?'],
+h: ['Every extra minute adds 120 meters of distance', 'More minutes reduce the distance traveled', 'Distance stays at 120 meters forever'],
+v: { n: 'Flight time', u: 'min', L: [1, 2, 3, 4, 5], R: [120, 240, 360, 480, 600], ru: 'm' },
+c: ['Distance = 120 × minutes (a constant rate of 120 m/min)', 'Distance grows randomly each minute', 'Time and distance are unrelated'],
+tip: 'Divide distance by minutes (R ÷ L) to verify the constant unit rate!'
+},
+{
+sub: 'Math', icon: '📐',
+n: 'Prof. Euler', sg: 'GEOMETRY GARDEN', p: [0, 28], a: [0, 25.4], hair: 0xa855f7, sh: 0x6d28d9, pa: 0x1f2937, t: 'Square Area Scaling',
+story: 'Prof. Euler builds square flower beds. When he increases the side length, the area grows much faster than expected!',
+o: ['Doubling the side length makes the area four times bigger', 'The garden fence is brown', 'The flowers are yellow'],
+q: ['How does the side length of a square affect its total area?', 'Who watered the flowers?', 'How many bricks are in the wall?'],
+h: ['Area equals side length squared (Area = s²)', 'Area equals side length plus 2', 'Area stays the same for every square'],
+v: { n: 'Side length', u: 'm', L: [1, 2, 3, 4, 5], R: [1, 4, 9, 16, 25], ru: 'm²' },
+c: ['Square area grows quadratically (s × s = s²)', 'Area grows by only 1 m² per meter', 'Larger sides have smaller areas'],
+tip: 'Test at least 3 side lengths and check the pattern: 1×1, 2×2, 3×3...'
+},
+{
+sub: 'English', icon: '📚',
+n: 'Lady Sonnet', sg: 'ENGLISH LIBRARY', p: [22, 26], a: [20, 23.6], hair: 0xf43f5e, sh: 0xbe123c, pa: 0x312e81, t: 'Context Clues',
+story: '"Although the ancient bridge looked fragile, it withstood the violent storm." Readers use surrounding words to unlock unfamiliar vocabulary.',
+o: ['The contrast word "Although" shows fragile means delicate or easily broken', 'The story mentions a bridge', 'Sentences end with a period'],
+q: ['How do contrast clues help determine the meaning of "fragile"?', 'How many books are on the shelf?', 'Who built the ancient bridge?'],
+h: ['Contrast words like "although" signal the opposite of withstanding a storm', 'Fragile must mean indestructible', 'Context clues never help with vocabulary'],
+v: { n: 'Clue Level', u: 'pts', L: [1, 2, 3, 4, 5], R: [20, 40, 60, 80, 100], ru: '% mastery' },
+c: ['Contrast context clues reveal that "fragile" means delicate or easily damaged', 'Fragile means made of solid steel', 'Reading surrounding words is unnecessary'],
+tip: 'Look for signal words like "although", "however", and "unlike" when decoding new words.'
+},
+{
+sub: 'English', icon: '📚',
+n: 'Bard Shakespeare', sg: 'STORY STAGE', p: [-36, 4], a: [-33.6, 4], hair: 0x10b981, sh: 0x047857, pa: 0x1e1b4b, t: 'Main Idea & Evidence',
+story: 'A well-crafted paragraph opens with a clear topic sentence, followed by supporting details that prove the central message.',
+o: ['Supporting details connect directly back to one central main idea', 'The stage curtains are red', 'Stories always happen at night'],
+q: ['How do supporting details strengthen a paragraph’s main idea?', 'How loud is the audience clapping?', 'What color is the quill pen?'],
+h: ['Specific facts and examples make the main idea clear and convincing', 'Random off-topic sentences make a paragraph stronger', 'A paragraph needs no main idea'],
+v: { n: 'Details used', u: 'facts', L: [1, 2, 3, 4, 5], R: [30, 50, 75, 90, 100], ru: '% clarity' },
+c: ['Relevant supporting evidence makes the central main idea clear and persuasive', 'Adding unrelated facts improves clarity', 'One word is enough for an essay'],
+tip: 'Ask yourself: "What is the single big point all these sentences support?"'
 }
 ];
 const ST = ['Observe', 'Question', 'Hypothesis', 'Experiment', 'Conclusion'];
@@ -424,7 +496,7 @@ render();
 }
 function render() {
 const c = C[cs.i], pn = $('#pn');
-let h = '<h2>' + c.n + ': ' + c.t + '</h2><div class="steps">' +
+let h = '<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#38bdf8;margin-bottom:0.2em">' + c.icon + ' ' + c.sub + ' Quest</div><h2>' + c.n + ': ' + c.t + '</h2><div class="steps">' +
 ST.map((_, k) => '<i class="' + (k < cs.s ? 'ok' : k == cs.s ? 'on' : '') + '"></i>').join('') + '</div>';
 if (cs.s < 5) h += '<div class="story">' + c.story + '</div><div class="q">' + ST[cs.s] + ': ' + QS[cs.s] + '</div>';
 if (cs.s == 3) {
@@ -473,8 +545,8 @@ hud();
 save();
 pushState(true);
 sendChat('⭐ Solved ' + c.t + ' (' + st + '/3 stars)!', true);
-pn.innerHTML = '<h2>Quest Complete!</h2><div>' + star(st) + '</div><p>You solved <b>' + c.t +
-'</b> using scientific inquiry. +40 XP. Wrong answers: ' + cs.m + '.</p><button class="btn" id="cl">Back to the world</button>';
+pn.innerHTML = '<h2>' + c.sub + ' Quest Complete!</h2><div>' + star(st) + '</div><p>You mastered <b>' + c.t +
+'</b> (' + c.sub + '). +40 XP. Wrong answers: ' + cs.m + '.</p><button class="btn" id="cl">Back to the world</button>';
 $('#cl').onclick = () => {
 $('#dlg').style.display = 'none';
 cs = null;
@@ -513,9 +585,14 @@ b.innerHTML = '<b>' + (k + 1) + '</b><span>' + ic + '</span><small>' + ST[k].sli
 b.onclick = () => say(DEF[k], 5000);
 $('#skills').appendChild(b);
 });
-$('#i1').onclick = () => infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + '</h2>' +
-C.map((c, i) => '<p style="display:flex;justify-content:space-between;align-items:center;margin:0.35em 0"><span>' + c.t + '</span><span>' + star(S.stars[i]) + '</span></p>').join('') +
-'<p style="color:#a5b4fc">Total XP: ' + S.xp + '</p>');
+$('#i1').onclick = () => {
+const groups = ['Science', 'Math', 'English'].map(sub => {
+const rows = C.map((c, i) => ({ c, i })).filter(x => x.c.sub === sub)
+.map(({ c, i }) => '<p style="display:flex;justify-content:space-between;align-items:center;margin:0.28em 0;font-size:0.94em"><span>' + c.icon + ' ' + c.t + ' <small style="color:#94a3b8">(' + c.n + ')</small></span><span>' + star(S.stars[i]) + '</span></p>').join('');
+return '<h3 style="margin:0.7em 0 0.25em;color:#38bdf8;font-size:1em;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.2em">' + sub + '</h3>' + rows;
+}).join('');
+infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + ' (' + totalStars() + '/36 ⭐)</h2>' + groups + '<p style="color:#a5b4fc;margin-top:0.6em">Total XP: ' + S.xp + '</p>');
+};
 $('#i2').onclick = () => {
 R.render(sc, cam);
 const a = document.createElement('a');
@@ -534,7 +611,7 @@ $('#i4').onclick = () => infoPanel('<h2>Science Journal</h2><p><b>Inquiry steps:
 $('#i5').onclick = () => {
 infoPanel('<h2>Reset progress?</h2><p>This erases your stars and XP on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
 $('#rs').onclick = () => {
-S = { name: S.name, xp: 0, stars: [0, 0, 0, 0, 0, 0], hp: 100, outfit: S.outfit };
+S = { name: S.name, xp: 0, stars: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hp: 100, outfit: S.outfit };
 save();
 hud();
 pushState(true);
@@ -947,6 +1024,30 @@ nl.rotation.z = Math.PI / 2;
 const cl = cyl(0.3, 0.3, 1.2, 0xc87533, 3, 1.3, -39);
 cl.rotation.z = Math.PI / 2;
 [0, 1, 2].forEach(i => box(0.25, 0.08, 0.12, 0xdddddd, 4.8 + i * 0.4, 1.05, -38.7));
+
+// Solar Observatory Pedestal (-10, -26)
+box(3.4, 0.6, 3.4, 0x1e3a8a, -10, 0.3, -26.5);
+const solPanel = new THREE.Mesh(new THREE.BoxGeometry(2.8, 0.12, 2.2), new THREE.MeshBasicMaterial({ color: 0x38bdf8 }));
+solPanel.position.set(-10, 1.4, -26.5);
+solPanel.rotation.x = 0.65;
+sc.add(solPanel);
+// Thermal Kitchen Counter (14, -24.5)
+bench(14, -24.5);
+const iceCube = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), new THREE.MeshBasicMaterial({ color: 0xbae6fd }));
+iceCube.position.set(14, 1.4, -24.5);
+sc.add(iceCube);
+// Math Plaza & Geometry Garden Landmarks (-24, 26.5) & (0, 30.5)
+box(4.5, 0.4, 4.5, 0x0284c7, -24, 0.2, 26.8);
+const mathPyr = new THREE.Mesh(new THREE.ConeGeometry(1.6, 2.6, 4), M(0xfde047));
+mathPyr.position.set(-24, 1.7, 26.8);
+sc.add(mathPyr);
+box(5, 0.35, 5, 0x6d28d9, 0, 0.18, 30.8);
+box(2.5, 0.45, 2.5, 0xa855f7, 0, 0.5, 30.8);
+// English Library & Story Stage Landmarks (22, 28.5) & (-38.5, 4)
+box(4.6, 3.2, 1.4, 0x7c2d12, 22, 1.6, 28.8);
+box(4.2, 0.3, 1.5, 0xfbbf24, 22, 1.2, 28.8);
+box(4.2, 0.3, 1.5, 0xf43f5e, 22, 2.2, 28.8);
+box(2.4, 0.5, 6, 0x9f1239, -38.8, 0.25, 4);
 let sd = 7;
 const rnd = () => (sd = (sd * 9301 + 49297) % 233280) / 233280;
 for (let i = 0; i < 110; i++) {
@@ -1100,7 +1201,7 @@ g.position.set(c.p[0], 0, c.p[1]);
 npcs.push(g);
 const s = document.createElement('div');
 s.className = 'sign';
-s.innerHTML = '<u>$</u>' + c.sg + '<div class="mk">!</div>';
+const subCol = c.sub === 'Math' ? '#38bdf8' : c.sub === 'English' ? '#f472b6' : '#fbbf24';s.style.borderColor = subCol;s.innerHTML = '<u style="background:' + subCol + '">' + c.icon + '</u>' + c.sg + '<div class="mk">!</div>';
 stg.appendChild(s);
 signs.push(s);
 });
@@ -1136,7 +1237,7 @@ mm.stroke();
 mm.fillStyle = 'rgba(184, 165, 138, 0.55)';
 mm.fillRect(25 * 1.45, 26 * 1.45, 46 * 1.45, 40 * 1.45);
 C.forEach((c, i) => {
-mm.fillStyle = S.stars[i] > 0 ? '#34d399' : '#fbbf24';
+mm.fillStyle = S.stars[i] > 0 ? '#34d399' : (c.sub === 'Math' ? '#38bdf8' : c.sub === 'English' ? '#f472b6' : '#fbbf24');
 mm.beginPath();
 mm.arc((c.p[0] + 48) * 1.45, (c.p[1] + 46) * 1.45, 4, 0, 7);
 mm.fill();
