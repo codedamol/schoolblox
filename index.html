@@ -464,11 +464,13 @@ const xpReqForLv = lv => 120 + (lv - 1) * 55;
 function getLevelInfo(totalXp = S.xp) {
 let lv = 1;
 let rem = Math.max(0, Math.floor(totalXp));
-while (lv < 100) {
+while (lv < 1000) {
 const req = xpReqForLv(lv);
 if (rem < req) return { lv, cur: rem, req };
 rem -= req;
 lv++;
+}
+return { lv: 1000, cur: rem, req: xpReqForLv(999) };
 }
 return { lv: 100, cur: rem, req: xpReqForLv(99) };
 }
