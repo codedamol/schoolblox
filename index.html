@@ -580,6 +580,7 @@ stars: Array(32).fill(0),
 bonusStars: 0,
 pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 },
 eggStats: { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' },
+quizBookStats: { booksRead: [], perfectBooks: [], attempts: 0, lastXpAt: {} },
 spentStars: 0,
 starTransactions: [],
 activeGameSession: null,
@@ -598,6 +599,10 @@ while (S.stars.length < 32) S.stars.push(0);
 if (typeof S.bonusStars !== 'number' || S.bonusStars < 0) S.bonusStars = 0;
 if (!S.pvpWins || typeof S.pvpWins !== 'object') S.pvpWins = { graphwars: 0, football: 0, basketball: 0, dronerace: 0 };
 if (!S.eggStats || typeof S.eggStats !== 'object') S.eggStats = { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' };
+if (!S.quizBookStats || typeof S.quizBookStats !== 'object') S.quizBookStats = { booksRead: [], perfectBooks: [], attempts: 0, lastXpAt: {} };
+if (!Array.isArray(S.quizBookStats.booksRead)) S.quizBookStats.booksRead = [];
+if (!Array.isArray(S.quizBookStats.perfectBooks)) S.quizBookStats.perfectBooks = [];
+if (!S.quizBookStats.lastXpAt || typeof S.quizBookStats.lastXpAt !== 'object') S.quizBookStats.lastXpAt = {};
 if (!Array.isArray(S.ownedOutfits)) S.ownedOutfits = [0];
 if (!S.ownedOutfits.includes(0)) S.ownedOutfits.push(0);
 if (!Array.isArray(S.ownedDrones)) S.ownedDrones = [0];
@@ -1053,6 +1058,386 @@ const PVP_STATIONS = [
 { id: 'basketball', n: 'PVP BASKETBALL', icon: '🏀', color: '#fb923c', p: [-14, 12], a: [-11, 10] },
 { id: 'dronerace', n: 'DRONE RACING', icon: '🚁', color: '#f472b6', p: [14, 12], a: [11, 10] }
 ];
+const MATH_STATIONS = [
+{ id: 'math_library', n: 'MATH LIBRARY', icon: '📚', color: '#38bdf8', p: [-6, -2], a: [-4, 0] },
+{ id: 'math_quizbook', n: 'RANDOM QUIZ BOOK', icon: '📖', color: '#fde047', p: [6, -2], a: [4, 0] }
+];
+
+const MATH_BOOKS = [
+{
+id: 'book1',
+num: 'Book 1',
+title: 'Arithmetics & PEMDAS',
+icon: '🧮',
+color: '#38bdf8',
+summary: 'Order of Operations ensures every player evaluates arithmetic expressions the exact same way.',
+rules: [
+'<b>P</b>arentheses / Brackets first: solve inside <code>( )</code> before anything else.',
+'<b>E</b>xponents next: evaluate powers and square roots (e.g., <code>3² = 9</code>).',
+'<b>M</b>ultiplication & <b>D</b>ivision: solve from <b>left to right</b>.',
+'<b>A</b>ddition & <b>S</b>ubtraction: solve from <b>left to right</b>.'
+],
+example: 'Example: <code>4 × (3 + 5) − 2 = 4 × 8 − 2 = 32 − 2 = 30</code>'
+},
+{
+id: 'book2',
+num: 'Book 2',
+title: 'Number Patterns',
+icon: '🔢',
+color: '#a855f7',
+summary: 'Arithmetic and geometric sequences follow predictable rules between consecutive terms.',
+rules: [
+'<b>Common Difference (d):</b> Subtract consecutive terms (<code>a₂ − a₁</code>) to find the constant step.',
+'<b>nth Term Formula:</b> <code>Term(n) = a₁ + (n − 1) × d</code>.',
+'<b>Geometric Ratio (r):</b> Multiply or divide by a constant factor each step (e.g., <code>2, 6, 18, 54... ×3</code>).'
+],
+example: 'Example: Sequence <code>3, 7, 11, 15...</code> has <code>d = +4</code>, so the 5th term is <code>19</code>.'
+},
+{
+id: 'book3',
+num: 'Book 3',
+title: 'Linear Algebra',
+icon: '📐',
+color: '#34d399',
+summary: 'Linear equations model constant rates of change using slope-intercept form and balanced operations.',
+rules: [
+'<b>Slope-Intercept Form:</b> <code>y = mx + b</code>, where <code>m</code> is slope (rate of change) and <code>b</code> is y-intercept.',
+'<b>Balance Principle:</b> Whatever operation you apply to one side of <code>=</code>, apply the exact same to the other.',
+'<b>Isolating x:</b> Undo addition/subtraction first, then divide by the coefficient of <code>x</code>.'
+],
+example: 'Example: <code>3x + 5 = 17 → 3x = 12 → x = 4</code>'
+},
+{
+id: 'book4',
+num: 'Book 4',
+title: 'Pythagorean Geometry',
+icon: '🔺',
+color: '#fb923c',
+summary: 'In any right-angled triangle, the square of the hypotenuse equals the sum of squares of both legs.',
+rules: [
+'<b>Theorem:</b> <code>a² + b² = c²</code>, where <code>c</code> is the longest side opposite the 90° angle.',
+'<b>3-4-5 Scaling:</b> Any multiple <code>(3k, 4k, 5k)</code> is automatically a right triangle.',
+'<b>Other Common Triples:</b> <code>5-12-13</code> and <code>8-15-17</code>.'
+],
+example: 'Example: If <code>a = 6</code> and <code>b = 8</code> (<code>k = 2</code>), then <code>c = √(36 + 64) = 10</code>.'
+}
+];
+
+const MATH_QUIZ_BANK = [
+{ book: 'book1', q: 'Evaluate: 4 × (3 + 5) − 2', opts: ['30', '15', '22', '32'], tip: 'Solve parentheses first: 3 + 5 = 8, then 4 × 8 − 2 = 30.' },
+{ book: 'book1', q: 'What is the value of 18 ÷ 3 × 2 + 4?', opts: ['16', '7', '12', '24'], tip: 'Division and multiplication go left-to-right: (18 ÷ 3) × 2 + 4 = 16.' },
+{ book: 'book1', q: 'Simplify: 5 + 3 × 2²', opts: ['17', '32', '22', '13'], tip: 'Exponents first (2² = 4), then multiply (3 × 4 = 12), then add 5.' },
+{ book: 'book1', q: 'Evaluate: (20 − 8) ÷ 4 + 7', opts: ['10', '25', '11', '8'], tip: '(20 − 8) = 12; 12 ÷ 4 = 3; 3 + 7 = 10.' },
+
+{ book: 'book2', q: 'Find the next number in the sequence: 3, 7, 11, 15, ___', opts: ['19', '18', '20', '21'], tip: 'Each step adds +4 (common difference d = 4).' },
+{ book: 'book2', q: 'What is the 6th term of the pattern: 2, 5, 8, 11, ...?', opts: ['17', '14', '20', '15'], tip: 'Rule is +3 per step: 11 (4th) → 14 (5th) → 17 (6th).' },
+{ book: 'book2', q: 'Find the missing term in the geometric pattern: 2, 6, 18, ___, 162', opts: ['54', '36', '48', '72'], tip: 'Each term is multiplied by 3: 18 × 3 = 54.' },
+{ book: 'book2', q: 'Which formula generates the sequence 3, 7, 11, 15 for position n = 1, 2, 3, 4?', opts: ['4n − 1', '3n + 1', '4n + 3', 'n + 4'], tip: 'Test n = 1: 4(1) − 1 = 3; test n = 2: 4(2) − 1 = 7.' },
+
+{ book: 'book3', q: 'Solve for x: 3x + 5 = 17', opts: ['x = 4', 'x = 6', 'x = 3', 'x = 7'], tip: 'Subtract 5 from both sides (3x = 12), then divide by 3.' },
+{ book: 'book3', q: 'In y = 3x + 5, how much does y increase when x increases by 1?', opts: ['3', '5', '8', '1'], tip: 'The slope m = 3 represents the rate of change per +1 in x.' },
+{ book: 'book3', q: 'Solve for x: 5x − 9 = 26', opts: ['x = 7', 'x = 5', 'x = 3.4', 'x = 8'], tip: 'Add 9 to both sides (5x = 35), then divide by 5.' },
+{ book: 'book3', q: 'If y = 2x − 4 and x = 6, what is the value of y?', opts: ['8', '16', '10', '4'], tip: 'Substitute x = 6: y = 2(6) − 4 = 12 − 4 = 8.' },
+
+{ book: 'book4', q: 'A right triangle has legs a = 3 and b = 4. What is hypotenuse c?', opts: ['5', '7', '6', '25'], tip: 'c = √(3² + 4²) = √(9 + 16) = √25 = 5.' },
+{ book: 'book4', q: 'Scale a 3-4-5 right triangle by k = 3. What is the new hypotenuse c?', opts: ['15', '12', '9', '20'], tip: 'Hypotenuse c = 5k = 5 × 3 = 15.' },
+{ book: 'book4', q: 'If a right triangle has hypotenuse c = 13 and leg a = 5, find leg b.', opts: ['12', '8', '10', '18'], tip: 'b = √(13² − 5²) = √(169 − 25) = √144 = 12.' },
+{ book: 'book4', q: 'Which set of side lengths forms a valid right triangle?', opts: ['6, 8, 10', '4, 5, 6', '5, 7, 9', '3, 5, 7'], tip: '6² + 8² = 36 + 64 = 100 = 10².' }
+];
+
+function generateDynamicMathQuestion(bookFilter) {
+const pool = bookFilter === 'all' ? ['book1', 'book2', 'book3', 'book4'] : [bookFilter];
+const pick = pool[Math.floor(Math.random() * pool.length)];
+
+if (pick === 'book1') {
+const a = 2 + Math.floor(Math.random() * 6);
+const b = 2 + Math.floor(Math.random() * 7);
+const c = 1 + Math.floor(Math.random() * 6);
+const d = 1 + Math.floor(Math.random() * 8);
+const ans = a * (b + c) - d;
+const w1 = a * b + c - d;
+const w2 = a * (b + c) + d;
+const w3 = (a + b) * c - d;
+const uniq = [...new Set([ans, w1, w2, w3, ans + 2, ans - 3])].slice(0, 4);
+return {
+book: 'book1',
+q: '[Dynamic] Evaluate: ' + a + ' × (' + b + ' + ' + c + ') − ' + d,
+opts: uniq.map(String),
+tip: 'Parentheses first: (' + b + ' + ' + c + ') = ' + (b + c) + ', then ' + a + ' × ' + (b + c) + ' − ' + d + ' = ' + ans + '.'
+};
+}
+
+if (pick === 'book2') {
+const start = 2 + Math.floor(Math.random() * 8);
+const step = 3 + Math.floor(Math.random() * 6);
+const seq = [start, start + step, start + 2 * step, start + 3 * step];
+const ans = start + 4 * step;
+const uniq = [...new Set([ans, ans + step, ans - 1, ans + 2])].slice(0, 4);
+return {
+book: 'book2',
+q: '[Dynamic] Next term in pattern: ' + seq.join(', ') + ', ___',
+opts: uniq.map(String),
+tip: 'Common difference is +' + step + ', so ' + seq[3] + ' + ' + step + ' = ' + ans + '.'
+};
+}
+
+if (pick === 'book3') {
+const a = 2 + Math.floor(Math.random() * 6);
+const x = 2 + Math.floor(Math.random() * 9);
+const b = 1 + Math.floor(Math.random() * 12);
+const c = a * x + b;
+const uniq = [...new Set([x, x + 1, Math.max(1, x - 1), x + 2])].slice(0, 4);
+return {
+book: 'book3',
+q: '[Dynamic] Solve for x: ' + a + 'x + ' + b + ' = ' + c,
+opts: uniq.map(v => 'x = ' + v),
+tip: 'Subtract ' + b + ' (' + a + 'x = ' + (c - b) + '), then divide by ' + a + ' → x = ' + x + '.'
+};
+}
+
+const k = 2 + Math.floor(Math.random() * 6);
+const legA = 3 * k, legB = 4 * k, hypC = 5 * k;
+const uniq = [...new Set([hypC, legA + legB, hypC + k, Math.max(5, hypC - k)])].slice(0, 4);
+return {
+book: 'book4',
+q: '[Dynamic] Right triangle has legs a = ' + legA + ' and b = ' + legB + '. Find hypotenuse c.',
+opts: uniq.map(String),
+tip: 'Scale factor k = ' + k + ' on a 3-4-5 triangle → c = 5 × ' + k + ' = ' + hypC + '.'
+};
+}
+
+function openMathLibrary(selectedBookId = 'book1') {
+if (isInDetention()) {
+const rem = Math.ceil((S.detentionUntil - Date.now()) / 1000);
+say('🚨 You are in Detention! Wait ' + rem + 's first.', 3000);
+return;
+}
+const book = MATH_BOOKS.find(b => b.id === selectedBookId) || MATH_BOOKS[0];
+if (!S.quizBookStats.booksRead.includes(book.id)) {
+S.quizBookStats.booksRead.push(book.id);
+save();
+}
+$('#dlg').style.display = 'flex';
+const pn = $('#pn');
+const tabsHtml = MATH_BOOKS.map(b => {
+const isSel = b.id === book.id;
+const isPerf = S.quizBookStats.perfectBooks.includes(b.id);
+return '<button class="opt" data-bk="' + b.id + '" style="flex:1;min-width:120px;border-color:' +
+(isSel ? b.color : 'rgba(255,255,255,0.18)') + ';background:' +
+(isSel ? 'rgba(56,189,248,0.22)' : '') + '">' +
+b.icon + ' ' + b.num + (isPerf ? ' ⭐' : '') + '</button>';
+}).join('');
+
+pn.innerHTML =
+'<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#38bdf8">📚 Math Dimension Library</div>' +
+'<h2>' + book.icon + ' ' + book.num + ': ' + book.title + '</h2>' +
+'<div class="row" style="flex-wrap:wrap;gap:6px;margin-bottom:10px">' + tabsHtml + '</div>' +
+'<div class="story">' + book.summary + '</div>' +
+'<ul style="text-align:left;line-height:1.55;margin:10px 0;padding-left:20px;color:#e2e8f0">' +
+book.rules.map(r => '<li style="margin-bottom:6px">' + r + '</li>').join('') +
+'</ul>' +
+'<div class="fb" style="color:#fde047;margin-bottom:12px">' + book.example + '</div>' +
+'<div class="row" style="gap:8px">' +
+'<button class="btn" id="qb-practice" style="background:#0284c7">📖 Quiz This Book</button>' +
+'<button class="btn" id="qb-close">Close Library</button>' +
+'</div>';
+
+pn.querySelectorAll('[data-bk]').forEach(btn => {
+btn.onclick = () => openMathLibrary(btn.dataset.bk);
+});
+$('#qb-practice').onclick = () => openMathQuizBook(book.id);
+$('#qb-close').onclick = () => { $('#dlg').style.display = 'none'; };
+}
+
+let qbSession = null;
+
+function openMathQuizBook(preselectBook = 'all') {
+if (isInDetention()) {
+const rem = Math.ceil((S.detentionUntil - Date.now()) / 1000);
+say('🚨 You are in Detention! Wait ' + rem + 's first.', 3000);
+return;
+}
+$('#dlg').style.display = 'flex';
+const pn = $('#pn');
+const bookOpts = [
+{ id: 'all', label: '🌐 All Math Books (Mixed)' },
+...MATH_BOOKS.map(b => ({
+id: b.id,
+label: b.icon + ' ' + b.num + ': ' + b.title + (S.quizBookStats.perfectBooks.includes(b.id) ? ' (⭐ Cleared)' : '')
+}))
+];
+
+pn.innerHTML =
+'<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#fde047">📖 Random Quiz Book</div>' +
+'<h2>Configure Your Math Quiz</h2>' +
+'<div class="story">Choose a topic from the Math Library and quiz length. Includes randomized bank questions + live procedural equations!</div>' +
+'<div style="text-align:left;margin:10px 0">' +
+'<label style="font-weight:700;font-size:0.85em;color:#93c5fd">1. Select Book / Topic:</label>' +
+'<select id="qb-topic" style="width:100%;padding:9px;margin-top:4px;border-radius:8px;background:#0f172a;color:#fff;border:1px solid #38bdf8">' +
+bookOpts.map(o => '<option value="' + o.id + '"' + (o.id === preselectBook ? ' selected' : '') + '>' + o.label + '</option>').join('') +
+'</select>' +
+'</div>' +
+'<div style="text-align:left;margin:10px 0">' +
+'<label style="font-weight:700;font-size:0.85em;color:#93c5fd">2. Quiz Length:</label>' +
+'<div class="row" style="gap:8px;margin-top:4px">' +
+'<button class="opt qb-len" data-len="5" style="border-color:#fde047;background:rgba(253,224,71,0.18)">⚡ 5-Item Quick Quiz</button>' +
+'<button class="opt qb-len" data-len="8">🔥 8-Item Challenge</button>' +
+'</div>' +
+'</div>' +
+'<div class="row" style="gap:8px;margin-top:12px">' +
+'<button class="btn" id="qb-start" style="background:#16a34a">Start Quiz</button>' +
+'<button class="btn" id="qb-lib">📚 Open Library</button>' +
+'<button class="btn" id="qb-cancel">Cancel</button>' +
+'</div>';
+
+let chosenLen = 5;
+pn.querySelectorAll('.qb-len').forEach(btn => {
+btn.onclick = () => {
+chosenLen = Number(btn.dataset.len);
+pn.querySelectorAll('.qb-len').forEach(b => {
+b.style.borderColor = 'rgba(255,255,255,0.18)';
+b.style.background = '';
+});
+btn.style.borderColor = '#fde047';
+btn.style.background = 'rgba(253,224,71,0.18)';
+};
+});
+
+$('#qb-lib').onclick = () => openMathLibrary($('#qb-topic').value === 'all' ? 'book1' : $('#qb-topic').value);
+$('#qb-cancel').onclick = () => { $('#dlg').style.display = 'none'; };
+$('#qb-start').onclick = () => startQuizBookRun($('#qb-topic').value, chosenLen);
+}
+
+function startQuizBookRun(bookFilter, count) {
+const staticPool = (bookFilter === 'all'
+? [...MATH_QUIZ_BANK]
+: MATH_QUIZ_BANK.filter(item => item.book === bookFilter)
+).sort(() => Math.random() - 0.5);
+
+const questions = [];
+for (let i = 0; i < count; i++) {
+if (i % 2 === 1 || staticPool.length === 0) {
+questions.push(generateDynamicMathQuestion(bookFilter));
+} else {
+questions.push(staticPool.pop());
+}
+}
+
+wrongClickTimes = [];
+qbSession = {
+bookFilter,
+questions,
+idx: 0,
+mistakes: 0,
+shownAt: Date.now(),
+shuffledOpts: null
+};
+renderQuizBookQuestion();
+}
+
+function renderQuizBookQuestion() {
+const pn = $('#pn');
+if (qbSession.idx >= qbSession.questions.length) {
+finishQuizBookRun();
+return;
+}
+const item = qbSession.questions[qbSession.idx];
+if (!qbSession.shuffledOpts) {
+qbSession.shuffledOpts = shuf(item.opts);
+}
+const progress = qbSession.questions
+.map((_, i) => '<i class="' + (i < qbSession.idx ? 'ok' : i === qbSession.idx ? 'on' : '') + '"></i>')
+.join('');
+
+pn.innerHTML =
+'<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#fde047">📖 Random Quiz Book · Item ' + (qbSession.idx + 1) + '/' + qbSession.questions.length + '</div>' +
+'<div class="steps">' + progress + '</div>' +
+'<div class="q" style="font-size:1.12em;margin:12px 0">' + esc(item.q) + '</div>' +
+qbSession.shuffledOpts.map((o, k) => '<button class="opt" data-k="' + k + '">' + esc(o.t) + '</button>').join('') +
+'<div class="fb" id="qb-fb"></div>';
+
+pn.querySelectorAll('.opt').forEach(btn => {
+btn.onclick = () => {
+const choice = qbSession.shuffledOpts[btn.dataset.k];
+if (choice.ok) {
+qbSession.idx++;
+qbSession.shuffledOpts = null;
+qbSession.shownAt = Date.now();
+renderQuizBookQuestion();
+} else {
+btn.classList.add('bad');
+qbSession.mistakes++;
+dmg();
+const nowClick = Date.now();
+wrongClickTimes.push(nowClick);
+wrongClickTimes = wrongClickTimes.filter(ts => nowClick - ts <= 4500);
+const ultraFast = (nowClick - qbSession.shownAt) < 900 && qbSession.mistakes >= 2;
+if (wrongClickTimes.length >= 3 || ultraFast) {
+qbSession = null;
+triggerDetention('rapid');
+return;
+}
+$('#qb-fb').textContent = '⚠️ Hint: ' + item.tip + ' (' + wrongClickTimes.length + '/3 rapid strikes)';
+}
+};
+});
+}
+
+function finishQuizBookRun() {
+const pn = $('#pn');
+const total = qbSession.questions.length;
+const correct = Math.max(0, total - qbSession.mistakes);
+const isPerfect = qbSession.mistakes === 0;
+const key = qbSession.bookFilter;
+const now = Date.now();
+const lastAt = S.quizBookStats.lastXpAt[key] || 0;
+const onCooldown = (now - lastAt) < 90000;
+
+S.quizBookStats.attempts = (S.quizBookStats.attempts || 0) + 1;
+
+let earnedXp = 0;
+if (!onCooldown) {
+earnedXp = correct * 15 + (isPerfect ? 40 : 0);
+S.quizBookStats.lastXpAt[key] = now;
+S.xp += earnedXp;
+}
+
+let starAwarded = false;
+if (isPerfect && key !== 'all' && !S.quizBookStats.perfectBooks.includes(key)) {
+S.quizBookStats.perfectBooks.push(key);
+S.bonusStars = (S.bonusStars || 0) + 1;
+starAwarded = true;
+}
+
+S.hp = 100;
+save();
+hud();
+pushState(true);
+
+if (starAwarded) {
+const bkObj = MATH_BOOKS.find(b => b.id === key);
+sendChat('📖⭐ Earned +1 Bonus Star for a PERFECT score on ' + (bkObj ? bkObj.title : key) + '!', true);
+}
+
+pn.innerHTML =
+'<h2>' + (isPerfect ? '🏆 Perfect Quiz Score!' : '📖 Quiz Book Complete!') + '</h2>' +
+'<p>Accuracy: <b>' + correct + '/' + total + '</b> · Mistakes: <b>' + qbSession.mistakes + '</b></p>' +
+'<p>Reward: <b>+' + earnedXp + ' XP</b>' +
+(starAwarded ? ' + <b style="color:#fde047">+1 ⭐ Bonus Star!</b>' : '') +
+(onCooldown ? ' <small style="color:#a5b4fc">(90s XP cooldown active on this topic)</small>' : '') +
+'</p>' +
+'<div class="row" style="gap:8px;margin-top:12px">' +
+'<button class="btn" id="qb-again" style="background:#0284c7">Play Another Quiz</button>' +
+'<button class="btn" id="qb-done">Continue Exploring</button>' +
+'</div>';
+
+$('#qb-again').onclick = () => openMathQuizBook(key);
+$('#qb-done').onclick = () => {
+$('#dlg').style.display = 'none';
+qbSession = null;
+};
+}
+
 let activePvpStations = [];
 let pvpSigns = [];
 let droneRace = { active: false, ringIdx: 0, startTime: 0, rings: [] };
@@ -1483,7 +1868,7 @@ $('#i5').onclick = () => {
 infoPanel('<h2>Reset progress?</h2><p>This erases your stars, XP, and Game Room stats on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
 $('#rs').onclick = () => {
 stopPvpLoop();
-S = { name: S.name, xp: 0, stars: Array(32).fill(0), bonusStars: 0, questLastXpAt: {}, pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 }, eggStats: { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' }, spentStars: 0, starTransactions: [], activeGameSession: null, completedSessionIds: [], ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0 };
+S = { name: S.name, xp: 0, stars: Array(32).fill(0), bonusStars: 0, questLastXpAt: {}, pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 }, eggStats: { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' }, quizBookStats: { booksRead: [], perfectBooks: [], attempts: 0, lastXpAt: {} }, spentStars: 0, starTransactions: [], activeGameSession: null, completedSessionIds: [], ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0 };
 rebuildLocalAvatar();
 save();
 hud();
@@ -2505,6 +2890,14 @@ return live ? (esc(live.name) + ' (Lv.' + (live.lv || 100) + ')') : 'Grandmaster
 }
 
 function openPvpGame(gameId) {
+if (gameId === 'math_library') {
+openMathLibrary();
+return;
+}
+if (gameId === 'math_quizbook') {
+openMathQuizBook();
+return;
+}
 if (gameId === 'stealanegg') {
 openStealAnEggPaywall();
 return;
@@ -3383,6 +3776,50 @@ floaters.push({ mesh: sp, baseY: fy, spd: 0.8 + (idx % 3) * 0.3, rot: false });
 if (idx % 2 === 0) {
 cyl(0.6, 0.8, 3.2, 0x1e293b, fx, 1.6, fz);
 }
+});
+
+activePvpStations = MATH_STATIONS;
+
+// 1. 📚 MATH LIBRARY — 3D Glowing Bookshelf Pedestal at [-6, -2]
+const libPed = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 2.2, 0.5, 20), M(0x1e293b));
+libPed.position.set(-6, 0.25, -2);
+worldGroup.add(libPed);
+box(1.9, 2.5, 0.75, 0x1e3a8a, -6, 1.75, -2);
+[0x38bdf8, 0xa855f7, 0x34d399, 0xfb923c].forEach((col, bi) => {
+const rowY = bi < 2 ? 2.25 : 1.35;
+const colX = bi % 2 === 0 ? -6.38 : -5.62;
+box(0.55, 0.62, 0.82, col, colX, rowY, -2);
+});
+const libHalo = new THREE.Mesh(
+new THREE.TorusGeometry(1.45, 0.08, 8, 32),
+new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+);
+libHalo.rotation.x = Math.PI / 2;
+libHalo.position.set(-6, 3.35, -2);
+worldGroup.add(libHalo);
+floaters.push({ mesh: libHalo, baseY: 3.35, spd: 1.1, rot: true });
+
+// 2. 📖 RANDOM QUIZ BOOK — Floating Glowing Tome Pedestal at [6, -2]
+const qbPed = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 2.2, 0.5, 20), M(0x1e293b));
+qbPed.position.set(6, 0.25, -2);
+worldGroup.add(qbPed);
+const tomeGroup = new THREE.Group();
+const cover = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.22, 1.1), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
+const pages = new THREE.Mesh(new THREE.BoxGeometry(1.36, 0.26, 0.98), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+pages.position.y = 0.05;
+tomeGroup.add(cover, pages);
+tomeGroup.position.set(6, 2.3, -2);
+tomeGroup.rotation.x = 0.35;
+worldGroup.add(tomeGroup);
+floaters.push({ mesh: tomeGroup, baseY: 2.3, spd: 1.4, rot: true });
+
+MATH_STATIONS.forEach(st => {
+const s = document.createElement('div');
+s.className = 'sign portal-sign';
+s.style.borderColor = st.color;
+s.innerHTML = '<u style="background:' + st.color + '">' + st.icon + '</u>' + st.n;
+stg.appendChild(s);
+pvpSigns.push(s);
 });
 } else if (dim === 'science') {
 sc.background = new THREE.Color(0x0b0f29);
