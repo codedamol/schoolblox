@@ -3956,7 +3956,7 @@ function askAdminPin() {
   document.getElementById('stage').appendChild(m);
   m.addEventListener('pointerdown', e => e.stopPropagation());
   const inp = m.querySelector('#adm-pi'); setTimeout(() => inp.focus(), 50);
-  const go = () => { if (inp.value === ADMIN_PIN) { m.remove(); unlockAdmin(); } else { m.querySelector('#adm-er').textContent = 'Wrong PIN'; inp.value = ''; } };
+  const go = () => { if (inp.value === ADMIN_PIN) { m.remove(); if (!S.name || S.name.trim().toLowerCase() !== ADMIN_NAME) { S.name = 'Rampage'; save(); hud(); pushState(true); } unlockAdmin(); } else { m.querySelector('#adm-er').textContent = 'Wrong PIN'; inp.value = ''; } };
   m.querySelector('#adm-ok').onclick = go;
   inp.onkeydown = e => { if (e.key === 'Enter') go(); };
   m.querySelector('#adm-no').onclick = () => m.remove();
@@ -3969,7 +3969,7 @@ setInterval(() => {
 let admTaps = 0, admTapT = 0;
 document.getElementById('me').addEventListener('click', () => {
   const n = Date.now(); admTaps = n - admTapT < 1500 ? admTaps + 1 : 1; admTapT = n;
-  if (admTaps >= 5 && S.name && S.name.trim().toLowerCase() === ADMIN_NAME) { admTaps = 0; askAdminPin(); }
+  if (admTaps >= 5) { admTaps = 0; askAdminPin(); }
 });
 </script>
 </body>
