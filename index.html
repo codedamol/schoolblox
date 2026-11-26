@@ -335,6 +335,43 @@ button:active{transform:scale(0.92);}
   opacity: 0.4;
   cursor: not-allowed;
 }
+#sx{position:absolute;inset:0;z-index:20;overflow:hidden;font-family:'Fredoka',sans-serif;touch-action:none;background:#7ec8ff}
+#sx canvas{position:absolute;inset:0;width:100%;height:100%}
+#sx button{font-family:inherit}
+.sx-t{font-weight:700;font-style:italic;color:#fff;-webkit-text-stroke:.14em #000;paint-order:stroke fill;text-shadow:0 .1em 0 #000;letter-spacing:.01em}
+#sx-top{position:absolute;left:.8em;top:.7em;display:flex;gap:.3em;background:rgba(20,20,24,.8);border-radius:2em;padding:.25em .35em}
+#sx-top button{width:2.1em;height:2.1em;border-radius:50%;border:0;background:transparent;color:#fff;font-size:1em;font-weight:900}
+.sx-b{position:absolute;left:.9em;width:8.6em;padding:.38em .5em;border:.2em solid #000;border-radius:.3em;color:#fff;font-size:1.5em;font-weight:700;text-shadow:0 .08em 0 #000,0 0 .15em #000;text-align:left;box-shadow:inset 0 -.28em 0 rgba(0,0,0,.22),inset 0 .12em 0 rgba(255,255,255,.35)}
+.sx-b.shop{top:41%;background:#3ed42b}.sx-b.idx{top:calc(41% + 3.3em);background:#2cb5f5}
+.sx-b i{position:absolute;right:-.5em;top:-.6em;width:1.2em;height:1.2em;border-radius:50%;background:#ef2f2f;border:.1em solid #fff;font-size:.65em;font-style:normal;display:flex;align-items:center;justify-content:center}
+#sx-slow{position:absolute;left:.9em;top:calc(41% + 6.6em);display:flex;align-items:center;gap:.5em;color:#fff;font-weight:700;font-size:1.1em;text-shadow:0 .08em 0 #000,0 0 .2em #000;cursor:pointer}
+#sx-slow b{width:3.4em;height:1.9em;border-radius:.35em;border:.15em solid #000;background:#2f3a2f;position:relative}
+#sx-slow b::after{content:'';position:absolute;left:.15em;top:.15em;width:1.2em;height:1.2em;background:#3ed42b;border-radius:.2em;transition:left .15s}
+#sx-slow.on b::after{left:1.75em}
+#sx-side{position:absolute;right:.5em;top:34%;display:flex;flex-direction:column;gap:.5em}
+#sx-side button{position:relative;width:3.6em;height:3.6em;border:.2em solid #000;border-radius:.3em;font-size:1.4em;box-shadow:inset 0 -.2em 0 rgba(0,0,0,.25),inset 0 .1em 0 rgba(255,255,255,.35)}
+#sx-side .e{background:#e53935}#sx-side .p{background:#f98a1a}#sx-side .z{background:#7e3ff2}
+#sx-side i{position:absolute;left:-.55em;bottom:-.4em;width:1.25em;height:1.25em;border-radius:50%;background:#e53935;border:.1em solid #fff;color:#fff;font-size:.6em;font-style:normal;font-weight:900;display:flex;align-items:center;justify-content:center}
+#sx-stats{position:absolute;left:.7em;bottom:.7em;display:flex;flex-direction:column;gap:.1em}
+#sx-stats div{display:flex;align-items:center;gap:.25em;font-size:2.1em;line-height:1.05}
+#sx-stats span{font-size:.9em;-webkit-text-stroke:0}
+#sx-sp{color:#c455ff}#sx-cash{color:#3ee63e}
+#sx-hot{position:absolute;left:50%;bottom:.5em;transform:translateX(-50%);display:flex;gap:.3em}
+#sx-hot button{position:relative;width:3.5em;height:3.5em;background:rgba(25,25,30,.72);border:.15em solid rgba(255,255,255,.35);border-radius:.3em;color:#fff;font-size:1.1em}
+#sx-hot button.sel{border-color:#fff}
+#sx-hot u{position:absolute;left:.25em;top:.1em;font-size:.55em;text-decoration:none}
+#sx-hot small{position:absolute;right:.25em;bottom:.1em;font-size:.6em;font-weight:700}
+#sx-night{position:absolute;right:.9em;bottom:.6em;font-size:2em;display:flex;align-items:center;gap:.25em}
+#sx-ev{position:absolute;left:50%;top:.8em;transform:translateX(-50%);font-size:1.5em;text-align:center;max-width:70%}
+#sx-ev.bad{color:#ff5252}
+#sx-lb{position:absolute;right:.6em;top:.6em;min-width:16em;background:rgba(20,22,30,.82);border-radius:.4em;padding:.4em .6em;font-size:.8em;color:#fff}
+#sx-lb div{display:grid;grid-template-columns:1fr 5em 5em;gap:.4em;padding:.15em 0}
+#sx-lb div:first-child{color:#9aa}
+#sx-pn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(34em,92%);max-height:80%;overflow:auto;display:none;background:#1f2b45;border:.2em solid #fff;border-radius:.6em;padding:.7em;color:#fff;box-shadow:0 0 0 .2em #000,0 1em 3em rgba(0,0,0,.6)}
+#sx-pn h3{margin:0 0 .5em;display:flex;justify-content:space-between;font-size:1.3em}
+#sx-pn h3 button{background:#e53935;border:.12em solid #000;color:#fff;border-radius:.3em;width:1.8em;font-weight:900}
+.sx-r{width:100%;display:flex;justify-content:space-between;gap:.5em;margin:.25em 0;padding:.5em .7em;border-radius:.4em;border:.12em solid #000;background:#2c4a7a;color:#fff;font-weight:700;font-size:.95em;text-align:left}
+.sx-r:disabled{opacity:.45}.sx-r.g{background:#2f9e2f}.sx-r.r{background:#c62f2f}.sx-r.o{background:#d97a12}
 </style>
 </head>
 <body>
@@ -1534,6 +1571,8 @@ if (activeSaeInterval) {
 clearInterval(activeSaeInterval);
 activeSaeInterval = null;
 }
+const sxEl = document.getElementById('sx');
+if (sxEl) sxEl.remove();
 }
 
 // =========================================================================
@@ -1713,285 +1752,120 @@ function finalizeExpiredOrCompletedSession(sessionObj, isCompleted, redirectHub 
   }
 }
 
-function launchStealAnEggGame(sessionObj) {
+function launchStealAnEggGame(sessionObj){
 stopPvpLoop();
-if (!sessionObj || sessionObj.expiresAt <= Date.now()) {
-  finalizeExpiredOrCompletedSession(sessionObj, true, true);
-  return;
+if(!sessionObj||sessionObj.expiresAt<=Date.now()){finalizeExpiredOrCompletedSession(sessionObj,true,true);return;}
+cs='pvp';$('#dlg').style.display='none';
+const es=S.eggStats||{cash:100,rebirths:0,steals:0,bestEgg:'None'};
+let cash=Math.max(50,Math.floor(es.cash||100)),rebirths=es.rebirths||0,steals=es.steals||0;
+let baseEggs=[{...EGG_CATALOG[0],hatched:false,hatchProg:0}];
+let lockRemaining=25+rebirths*10,trapsCount=1,thiefAlert=null,banner='Buy eggs in the Shop or raid rival bases!',tab=null,slow=false,sel=1;
+const n0=Date.now();
+const live=Object.values(remotePlayers).filter(rp=>rp&&n0-(rp.ts||0)<25000&&rp.name).map(rp=>rp.name);
+const rivalNames=[live[0]||'ShadowThief99',live[1]||'EggTycoon_TH',live[2]||'DragonHunter'];
+let rivals=[{name:rivalNames[0],locked:false,lockTimer:0,egg:EGG_CATALOG[1]},{name:rivalNames[1],locked:true,lockTimer:12,egg:EGG_CATALOG[2]},{name:rivalNames[2],locked:true,lockTimer:22,egg:EGG_CATALOG[3]}];
+let belt=[EGG_CATALOG[0],EGG_CATALOG[1],EGG_CATALOG[Math.min(3,1+Math.floor(rebirths/2))]];
+const getMult=()=>1+rebirths*0.75;
+const income=()=>Math.round(baseEggs.reduce((s,e)=>s+e.rate*(e.hatched?e.mult:1),0)*getMult());
+const rebCost=()=>1500*Math.pow(2,rebirths);
+const RAR={common:'Common',rare:'Rare',epic:'Epic',mythic:'Mythic'},PET={common:'Chicken',rare:'Raptor',epic:'Phoenix',mythic:'Dragon'};
+const COL={common:'#ffffff',rare:'#4fc3ff',epic:'#ff9a3c',mythic:'#e46bff'};
+const fmt=n=>n>=1e9?(n/1e9).toFixed(1)+'B':n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e4?Math.floor(n/1e3)+'K':n>=1e3?(n/1e3).toFixed(1)+'K':String(Math.floor(n));
+const sync=()=>{S.eggStats={cash:Math.floor(cash),rebirths,steals,bestEgg:baseEggs.length?baseEggs[baseEggs.length-1].name:'None'};save();};
+const sx=document.createElement('div');sx.id='sx';
+sx.innerHTML='<canvas></canvas><div id="sx-top"><button id="sx-menu">≡</button><button id="sx-exit" title="End session">✕</button></div><div id="sx-ev" class="sx-t"></div><div id="sx-lb"></div>'+
+'<button class="sx-b shop" id="sx-shop">🛒 Shop<i>!</i></button><button class="sx-b idx" id="sx-idx">📖 Index</button><div id="sx-slow"><b></b><span>Slow Mode</span></div>'+
+'<div id="sx-side"><button class="e" data-t="e">🥚<i id="sx-ec"></i></button><button class="p" data-t="p">🐾</button><button class="z" data-t="z">🧪</button></div>'+
+'<div id="sx-stats"><div class="sx-t"><span>👟</span><b id="sx-sp"></b></div><div class="sx-t"><span>💵</span><b id="sx-cash"></b></div></div>'+
+'<div id="sx-hot"><button id="sx-h1" class="sel"><u>1</u>🏏</button><button id="sx-h2"><u>2</u>🪤<small id="sx-tr"></small></button></div>'+
+'<div id="sx-night" class="sx-t">🌙 in <span id="sx-tm"></span></div><div id="sx-pn"></div>';
+$('#stage').appendChild(sx);
+const q=s=>sx.querySelector(s),cv=q('canvas'),ctx=cv.getContext('2d'),pn=q('#sx-pn');
+const rem=()=>Math.max(0,Math.ceil((sessionObj.expiresAt-Date.now())/1000));
+function hudSx(){
+q('#sx-sp').textContent=fmt(income())+'/s';q('#sx-cash').textContent='$'+fmt(cash);q('#sx-ec').textContent=baseEggs.length;q('#sx-tr').textContent='x'+trapsCount;
+const r=rem();q('#sx-tm').textContent=Math.floor(r/60)+'m '+(r%60)+'s';
+const ev=q('#sx-ev');ev.className='sx-t'+(thiefAlert?' bad':'');
+ev.textContent=thiefAlert?'🚨 '+thiefAlert.name+' is stealing your egg ('+thiefAlert.progress+'%)! Press 1 to slap!':banner;
+q('#sx-lb').innerHTML='<div><span>People</span><span>Money/s</span><span>Speed</span></div><div><span>'+esc(S.name||'You')+'</span><span>'+fmt(income())+'</span><span>'+getMult().toFixed(2)+'x</span></div>'+
+rivals.map(r=>'<div><span>'+esc(r.name)+'</span><span>'+fmt(r.egg.rate)+'</span><span>'+(r.locked?'🔒':'⚡')+'</span></div>').join('');
 }
-
-cs = 'pvp';
-$('#dlg').style.display = 'flex';
-
-const es = S.eggStats || { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' };
-let cash = Math.max(50, Math.floor(es.cash || 100));
-let rebirths = es.rebirths || 0;
-let steals = es.steals || 0;
-
-let baseEggs = [
-{ ...EGG_CATALOG[0], hatched: false, hatchProg: 0 }
-];
-let lockRemaining = 25 + rebirths * 10;
-let trapsCount = 1;
-let thiefAlert = null;
-let statusBanner = 'Buy conveyor eggs or raid rival bases!';
-
-const now = Date.now();
-const liveNames = Object.values(remotePlayers)
-.filter(rp => rp && now - (rp.ts || 0) < 25000 && rp.name)
-.map(rp => rp.name);
-const rivalNames = [
-liveNames[0] || 'ShadowThief99',
-liveNames[1] || 'EggTycoon_TH',
-liveNames[2] || 'DragonHunter'
-];
-
-let rivals = [
-{ name: rivalNames[0], locked: false, lockTimer: 0, egg: EGG_CATALOG[1] },
-{ name: rivalNames[1], locked: true, lockTimer: 12, egg: EGG_CATALOG[2] },
-{ name: rivalNames[2], locked: true, lockTimer: 22, egg: EGG_CATALOG[3] }
-];
-
-let belt = [
-EGG_CATALOG[0],
-EGG_CATALOG[1],
-EGG_CATALOG[Math.min(3, 1 + Math.floor(rebirths / 2))]
-];
-
-const getMult = () => 1 + rebirths * 0.75;
-const getIncomePerSec = () => {
-let sum = 0;
-baseEggs.forEach(e => {
-sum += e.rate * (e.hatched ? e.mult : 1);
-});
-return Math.round(sum * getMult());
-};
-const getRebirthCost = () => 1500 * Math.pow(2, rebirths);
-
-function syncEggProgress() {
-  S.eggStats = {
-    cash: Math.floor(cash),
-    rebirths,
-    steals,
-    bestEgg: baseEggs.length ? baseEggs[baseEggs.length - 1].name : 'None'
-  };
-  save();
+function pnx(){
+if(!tab){pn.style.display='none';return;}
+pn.style.display='block';let h='',T={shop:'🛒 Shop',idx:'📖 Index',e:'🥚 My Eggs ('+baseEggs.length+'/8)',p:'🐾 Raid Rival Bases',z:'🧪 Boosts & Rebirth'}[tab];
+if(tab==='shop'){h=belt.map((e,i)=>'<button class="sx-r" data-b="'+i+'" '+(cash<e.cost?'disabled':'')+'><span>'+e.icon+' '+e.name+' (+$'+e.rate+'/s)</span><b>$'+e.cost+'</b></button>').join('')+
+'<button class="sx-r g" data-a="lock"><span>🔒 Lock Base ('+(lockRemaining>0?lockRemaining+'s left':'open')+')</span><b>$80</b></button><button class="sx-r g" data-a="trap"><span>🪤 Shock Trap (x'+trapsCount+')</span><b>$150</b></button>';}
+if(tab==='idx')h=EGG_CATALOG.map(e=>'<div class="sx-r" style="border-color:'+e.color+'"><span>'+e.icon+' '+RAR[e.id]+' '+PET[e.id]+'</span><b>$'+e.rate+'/s · x'+e.mult+' · '+e.hatchSec+'s</b></div>').join('');
+if(tab==='e')h=baseEggs.map(e=>'<div class="sx-r"><span>'+(e.hatched?'🐣':e.icon)+' '+RAR[e.id]+' '+PET[e.id]+'</span><b>'+(e.hatched?'$'+Math.round(e.rate*e.mult*getMult())+'/s':Math.min(100,Math.round(e.hatchProg/e.hatchSec*100))+'%')+'</b></div>').join('')||'<small>No eggs yet</small>';
+if(tab==='p')h=rivals.map((r,i)=>'<button class="sx-r r" data-s="'+i+'" '+(r.locked?'disabled':'')+'><span>🥷 '+esc(r.name)+' · '+r.egg.icon+' '+RAR[r.egg.id]+'</span><b>'+(r.locked?'🔒 '+r.lockTimer+'s':'⚡ STEAL!')+'</b></button>').join('');
+if(tab==='z')h='<div class="sx-r"><span>Rebirths: '+rebirths+'</span><b>'+getMult().toFixed(2)+'x cash</b></div><button class="sx-r o" data-a="reb" '+(cash<rebCost()?'disabled':'')+'><span>🔄 Rebirth</span><b>$'+fmt(rebCost())+'</b></button><button class="sx-r r" data-a="slap"><span>🏏 Slap Thief</span><b>'+(thiefAlert?'🚨 HIT!':'Ready')+'</b></button><div class="sx-r"><span>🥷 Eggs stolen</span><b>'+steals+'</b></div>';
+pn.innerHTML='<h3><span>'+T+'</span><button data-a="x">✕</button></h3>'+h;
+pn.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>buy(+b.dataset.b));
+pn.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>steal(+b.dataset.s));
+pn.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>act(b.dataset.a));
 }
-
-function renderSaeUI() {
-// Always compute remaining time from persistent expiresAt timestamp (Priority 3)
-const maxValidExpire = sessionObj.startAt + sessionObj.durationSec * 1000;
-if (sessionObj.expiresAt > maxValidExpire) {
-  sessionObj.expiresAt = maxValidExpire;
-  save();
-}
-const remSec = Math.max(0, Math.ceil((sessionObj.expiresAt - Date.now()) / 1000));
-const mm = String(Math.floor(remSec / 60)).padStart(2, '0');
-const ss = String(remSec % 60).padStart(2, '0');
-const income = getIncomePerSec();
-const rebCost = getRebirthCost();
-
-const beltHtml = belt.map((eg, idx) =>
-'<button class="sae-btn" data-buy-egg="' + idx + '" ' + (cash < eg.cost ? 'disabled' : '') + '>' +
-'<span>' + eg.icon + ' ' + eg.name + ' <small style="color:#34d399">(+$' + eg.rate + '/s)</small></span>' +
-'<span style="color:#fde047">$' + eg.cost + '</span></button>'
-).join('');
-
-const rivalsHtml = rivals.map((rv, idx) =>
-'<button class="sae-btn steal" data-steal="' + idx + '" ' + (rv.locked ? 'disabled' : '') + '>' +
-'<span>🥷 ' + esc(rv.name) + ' · ' + rv.egg.icon + ' ' + rv.egg.name.split(' ')[0] + '</span>' +
-'<span>' + (rv.locked ? '🔒 ' + rv.lockTimer + 's' : '⚡ STEAL!') + '</span></button>'
-).join('');
-
-const myEggsHtml = baseEggs.slice(-5).map(e =>
-'<span style="display:inline-flex;align-items:center;gap:0.25em;background:rgba(255,255,255,0.08);border:1px solid ' + e.color + ';padding:0.2em 0.5em;border-radius:99px;font-size:0.78em">' +
-(e.hatched ? '🐣' : e.icon) + ' ' + e.name.split(' ')[0] + (e.hatched ? ' (2x!)' : ' (' + Math.min(100, Math.round((e.hatchProg / e.hatchSec) * 100)) + '%)') +
-'</span>'
-).join(' ');
-
-$('#pn').innerHTML =
-'<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5em;flex-wrap:wrap">' +
-'<h2 style="margin:0">🥚 Steal an Egg · Live Arena</h2>' +
-'<span class="sae-timer-pill ' + (remSec <= 15 ? 'low' : '') + '">⏳ ' + mm + ':' + ss + ' left</span>' +
-'</div>' +
-'<div class="pvp-scorebar">' +
-'<span>💰 Cash: <b style="color:#34d399">$' + cash.toLocaleString() + '</b> (+$' + income + '/s)</span>' +
-'<span>🔄 Rebirths: <b style="color:#fde047">' + rebirths + '</b> (' + getMult().toFixed(2) + 'x)</span>' +
-'<span>🥷 Stolen: <b>' + steals + '</b></span>' +
-'</div>' +
-'<div style="background:rgba(56,189,248,0.14);border:1px solid rgba(56,189,248,0.4);border-radius:0.65em;padding:0.4em 0.7em;font-size:0.84em;font-weight:700;color:#e0f2fe;margin-bottom:0.45em">' +
-(thiefAlert
-? '🚨 ALERT! <b>' + esc(thiefAlert.name) + '</b> is stealing your egg (' + thiefAlert.progress + '%)! Hit SLAP THIEF!'
-: '📢 ' + statusBanner) +
-'</div>' +
-'<div class="sae-grid">' +
-'<div class="sae-box"><h4><span>🏭 Conveyor Belt</span><span>Eggs: ' + baseEggs.length + '/8</span></h4>' + beltHtml + '</div>' +
-'<div class="sae-box"><h4><span>🥷 Rival Bases (Raid!)</span><span>Live/AI</span></h4>' + rivalsHtml + '</div>' +
-'</div>' +
-'<div class="sae-box" style="margin-top:0.5em">' +
-'<h4><span>🛡️ Your Base Defense & Hatchery</span><span>' + (lockRemaining > 0 ? '🔒 Locked (' + lockRemaining + 's)' : '🔓 UNLOCKED!') + ' · Traps: ' + trapsCount + '</span></h4>' +
-'<div style="display:flex;flex-wrap:wrap;gap:0.35em;margin-bottom:0.45em">' + (myEggsHtml || '<small>No eggs yet</small>') + '</div>' +
-'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:0.4em">' +
-'<button class="sae-btn def" id="sae-lock"><span>🔒 Lock Base</span><span>$80</span></button>' +
-'<button class="sae-btn def" id="sae-trap"><span>🪤 Buy Trap</span><span>$150</span></button>' +
-'<button class="sae-btn steal" id="sae-slap"><span>👋 Slap Thief!</span><span>' + (thiefAlert ? '🚨 HIT!' : 'Ready') + '</span></button>' +
-'<button class="sae-btn rebirth" id="sae-rebirth" ' + (cash < rebCost ? 'disabled' : '') + '><span>🔄 Rebirth</span><span>$' + rebCost + '</span></button>' +
-'</div>' +
-'</div>' +
-'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.55em">' +
-'<small style="color:#94a3b8">Timer persists across refresh · Early exit forfeits completion XP</small>' +
-'<button class="btn" id="sae-leave-early" style="margin:0;padding:0.4em 1em;background:#475569;font-size:0.82em">End Session Early</button>' +
-'</div>';
-
-$('#pn').querySelectorAll('[data-buy-egg]').forEach(btn => {
-btn.onclick = () => {
-const idx = Number(btn.dataset.buyEgg);
-const eg = belt[idx];
-if (!eg || cash < eg.cost) return;
-if (baseEggs.length >= 8) baseEggs.shift();
-cash -= eg.cost;
-baseEggs.push({ ...eg, hatched: false, hatchProg: 0 });
-const roll = Math.random();
-const nextEgg = roll < 0.45 ? EGG_CATALOG[0] : roll < 0.78 ? EGG_CATALOG[1] : roll < 0.94 ? EGG_CATALOG[2] : EGG_CATALOG[3];
-belt[idx] = nextEgg;
-statusBanner = 'Bought ' + eg.icon + ' ' + eg.name + '! Hatching in your base...';
-syncEggProgress();
-renderSaeUI();
-};
-});
-
-$('#pn').querySelectorAll('[data-steal]').forEach(btn => {
-btn.onclick = () => {
-const idx = Number(btn.dataset.steal);
-const rv = rivals[idx];
-if (!rv || rv.locked) return;
-const chance = Math.min(0.92, 0.62 + rebirths * 0.06);
-if (Math.random() < chance) {
-if (baseEggs.length >= 8) baseEggs.shift();
-baseEggs.push({ ...rv.egg, hatched: false, hatchProg: 0 });
-steals++;
-statusBanner = '🎉 STOLE ' + rv.egg.icon + ' ' + rv.egg.name + ' from ' + rv.name + '!';
-rv.locked = true;
-rv.lockTimer = 18;
-rv.egg = EGG_CATALOG[Math.min(3, Math.floor(Math.random() * 4))];
-} else {
-statusBanner = '👋 Slapped by ' + rv.name + '! Wait for another opening!';
-rv.locked = true;
-rv.lockTimer = 10;
-}
-syncEggProgress();
-renderSaeUI();
-};
-});
-
-$('#sae-lock').onclick = () => {
-if (cash < 80) { statusBanner = 'Need $80 to lock base!'; renderSaeUI(); return; }
-cash -= 80;
-lockRemaining = 45 + rebirths * 12;
-thiefAlert = null;
-statusBanner = '🔒 Base Laser Door Locked for ' + lockRemaining + 's!';
-syncEggProgress();
-renderSaeUI();
-};
-
-$('#sae-trap').onclick = () => {
-if (cash < 150) { statusBanner = 'Need $150 for a Shock Trap!'; renderSaeUI(); return; }
-cash -= 150;
-trapsCount++;
-statusBanner = '🪤 Installed Shock Trap #' + trapsCount + ' at your base entrance!';
-syncEggProgress();
-renderSaeUI();
-};
-
-$('#sae-slap').onclick = () => {
-if (thiefAlert) {
-cash += 65;
-statusBanner = '👋 MEGA SLAP! Knocked out ' + thiefAlert.name + ' and took +$65 bounty!';
-thiefAlert = null;
-} else {
-statusBanner = '👋 Swung Slap Glove! Keep watch for thieves when your lock expires.';
-}
-syncEggProgress();
-renderSaeUI();
-};
-
-$('#sae-rebirth').onclick = () => {
-const cost = getRebirthCost();
-if (cash < cost) return;
-rebirths++;
-cash = 150 * rebirths;
-trapsCount = 1 + rebirths;
-lockRemaining = 45 + rebirths * 12;
-baseEggs = [{ ...EGG_CATALOG[Math.min(3, rebirths)], hatched: false, hatchProg: 0 }];
-statusBanner = '🔄 REBIRTH #' + rebirths + '! Permanent ' + getMult().toFixed(2) + 'x Cash Multiplier unlocked!';
-syncEggProgress();
-renderSaeUI();
-};
-
-$('#sae-leave-early').onclick = () => {
-syncEggProgress();
-finalizeExpiredOrCompletedSession(sessionObj, false, true);
-};
-}
-
-renderSaeUI();
-
-activeSaeInterval = setInterval(() => {
-const remMs = sessionObj.expiresAt - Date.now();
-if (remMs <= 0) {
-syncEggProgress();
-finalizeExpiredOrCompletedSession(sessionObj, true, true);
-return;
-}
-
-cash += getIncomePerSec();
-
-baseEggs.forEach(e => {
-if (!e.hatched) {
-e.hatchProg += 1;
-if (e.hatchProg >= e.hatchSec) {
-e.hatched = true;
-statusBanner = '🐣 ' + e.name + ' HATCHED! Now generating ' + e.mult + 'x cash!';
-}
-}
-});
-
-rivals.forEach(rv => {
-if (rv.locked) {
-rv.lockTimer--;
-if (rv.lockTimer <= 0) {
-rv.locked = false;
-}
-} else if (Math.random() < 0.08) {
-rv.locked = true;
-rv.lockTimer = 14;
-}
-});
-
-if (lockRemaining > 0) {
-lockRemaining--;
-} else {
-if (!thiefAlert && baseEggs.length > 0 && Math.random() < 0.25) {
-const thiefName = rivalNames[Math.floor(Math.random() * rivalNames.length)];
-if (trapsCount > 0) {
-trapsCount--;
-statusBanner = '⚡ Shock Trap zapped ' + thiefName + ' at your door! (' + trapsCount + ' traps left)';
-} else {
-thiefAlert = { name: thiefName, progress: 25 };
-}
-} else if (thiefAlert) {
-thiefAlert.progress += 25;
-if (thiefAlert.progress >= 100) {
-const stolen = baseEggs.pop();
-statusBanner = '😱 ' + thiefAlert.name + ' stole your ' + (stolen ? stolen.name : 'egg') + '! Lock your base!';
-thiefAlert = null;
-}
-}
-}
-
-syncEggProgress();
-renderSaeUI();
-}, 1000);
+function refresh(){sync();hudSx();pnx();}
+function buy(i){const e=belt[i];if(!e||cash<e.cost)return;if(baseEggs.length>=8)baseEggs.shift();cash-=e.cost;baseEggs.push({...e,hatched:false,hatchProg:0});
+const r=Math.random();belt[i]=r<.45?EGG_CATALOG[0]:r<.78?EGG_CATALOG[1]:r<.94?EGG_CATALOG[2]:EGG_CATALOG[3];banner='Bought '+e.icon+' '+e.name+'! Hatching...';refresh();}
+function steal(i){const v=rivals[i];if(!v||v.locked)return;
+if(Math.random()<Math.min(.92,.62+rebirths*.06)){if(baseEggs.length>=8)baseEggs.shift();baseEggs.push({...v.egg,hatched:false,hatchProg:0});steals++;banner='🎉 STOLE '+v.egg.icon+' '+v.egg.name+' from '+v.name+'!';v.locked=true;v.lockTimer=18;v.egg=EGG_CATALOG[Math.floor(Math.random()*4)];}
+else{banner='👋 Slapped by '+v.name+'! Wait for another opening!';v.locked=true;v.lockTimer=10;}refresh();}
+function act(a){
+if(a==='x'){tab=null;return pnx();}
+if(a==='lock'){if(cash<80){banner='Need $80 to lock base!';}else{cash-=80;lockRemaining=45+rebirths*12;thiefAlert=null;banner='🔒 Base locked for '+lockRemaining+'s!';}}
+if(a==='trap'){if(cash<150){banner='Need $150 for a Shock Trap!';}else{cash-=150;trapsCount++;banner='🪤 Shock Trap #'+trapsCount+' installed!';}}
+if(a==='slap'){if(thiefAlert){cash+=65;banner='👋 MEGA SLAP! Knocked out '+thiefAlert.name+' (+$65)!';thiefAlert=null;}else banner='👋 Swung the bat! Watch for thieves when your lock expires.';}
+if(a==='reb'){const c=rebCost();if(cash<c)return;rebirths++;cash=150*rebirths;trapsCount=1+rebirths;lockRemaining=45+rebirths*12;baseEggs=[{...EGG_CATALOG[Math.min(3,rebirths)],hatched:false,hatchProg:0}];banner='🔄 REBIRTH #'+rebirths+'! '+getMult().toFixed(2)+'x cash!';}
+refresh();}
+q('#sx-shop').onclick=()=>{tab=tab==='shop'?null:'shop';pnx();};
+q('#sx-idx').onclick=()=>{tab=tab==='idx'?null:'idx';pnx();};
+sx.querySelectorAll('#sx-side button').forEach(b=>b.onclick=()=>{tab=tab===b.dataset.t?null:b.dataset.t;pnx();});
+q('#sx-slow').onclick=e=>{slow=!slow;e.currentTarget.classList.toggle('on',slow);};
+q('#sx-h1').onclick=()=>{sel=1;q('#sx-h1').classList.add('sel');q('#sx-h2').classList.remove('sel');act('slap');};
+q('#sx-h2').onclick=()=>{sel=2;q('#sx-h2').classList.add('sel');q('#sx-h1').classList.remove('sel');act('trap');};
+q('#sx-exit').onclick=q('#sx-menu').onclick=()=>{sync();finalizeExpiredOrCompletedSession(sessionObj,false,true);};
+let px=.5,py=.82,tx=.5,ty=.82,floats=[];
+cv.onpointerdown=e=>{const r=cv.getBoundingClientRect();tx=(e.clientX-r.left)/r.width;ty=Math.min(.95,Math.max(.5,(e.clientY-r.top)/r.height));};
+function draw(ts){
+const dpr=Math.min(2,window.devicePixelRatio||1),W=cv.clientWidth,H=cv.clientHeight;
+if(cv.width!==Math.round(W*dpr)){cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);}
+ctx.setTransform(dpr,0,0,dpr,0,0);const t=ts/1000*(slow?.4:1),hz=H*.36,vx=W*.55;
+const g=ctx.createLinearGradient(0,0,0,hz);g.addColorStop(0,'#5fb8ff');g.addColorStop(1,'#cfeaff');ctx.fillStyle=g;ctx.fillRect(0,0,W,hz+2);
+ctx.fillStyle='rgba(255,255,255,.9)';[[.45,.1,.07],[.7,.06,.09],[.85,.15,.06]].forEach(c=>{ctx.beginPath();ctx.ellipse(W*c[0],H*c[1],W*c[2],H*.035,0,0,7);ctx.fill();});
+ctx.fillStyle='#c97b52';ctx.beginPath();ctx.moveTo(0,H*.02);ctx.lineTo(W*.72,hz*.8);ctx.lineTo(W*.72,hz+2);ctx.lineTo(0,hz+2);ctx.fill();
+ctx.strokeStyle='#4ccc2c';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(0,H*.02);ctx.lineTo(W*.72,hz*.8);ctx.stroke();
+const N=14,C=24,Pt=(u,r)=>{const k=Math.pow(r/N,1.8);return[vx+(u-.5)*W*2.4*k,hz+(H-hz)*k];};
+for(let r=0;r<N;r++)for(let c=0;c<C;c++){const a=Pt(c/C-.2,r),b=Pt((c+1)/C-.2,r),d=Pt((c+1)/C-.2,r+1),e=Pt(c/C-.2,r+1);ctx.fillStyle=(r+c)%2?'#58d12c':'#4fc626';ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.lineTo(...d);ctx.lineTo(...e);ctx.fill();}
+const sc=y=>.25+.95*((y-hz)/(H-hz));
+[.3,.5,.72].forEach(k=>{const y=hz+(H-hz)*k,s=sc(y);ctx.strokeStyle='#d9531e';ctx.lineWidth=5*s;[0,.5].forEach(o=>{ctx.beginPath();ctx.moveTo(0,y-s*(14+o*20));ctx.lineTo(W,y-s*(14+o*20));ctx.stroke();});ctx.fillStyle='#3a3a42';for(let x=0;x<W;x+=70*s+20)ctx.fillRect(x,y-s*46,9*s,s*50);});
+const eggs=baseEggs.slice(-8),items=[];
+eggs.forEach((e,i)=>{const k=[.34,.52,.74][i%3],y=hz+(H-hz)*k,s=sc(y),u=((i*.37)%1.5)-.15+Math.sin(t*.7+i*1.7)*.07;items.push({y,s,x:W*(.15+u*.6),e,i});});
+items.push({y:H*py,s:sc(H*py),me:1});items.sort((a,b)=>a.y-b.y);
+const tag=(s,x,y,f,col)=>{ctx.font='italic 700 '+f+'px Fredoka';ctx.textAlign='center';ctx.lineWidth=f/4;ctx.strokeStyle='#000';ctx.strokeText(s,x,y);ctx.fillStyle=col;ctx.fillText(s,x,y);};
+items.forEach(o=>{const{x,y,s}=o;if(o.me){x0=px*W;ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(x0,y,22*s,7*s,0,0,7);ctx.fill();
+const bob=Math.sin(t*10)*(Math.hypot(tx-px,ty-py)>.01?3*s:0);ctx.fillStyle='#fff';ctx.fillRect(x0-14*s,y-6*s,10*s,6*s);ctx.fillRect(x0+4*s,y-6*s,10*s,6*s);
+ctx.fillStyle='#111';ctx.fillRect(x0-13*s,y-30*s,9*s,25*s);ctx.fillRect(x0+4*s,y-30*s,9*s,25*s);ctx.fillStyle='#161616';ctx.fillRect(x0-17*s,y-62*s+bob,34*s,32*s);ctx.fillStyle='#2b7bd6';ctx.fillRect(x0-6*s,y-56*s+bob,12*s,18*s);
+ctx.fillStyle='#fff';ctx.fillRect(x0-22*s,y-60*s+bob,6*s,22*s);ctx.fillRect(x0+16*s,y-60*s+bob,6*s,22*s);ctx.fillStyle='#f4d6b8';ctx.fillRect(x0-11*s,y-84*s+bob,22*s,22*s);ctx.fillStyle='#8a4b1f';ctx.fillRect(x0-12*s,y-88*s+bob,24*s,9*s);
+ctx.fillStyle='#d8531e';ctx.save();ctx.translate(x0+22*s,y-58*s+bob);ctx.rotate(-.5);ctx.fillRect(-2*s,-30*s,5*s,34*s);ctx.restore();return;}
+const e=o.e,c=COL[e.id],bounce=Math.abs(Math.sin(t*3+o.i))*5*s;
+ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(x,y,20*s,6*s,0,0,7);ctx.fill();
+if(e.hatched){ctx.fillStyle=c;ctx.fillRect(x-15*s,y-24*s-bounce,30*s,20*s);ctx.fillRect(x+8*s,y-34*s-bounce,16*s,14*s);ctx.fillStyle='#222';ctx.fillRect(x+17*s,y-30*s-bounce,3*s,3*s);ctx.fillStyle='#ffb300';ctx.fillRect(x-14*s,y-6*s,5*s,6*s);ctx.fillRect(x+4*s,y-6*s,5*s,6*s);
+tag(RAR[e.id],x,y-62*s,11*s,c);tag(PET[e.id],x,y-50*s,11*s,'#fff');tag('$'+Math.round(e.rate*e.mult*getMult())+'/s',x,y-38*s,11*s,'#3ee63e');}
+else{ctx.fillStyle=c;ctx.beginPath();ctx.ellipse(x,y-18*s,13*s,18*s,0,0,7);ctx.fill();ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.stroke();ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(x-16*s,y-44*s,32*s,5*s);ctx.fillStyle='#3ee63e';ctx.fillRect(x-16*s,y-44*s,32*s*Math.min(1,e.hatchProg/e.hatchSec),5*s);tag(RAR[e.id]+' Egg',x,y-52*s,11*s,c);}});
+tag(esc(S.name||'You'),px*W,H*py-sc(H*py)*98,13*sc(H*py),'#fff');
+floats=floats.filter(f=>ts-f.t0<1400);floats.forEach(f=>{const a=(ts-f.t0)/1400;ctx.globalAlpha=1-a;tag('+$'+f.v,f.x,f.y-a*50,16,'#3ee63e');});ctx.globalAlpha=1;
+px+=(tx-px)*.08;py+=(ty-py)*.08;activePvpLoop=requestAnimationFrame(draw);}
+let x0=0;activePvpLoop=requestAnimationFrame(draw);
+hudSx();
+const keyH=e=>{if(!document.getElementById('sx'))return document.removeEventListener('keydown',keyH);if(e.key==='1')q('#sx-h1').click();if(e.key==='2')q('#sx-h2').click();};document.addEventListener('keydown',keyH);
+activeSaeInterval=setInterval(()=>{
+if(sessionObj.expiresAt-Date.now()<=0){sync();finalizeExpiredOrCompletedSession(sessionObj,true,true);return;}
+cash+=income();
+baseEggs.forEach(e=>{if(e.hatched)floats.push({t0:performance.now(),x:cv.clientWidth*(.3+Math.random()*.4),y:cv.clientHeight*(.45+Math.random()*.2),v:Math.round(e.rate*e.mult*getMult())});else{e.hatchProg++;if(e.hatchProg>=e.hatchSec){e.hatched=true;banner='🐣 '+e.name+' HATCHED! '+e.mult+'x cash!';}}});
+rivals.forEach(r=>{if(r.locked){if(--r.lockTimer<=0)r.locked=false;}else if(Math.random()<.08){r.locked=true;r.lockTimer=14;}});
+if(lockRemaining>0)lockRemaining--;else{if(!thiefAlert&&baseEggs.length>0&&Math.random()<.25){const nm=rivalNames[Math.floor(Math.random()*3)];if(trapsCount>0){trapsCount--;banner='⚡ Shock Trap zapped '+nm+'! ('+trapsCount+' left)';}else thiefAlert={name:nm,progress:25};}
+else if(thiefAlert){thiefAlert.progress+=25;if(thiefAlert.progress>=100){const s=baseEggs.pop();banner='😱 '+thiefAlert.name+' stole your '+(s?s.name:'egg')+'! Lock your base!';thiefAlert=null;}}}
+refresh();},1000);
 }
 
 let lastPvpXpAt = 0;
