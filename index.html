@@ -472,14 +472,14 @@ button:active{transform:scale(0.92);}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // =========================================================================
-// PRIORITY 1: FIXED HTML ENTITY ESCAPING (prevents SyntaxError on single quote)
+// PRIORITY 1: COPY-PASTE SAFE HTML ESCAPING (Unicode escapes never break)
 // =========================================================================
 const HTML_ENTITIES = {
-  '&': '&',
-  '<': '<',
-  '>': '>',
-  '"': '"',
-  "'": '''
+  '&': '\u0026amp;',
+  '<': '\u0026lt;',
+  '>': '\u0026gt;',
+  '"': '\u0026quot;',
+  "'": '\u0026#39;'
 };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, m => HTML_ENTITIES[m]);
 
