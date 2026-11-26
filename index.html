@@ -1483,6 +1483,225 @@ qbSession = null;
 };
 }
 
+// ===== MAP-STYLE ADAPTIVE PRACTICE (original primary-friendly items, not official NWEA content) =====
+const MAP_NAMES = { math:['Math','🧮'], science:['Science','🔬'], english:['English','📚'], thai:['Thai','🇹🇭'], ict:['ICT & Robotics','💻'], makerspace:['Makerspace','🤖'], arts:['Arts','🎨'], design:['Digital Design','✏️'] };
+const MAP_RAW = {
+math:[
+[1,"What is 7 + 5?","12","11","13","10","7 + 3 = 10, then 2 more makes 12."],
+[1,"Which number is the greatest?","83","38","29","79","Compare the tens first: 8 tens is the most."],
+[1,"Sam has 9 apples. He eats 4. How many are left?","5","4","6","13","9 − 4 = 5."],
+[1,"What comes next? 2, 4, 6, 8, ___","10","9","12","11","The pattern adds 2 each time."],
+[2,"What is 46 + 27?","73","63","72","83","46 + 20 = 66, then + 7 = 73."],
+[2,"How many tens are in 70?","7","70","1","0","70 is 7 groups of ten."],
+[2,"A box has 5 rows of 3 stickers. How many stickers in all?","15","8","12","53","5 × 3 = 15."],
+[2,"Which shape has 4 equal sides and 4 square corners?","Square","Triangle","Circle","Pentagon","A square has 4 equal sides and 4 right angles."],
+[3,"What is 6 × 7?","42","36","48","13","6 × 7 = 42."],
+[3,"Which fraction is the same as one half?","2/4","1/4","2/3","3/4","2 out of 4 equal parts is half."],
+[3,"A rectangle is 8 cm long and 3 cm wide. What is its perimeter?","22 cm","24 cm","11 cm","16 cm","Add all sides: 8 + 3 + 8 + 3 = 22."],
+[3,"What is 504 − 238?","266","274","366","276","504 − 200 = 304, then 304 − 38 = 266."],
+[4,"What is 3/8 + 2/8?","5/8","5/16","1/8","6/8","Same bottom number: add the tops, keep the bottom."],
+[4,"Round 4,863 to the nearest hundred.","4,900","4,800","5,000","4,860","The tens digit is 6, so round the hundreds up."],
+[4,"36 marbles are shared equally among 4 friends. How many does each get?","9","8","10","32","36 ÷ 4 = 9."],
+[4,"Which is the best estimate for the length of a pencil?","18 cm","18 m","18 km","180 cm","A pencil is about as long as your hand: 18 cm."],
+[5,"What is 2.5 + 3.75?","6.25","5.80","6.30","5.25","Line up the decimal points: 2.50 + 3.75 = 6.25."],
+[5,"What is 3/4 of 24?","18","6","12","21","24 ÷ 4 = 6, then 6 × 3 = 18."],
+[5,"Which is equal to 4 × (5 + 3)?","32","23","12","35","Brackets first: 5 + 3 = 8, then 4 × 8 = 32."],
+[5,"A triangle has angles of 50° and 60°. What is the third angle?","70°","80°","110°","130°","Angles in a triangle add up to 180°: 180 − 110 = 70."],
+[6,"What is 25% of 180?","45","25","90","72","25% is one quarter: 180 ÷ 4 = 45."],
+[6,"Solve: 3x + 4 = 19. What is x?","5","7","6","15","Subtract 4 to get 3x = 15, then divide by 3."],
+[6,"A car travels 60 km each hour. How far does it go in 2.5 hours?","150 km","120 km","62.5 km","180 km","60 × 2.5 = 150."],
+[6,"What is the area of a triangle with base 10 cm and height 6 cm?","30 cm²","60 cm²","16 cm²","15 cm²","Area = ½ × base × height = ½ × 10 × 6 = 30."]],
+english:[
+[1,"Which word rhymes with 'cat'?","hat","dog","cup","pen","Rhyming words have the same ending sound: cat, hat."],
+[1,"Which sentence is correct?","The dog runs fast.","the dog runs fast","The dog run fast.","Fast runs dog the.","A sentence starts with a capital letter and the verb matches the subject."],
+[1,"Which word names an animal?","rabbit","jump","green","under","A rabbit is an animal."],
+[1,"Mia has a red ball. She kicks it. What does Mia kick?","a red ball","a blue car","a cat","a hat","The story says Mia has a red ball and kicks it."],
+[2,"Choose the opposite of 'hot'.","cold","warm","big","sunny","Opposites mean the reverse: hot and cold."],
+[2,"Which sentence needs a question mark?","Where is my bag","I like pizza","Look at the bird","The sun is hot","Asking sentences end with a question mark (?)."],
+[2,"Two ___ are playing in the park.","children","child","childs","childrens","The plural of child is children."],
+[2,"Which word is a verb (action word)?","swim","blue","table","happy","Swim is something you do."],
+[3,"Which word means the same as 'big'?","large","tiny","quiet","quick","Large and big are synonyms."],
+[3,"Yesterday, we ___ to the market.","went","go","goes","going","Yesterday = past tense: went."],
+[3,"Tom planted a seed and watered it daily. After two weeks, a small green shoot came up. What happened after two weeks?","A small green shoot came up.","Tom stopped watering it.","The seed was eaten.","Tom planted another seed.","Re-read the last sentence for the answer."],
+[3,"Which sentence has the correct capital letters?","On Monday, Lina visited Bangkok.","on Monday, lina visited bangkok.","On monday, Lina visited bangkok.","On Monday, lina Visited Bangkok.","Capitalize the first word, days, and names of people and places."],
+[4,"What does the prefix 'un-' mean in 'unhappy'?","not","again","before","very","un- means 'not', so unhappy = not happy."],
+[4,"Which word is an adjective? 'The tall boy kicked the ball.'","tall","boy","kicked","ball","Adjectives describe nouns: tall boy."],
+[4,"Which sentence uses commas correctly?","We bought apples, bananas, and grapes.","We bought, apples bananas and grapes.","We, bought apples bananas, and grapes.","We bought apples bananas and, grapes.","Use commas to separate items in a list."],
+[4,"Ants work together. Some find food and others carry it to the nest. Teamwork keeps the colony strong. What is the main idea?","Ants succeed by working together.","Ants live in nests.","Ants like food.","Ants are small insects.","The main idea is what the whole paragraph is mostly about."],
+[5,"The scientist was ___ about her results, so she checked them again.","cautious","careless","generous","enormous","Checking again shows she was careful: cautious."],
+[5,"What does 'reluctant' mean? 'He was reluctant to jump into the cold pool.'","unwilling","eager","able","proud","Reluctant means not wanting to do something."],
+[5,"Which sentence is in the past perfect tense?","She had finished her homework before dinner.","She finishes her homework before dinner.","She will finish her homework before dinner.","She is finishing her homework before dinner.","Past perfect = had + past participle."],
+[5,"'The wind whispered through the trees.' What is this?","personification","simile","hyperbole","rhyme","Giving human actions (whispering) to wind is personification."],
+[6,"Which sentence has correct subject–verb agreement?","Neither of the boys is ready.","Neither of the boys are ready.","Neither of the boys were ready.","Neither of the boys be ready.","'Neither' is singular, so use 'is'."],
+[6,"Which word is closest in meaning to 'ambiguous'?","unclear","certain","obvious","simple","Ambiguous means having more than one possible meaning."],
+[6,"'Everyone knows pizza is the best food ever!' This sentence is mostly...","an opinion","a fact","a definition","a question","A fact can be proven; 'best' is a personal opinion."],
+[6,"The test was hard; ___, most students passed.","however","therefore","for example","because","However shows contrast between two ideas."]],
+science:[
+[1,"Which part of a plant takes in water from the soil?","roots","leaves","flower","fruit","Roots absorb water."],
+[1,"Which is a living thing?","a cat","a rock","a chair","a toy car","Living things grow, need food, and have babies."],
+[1,"What do we use our eyes for?","seeing","hearing","smelling","tasting","Eyes help us see."],
+[1,"Which is a source of light?","the Sun","the Moon","a mirror","a book","The Sun makes its own light; the Moon only reflects it."],
+[2,"What do plants need to grow?","water, light, and air","sweets and milk","only soil","darkness only","Plants need water, light, air and nutrients."],
+[2,"Which object is magnetic?","an iron nail","a plastic spoon","a wooden stick","a rubber band","Magnets attract iron."],
+[2,"Water turns into ice when it is ___.","cooled","heated","stirred","shaken","Water freezes below 0°C."],
+[2,"Which animal is a mammal?","dolphin","shark","frog","eagle","Mammals breathe air and feed milk to their babies."],
+[3,"What is the main job of a plant's leaves?","make food using sunlight","hold the plant in the soil","make seeds","drink water","Leaves do photosynthesis."],
+[3,"Which is the best conductor of electricity?","copper wire","rubber","plastic","wood","Metals conduct electricity well."],
+[3,"What causes day and night on Earth?","Earth spinning on its axis","The Sun moving around Earth","The Moon blocking the Sun","Earth moving closer to the Sun","Earth spins once every 24 hours."],
+[3,"Which change is reversible?","melting ice","burning paper","baking a cake","rusting iron","Ice can freeze back into ice."],
+[4,"In the food chain grass → grasshopper → frog → snake, what is the frog?","a consumer","a producer","a decomposer","a plant","Frogs eat other animals, so they are consumers."],
+[4,"Which force pulls objects toward the center of Earth?","gravity","friction","magnetism","buoyancy","Gravity pulls things down."],
+[4,"Sound is made when objects ___.","vibrate","freeze","melt","glow","Vibrations create sound."],
+[4,"Which is a renewable energy source?","solar power","coal","natural gas","oil","Sunlight will not run out."],
+[5,"Which part of a cell controls its activities?","nucleus","cell wall","chloroplast","vacuole","The nucleus is the control center."],
+[5,"To test if more sunlight helps plants grow taller, what should be changed?","the amount of sunlight","the type of plant","the size of the pot","the amount of water","Change only one thing in a fair test."],
+[5,"What happens to the particles of a liquid when it is heated?","they move faster","they stop moving","they disappear","they get smaller","Heat gives particles more energy."],
+[5,"Which layer of Earth do we live on?","crust","mantle","outer core","inner core","The crust is the thin outer layer."],
+[6,"Which gas do plants take in for photosynthesis?","carbon dioxide","oxygen","nitrogen","hydrogen","Plants use CO₂, water and light to make food."],
+[6,"Which is a chemical change?","iron rusting","ice melting","sugar dissolving","paper being cut","Rusting makes a new substance."],
+[6,"Why do we see different phases of the Moon?","We see different amounts of its sunlit side","Earth's shadow covers it","The Moon changes shape","Clouds cover it","The Moon orbits Earth, changing our view of the lit half."],
+[6,"In a circuit, what does a switch do?","opens or closes the path","makes electricity","stores energy","brightens the bulb","Current flows only when the circuit is closed."]],
+thai:[
+[1,"'แมว' means which animal?","cat","dog","bird","fish","แมว = cat."],
+[1,"'ขอบคุณ' means ___.","thank you","sorry","please","hello","ขอบคุณ = thank you."],
+[1,"What is the Thai numeral '๓'?","3","2","5","8","๑=1, ๒=2, ๓=3."],
+[2,"'สีแดง' is the color ___.","red","blue","green","yellow","แดง = red."],
+[2,"'วันจันทร์' is ___.","Monday","Sunday","Friday","Wednesday","วันจันทร์ = Monday."],
+[2,"What is the Thai numeral '๕'?","5","6","3","9","๕ = 5."],
+[3,"'ช้าง' is which animal?","elephant","tiger","monkey","horse","ช้าง = elephant."],
+[3,"How do you say 'water' in Thai?","น้ำ","ข้าว","ไฟ","ดิน","น้ำ = water, ข้าว = rice, ไฟ = fire, ดิน = soil."],
+[4,"'ข้าว' means ___.","rice","water","fish","milk","ข้าว = rice."],
+[4,"Which word means 'school'?","โรงเรียน","โรงพยาบาล","ตลาด","วัด","โรงเรียน = school."]],
+ict:[
+[1,"Which device do you use to type letters?","keyboard","mouse","speaker","printer","A keyboard has letter keys."],
+[1,"Which part of the computer shows pictures and words?","monitor","keyboard","mouse","speaker","The monitor is the screen."],
+[2,"A stranger online asks for your home address. What should you do?","Don't answer and tell a trusted adult","Give it to them","Share it with friends","Post it online","Never share personal information with strangers."],
+[2,"A strong password should be ___.","long, with letters, numbers and symbols","your name","1234","your birthday","Hard-to-guess passwords keep accounts safe."],
+[3,"What does CPU stand for?","Central Processing Unit","Computer Personal Unit","Central Program Utility","Core Power Unit","The CPU is the computer's brain."],
+[3,"Which is an example of saving files in the cloud?","Google Drive","a USB cable","a keyboard","a monitor","Cloud storage keeps files online."],
+[4,"A set of steps to solve a problem is called a(n) ___.","algorithm","bug","pixel","icon","Algorithms are step-by-step instructions."],
+[4,"A mistake in a program is called a ___.","bug","loop","sprite","variable","Fixing bugs is called debugging."],
+[5,"A loop in coding is used to ___.","repeat instructions","stop the computer","delete code","draw a border","Loops save time by repeating steps."],
+[5,"Which file type is usually a picture?",".jpg",".mp3",".docx",".exe","JPG is a common image format."]],
+makerspace:[
+[1,"Before using tools in the makerspace, you should ___.","listen to the safety rules","run around","taste the glue","skip the instructions","Safety first!"],
+[1,"Which item protects your eyes?","safety goggles","gloves","apron","hat","Goggles protect eyes from dust and sparks."],
+[2,"What does a robot need to turn its wheels?","a motor","a sticker","paint","a ruler","Motors make wheels spin."],
+[2,"Which is a simple machine?","a lever","a laptop","a battery","a bulb","A lever is a simple machine."],
+[3,"A sensor on a robot helps it ___.","detect things around it","cook food","sing songs","wash itself","Sensors measure the world around the robot."],
+[3,"What is the 'brain' of a robot?","the controller","a wheel","the bumper","the battery","The controller runs the program."],
+[4,"A big gear turning a small gear makes the small gear spin ___.","faster","slower","at the same speed","not at all","The smaller gear turns more times."],
+[5,"What does an ultrasonic sensor measure?","distance","color","temperature","weight","It uses sound waves to find how far something is."]],
+arts:[
+[1,"Which are the primary colors?","red, yellow, blue","green, orange, purple","black, white, gray","pink, brown, gray","Primary colors can't be made by mixing."],
+[1,"Which tool is used to paint?","a brush","a ruler","a spoon","a stapler","A brush spreads paint."],
+[2,"What color do you get by mixing blue and yellow?","green","orange","purple","brown","Blue + yellow = green."],
+[2,"What color do you get by mixing red and yellow?","orange","green","purple","pink","Red + yellow = orange."],
+[3,"Which colors are warm colors?","red, orange, yellow","blue, green, purple","black, white, gray","blue, gray, white","Warm colors remind us of fire and sun."],
+[3,"A line that goes straight up and down is ___.","vertical","horizontal","curved","zigzag","Vertical lines stand up like a tree."],
+[4,"Which element of art describes how light or dark a color is?","value","texture","line","form","Value = lightness or darkness."],
+[4,"Texture is how something ___.","feels or looks like it feels","smells","sounds","moves","Rough, smooth, soft: all are textures."],
+[5,"Making the same shapes on both sides of a center line is called ___.","symmetry","contrast","rhythm","perspective","Symmetry = mirror-like balance."]],
+design:[
+[1,"Which shape has 3 sides?","triangle","circle","square","oval","Tri means three."],
+[2,"Which step comes first in the design process?","Ask: find the problem","Improve","Create","Share","Designers start by understanding the problem."],
+[2,"A sketch is a ___.","quick drawing of an idea","finished building","computer virus","tool","Sketches help you plan."],
+[3,"A prototype is ___.","a first model of an idea","a final product in shops","a type of paint","a kind of glue","Prototypes are test versions."],
+[3,"Why do designers test prototypes?","to find problems and improve","to waste time","to make it break","to hide mistakes","Testing shows what to fix."],
+[4,"What makes a poster easier to read?","big clear letters with good contrast","tiny letters","light yellow text on white","many fonts in many colors","Clear, high-contrast text is easy to read."],
+[4,"An app icon should be ___.","simple and easy to understand","very detailed","hidden","confusing","Simple icons are recognized quickly."],
+[5,"'User-centered design' means designing ___.","for the needs of the people who will use it","only for yourself","only for looks","without testing","Always think about the user."]]
+};
+const MAP_BANK = {};
+Object.keys(MAP_RAW).forEach(k => { MAP_BANK[k] = MAP_RAW[k].map(r => ({ l: r[0], q: r[1], opts: [r[2], r[3], r[4], r[5]], tip: r[6] })); });
+let mapS = null;
+function openMapPractice(dim) {
+  if (isInDetention()) { say('🚨 You are in Detention! Wait first.', 3000); return; }
+  const nm = MAP_NAMES[dim] || [dim, '📝'];
+  $('#dlg').style.display = 'flex';
+  const pn = $('#pn');
+  pn.innerHTML = '<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#22d3ee">📝 MAP-Style Practice</div><h2>' + nm[1] + ' ' + nm[0] + '</h2>' +
+    '<div class="story">Questions get harder when you answer correctly and easier when you miss one. You get one try per question, like a real test. <small>(Practice only. Not the official NWEA MAP test.)</small></div>' +
+    '<div style="text-align:left;margin:10px 0"><label style="font-weight:700;font-size:0.85em;color:#93c5fd">Choose where to start:</label>' +
+    '<div class="row" style="gap:8px;margin-top:4px"><button class="opt map-lv" data-lv="2" style="border-color:#22d3ee;background:rgba(34,211,238,0.18)">🌱 Grade 1–2</button><button class="opt map-lv" data-lv="4">🌿 Grade 3–4</button><button class="opt map-lv" data-lv="5">🌳 Grade 5–6</button></div></div>' +
+    '<div class="row" style="gap:8px;margin-top:12px"><button class="btn" id="map-go" style="background:#16a34a">Start (8 questions)</button><button class="btn" id="map-x">Cancel</button></div>';
+  let lv = 2;
+  pn.querySelectorAll('.map-lv').forEach(b => b.onclick = () => {
+    lv = Number(b.dataset.lv);
+    pn.querySelectorAll('.map-lv').forEach(o => { o.style.borderColor = 'rgba(255,255,255,0.18)'; o.style.background = ''; });
+    b.style.borderColor = '#22d3ee'; b.style.background = 'rgba(34,211,238,0.18)';
+  });
+  $('#map-x').onclick = () => { $('#dlg').style.display = 'none'; };
+  $('#map-go').onclick = () => {
+    const bank = MAP_BANK[dim] || [];
+    mapS = { dim, lv, n: Math.min(8, bank.length), i: 0, right: 0, used: new Set(), maxOk: 0, mistakes: 0 };
+    renderMapQ();
+  };
+}
+function pickMapItem() {
+  const bank = MAP_BANK[mapS.dim]; let bd = 99, c = [];
+  bank.forEach((it, k) => {
+    if (mapS.used.has(k)) return;
+    const d = Math.abs(it.l - mapS.lv);
+    if (d < bd) { bd = d; c = []; }
+    if (d === bd) c.push(k);
+  });
+  return c.length ? c[Math.floor(Math.random() * c.length)] : -1;
+}
+function renderMapQ() {
+  const pn = $('#pn');
+  const k = mapS.i < mapS.n ? pickMapItem() : -1;
+  if (k < 0) { finishMapRun(); return; }
+  mapS.used.add(k);
+  const item = MAP_BANK[mapS.dim][k];
+  const opts = shuf(item.opts);
+  const prog = Array.from({ length: mapS.n }, (_, i) => '<i class="' + (i < mapS.i ? 'ok' : i === mapS.i ? 'on' : '') + '"></i>').join('');
+  pn.innerHTML = '<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#22d3ee">📝 MAP-Style Practice · Question ' + (mapS.i + 1) + '/' + mapS.n + '</div>' +
+    '<div class="steps">' + prog + '</div><div class="q" style="font-size:1.12em;margin:12px 0">' + esc(item.q) + '</div>' +
+    opts.map((o, j) => '<button class="opt" data-j="' + j + '">' + esc(o.t) + '</button>').join('') + '<div class="fb" id="map-fb"></div>';
+  pn.querySelectorAll('.opt').forEach(btn => btn.onclick = () => {
+    const ch = opts[btn.dataset.j];
+    pn.querySelectorAll('.opt').forEach(b => { b.disabled = true; if (opts[b.dataset.j].ok) b.classList.add('ok'); });
+    if (ch.ok) { mapS.right++; mapS.maxOk = Math.max(mapS.maxOk, item.l); mapS.lv = Math.min(6, mapS.lv + 1); }
+    else { btn.classList.add('bad'); mapS.mistakes++; mapS.lv = Math.max(1, mapS.lv - 1); }
+    mapS.i++;
+    $('#map-fb').innerHTML = (ch.ok ? '✅ Correct!' : '❌ Not quite. The answer is: <b>' + esc(item.opts[0]) + '</b>') + '<br><small>💡 ' + esc(item.tip) + '</small><div class="row" style="margin-top:8px"><button class="btn" id="map-next">' + (mapS.i >= mapS.n ? 'See Results' : 'Next ➜') + '</button></div>';
+    $('#map-next').onclick = renderMapQ;
+  });
+}
+function finishMapRun() {
+  const pn = $('#pn'), key = 'map_' + mapS.dim, total = mapS.n, now = Date.now();
+  const lastAt = S.quizBookStats.lastXpAt[key] || 0, cool = (now - lastAt) < 90000;
+  let xp = 0;
+  if (!cool) { xp = mapS.right * 12 + (mapS.right === total ? 30 : 0); S.quizBookStats.lastXpAt[key] = now; S.xp += xp; }
+  let star = false;
+  if (mapS.right === total && !S.quizBookStats.perfectBooks.includes(key)) { S.quizBookStats.perfectBooks.push(key); S.bonusStars = (S.bonusStars || 0) + 1; star = true; }
+  save(); hud(); pushState(true);
+  if (star) sendChat('📝⭐ Earned +1 Bonus Star for a PERFECT MAP-style practice in ' + (MAP_NAMES[mapS.dim] || [mapS.dim])[0] + '!', true);
+  const dim = mapS.dim;
+  pn.innerHTML = '<h2>' + (mapS.right === total ? '🏆 Perfect!' : '📝 Practice Complete!') + '</h2>' +
+    '<p>Score: <b>' + mapS.right + '/' + total + '</b></p>' +
+    '<p>Hardest level answered correctly: <b>' + (mapS.maxOk ? 'Level ' + mapS.maxOk + ' (about Grade ' + mapS.maxOk + ')' : 'keep practicing!') + '</b></p>' +
+    '<p>Reward: <b>+' + xp + ' XP</b>' + (star ? ' + <b style="color:#fde047">+1 ⭐ Bonus Star!</b>' : '') + (cool ? ' <small style="color:#a5b4fc">(90s XP cooldown active)</small>' : '') + '</p>' +
+    '<div class="row" style="gap:8px;margin-top:12px"><button class="btn" id="map-again" style="background:#0284c7">Practice Again</button><button class="btn" id="map-done">Continue Exploring</button></div>';
+  $('#map-again').onclick = () => openMapPractice(dim);
+  $('#map-done').onclick = () => { $('#dlg').style.display = 'none'; mapS = null; };
+}
+function addMapStation(dimKey) {
+  if (!MAP_BANK[dimKey] || typeof worldGroup === 'undefined' || !worldGroup) return;
+  const st = { id: 'map_' + dimKey, n: 'MAP PRACTICE', icon: '📝', color: '#22d3ee', p: [0, -9], a: [0, -6.5] };
+  activePvpStations = [...activePvpStations, st];
+  const ped = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 2.2, 0.5, 20), new THREE.MeshLambertMaterial({ color: 0x1e293b }));
+  ped.position.set(0, 0.25, -9); worldGroup.add(ped);
+  const pad = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.7, 0.15), new THREE.MeshBasicMaterial({ color: 0x22d3ee }));
+  pad.position.set(0, 2.3, -9); worldGroup.add(pad);
+  floaters.push({ mesh: pad, baseY: 2.3, spd: 1.3, rot: true });
+  const s = document.createElement('div');
+  s.className = 'sign portal-sign'; s.style.borderColor = st.color;
+  s.innerHTML = '<u style="background:' + st.color + '">' + st.icon + '</u>' + st.n;
+  stg.appendChild(s); pvpSigns.push(s);
+}
+
 let activePvpStations = [];
 let pvpSigns = [];
 let droneRace = { active: false, ringIdx: 0, startTime: 0, rings: [] };
@@ -2950,6 +3169,10 @@ return live ? (esc(live.name) + ' (Lv.' + (live.lv || 100) + ')') : 'Grandmaster
 }
 
 function openPvpGame(gameId) {
+if (typeof gameId === 'string' && gameId.indexOf('map_') === 0) {
+openMapPractice(gameId.slice(4));
+return;
+}
 if (gameId === 'math_library') {
 openMathLibrary();
 return;
@@ -5199,6 +5422,7 @@ document.getElementById('me').addEventListener('click', () => {
         disposeThreeObject(worldGroup);
       }
       origBuildWorld.apply(this, arguments);
+      try { addMapStation(dimKey); } catch (e) { console.warn('MAP station failed', e); }
       const homeBtn = document.getElementById('home-btn');
       if (homeBtn) homeBtn.classList.toggle('show', dimKey !== 'hub' && dimKey !== 'detention');
     };
