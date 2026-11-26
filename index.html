@@ -1,4 +1,4 @@
-<!-- Developer: johnicebourne@gmail.com | Inquiry World v14 Pre-Deployment Audited Build -->
+<!-- Developer: johnicebourne@gmail.com | Inquiry World v15 Audited, Optimized & Upgraded Build -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
-<title>Inquiry World · Live MMO, FPV & Game Room</title>
+<title>Inquiry World v15 · Live MMO, FPV & Game Room</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
@@ -378,6 +378,47 @@ button:active{transform:scale(0.92);}
 #sx-jump{position:absolute;right:1.5em;bottom:5.2em;width:4.4em;height:4.4em;border-radius:50%;background:rgba(255,255,255,.24);border:.18em solid #fff;color:#fff;font-size:1.1em;font-weight:900;text-shadow:0 2px 0 #000;z-index:4;box-shadow:0 4px 14px rgba(0,0,0,.4)}
 #sx-jump:active{transform:scale(.92);background:rgba(255,255,255,.45)}
 #sx-camhint{position:absolute;left:50%;top:3.3em;transform:translateX(-50%);font-size:.78em;color:rgba(255,255,255,.88);background:rgba(0,0,0,.45);padding:.2em .7em;border-radius:99px;z-index:4;pointer-events:none}
+
+/* === INQUIRY WORLD v15 UI, SOUND & MOBILE POLISH === */
+#home-btn {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.32), rgba(19, 16, 38, 0.85));
+  border-color: rgba(52, 211, 153, 0.55);
+  display: none;
+}
+#home-btn.show { display: inline-flex; }
+#home-btn:hover { background: linear-gradient(135deg, rgba(16, 185, 129, 0.55), rgba(19, 16, 38, 0.95)); }
+
+#sfx-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 2.35em; height: 2.35em; border-radius: 50%;
+  background: var(--glass-bg); backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border); color: #fff; font-size: 0.92em;
+  box-shadow: var(--shadow-glow);
+}
+#sfx-btn:hover { background: rgba(139, 92, 246, 0.45); border-color: #fff; }
+#sfx-btn.muted { opacity: 0.55; border-color: rgba(248, 113, 113, 0.55); }
+
+.tr-controls { display: flex; align-items: center; gap: 0.45em; }
+.tr-controls #fs-btn { margin-right: 0; }
+
+@media (max-width: 768px) {
+  #me { left: 0.7em; top: 0.7em; padding: 0.4em 0.75em 0.4em 0.5em; gap: 0.55em; }
+  #av-wrap { width: 3.3em; height: 3.3em; }
+  #st { min-width: 9.2em; }
+  #tr { right: 0.7em; top: 0.7em; gap: 0.45em; }
+  #top-pills { flex-wrap: wrap; justify-content: flex-end; max-width: 56vw; gap: 0.35em; }
+  .stat-pill { padding: 0.34em 0.65em; font-size: 0.82em; }
+  #mmw { width: 7.2em; height: 7.2em; }
+  #drone-osd { top: 8.4em; padding: 0.38em 0.75em; gap: 0.55em; font-size: 0.88em; }
+  #chat-box { left: 0.7em; bottom: 12.6em; width: 15.5em; }
+  #chat-feed { height: 4.6em; }
+  #bl { left: 0.7em; bottom: 0.7em; gap: 0.32em; padding: 0.3em 0.4em; }
+  .ic { width: 2.45em; height: 2.45em; }
+  #joy { left: 1.2em; bottom: 4.3em; width: 7.4em; height: 7.4em; }
+  #actions-right { right: 0.8em; bottom: 0.8em; transform: scale(0.9); transform-origin: bottom right; }
+  #flight-pad { right: 0.8em; bottom: 13.4em; }
+}
 </style>
 </head>
 <body>
@@ -419,6 +460,7 @@ button:active{transform:scale(0.92);}
 </div>
 <div class="hud" id="tr">
 <div id="top-pills">
+<button class="glass-card stat-pill" id="home-btn" type="button" title="Warp to Main Plaza [H]">🏠 Plaza</button>
 <button class="glass-card stat-pill" id="dim-pill" title="Dimension Selector">🌐 <span id="dim-name">Main Plaza</span></button>
 <div class="glass-card stat-pill stars">⭐ <span id="tot">0</span>/96</div>
 <button class="glass-card stat-pill online-btn" id="online-btn" aria-label="Online Players">
@@ -430,7 +472,10 @@ button:active{transform:scale(0.92);}
 <canvas id="mm" width="140" height="140"></canvas>
 <div id="mm-compass">N</div>
 </div>
+<div class="tr-controls">
+<button id="sfx-btn" type="button" title="Toggle Sound Effects" aria-label="Toggle Sound">🔊</button>
 <button id="fs-btn" type="button" title="Toggle Fullscreen" aria-label="Fullscreen">⛶ Fullscreen</button>
+</div>
 </div>
 <div class="glass-card" id="players-drawer">
 <div class="drawer-hdr">
@@ -1535,7 +1580,7 @@ render();
 function render() {
 const c = cs.qObj, pn = $('#pn');
 const badgeCol = (DIMS[c.dim] && DIMS[c.dim].color) || '#fbbf24';
-let h = '<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:' + badgeCol + ';margin-bottom:0.2em">' + c.icon + ' ' + c.sub + ' Dimension Quest</div><h2>' + c.n + ': ' + c.t + '</h2><div class="steps">' +
+let h = '<div style="font-size:0.75em;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:' + badgeCol + ';margin-bottom:0.2em">' + esc(c.icon) + ' ' + esc(c.sub) + ' Dimension Quest</div><h2>' + esc(c.n) + ': ' + esc(c.t) + '</h2><div class="steps">' +
 ST.map((_, k) => '<i class="' + (k < cs.s ? 'ok' : k == cs.s ? 'on' : '') + '"></i>').join('') + '</div>';
 if (cs.s < 5) h += '<div class="story">' + c.story + '</div><div class="q">' + ST[cs.s] + ': ' + QS[cs.s] + '</div>';
 if (cs.s == 3) {
@@ -1704,7 +1749,7 @@ else btnHtml = '<button class="shop-buy" data-buy-drone="' + d.id + '" ' + (star
 
 const hexCol = '#' + d.accent.toString(16).padStart(6, '0');
 bodyHtml += '<div class="shop-card ' + (equipped ? 'equipped' : '') + '">' +
-'<div><h4><span style="display:inline-block;width:0.9em;width:0.9em;height:0.9em;border-radius:50%;background:' + hexCol + ';border:1px solid #fff"></span> ' + d.icon + ' ' + d.name + '</h4>' +
+'<div><h4><span style="display:inline-block;width:0.9em;height:0.9em;border-radius:50%;background:' + hexCol + ';border:1px solid #fff"></span> ' + d.icon + ' ' + d.name + '</h4>' +
 '<p style="margin-top:0.3em">' + d.desc + '</p></div>' + btnHtml + '</div>';
 });
 }
@@ -2861,6 +2906,7 @@ activeSaeInterval = setInterval(() => {
       changed = true;
       if (e.hatchProg >= e.hatchSec) {
         e.hatched = true;
+        if (typeof window.playSfx === 'function') window.playSfx('star');
         say2('🐣 ' + e.name + ' HATCHED into a ' + PET[e.id] + '! (' + e.mult + 'x cash!)');
       }
     }
@@ -2868,6 +2914,20 @@ activeSaeInterval = setInterval(() => {
   if (changed) rebuildBaseEggs3D();
   refresh();
 }, 1000);
+
+window._saeCleanup = () => {
+  try {
+    removeEventListener('keydown', kd);
+    removeEventListener('keyup', ku);
+  } catch (e) {}
+  try {
+    if (typeof window.disposeThreeObject === 'function') window.disposeThreeObject(sc3);
+    if (r3) {
+      r3.dispose();
+      if (r3.forceContextLoss) r3.forceContextLoss();
+    }
+  } catch (e) {}
+};
 }
 let lastPvpXpAt = 0;
 function recordPvpWin(gameKey, label) {
@@ -4484,8 +4544,12 @@ av.tag.style.display = 'flex';
 av.tag.style.left = (v3.x * 0.5 + 0.5) * stg.clientWidth + 'px';
 av.tag.style.top = (-v3.y * 0.5 + 0.5) * stg.clientHeight + 'px';
 const showBubble = data.emote && (now - (data.emoteAt || 0) < 6500);
-av.tag.innerHTML = (showBubble ? '<div class="chat-bubble">' + esc(data.emote) + '</div>' : '') +
+const nextTagHtml = (showBubble ? '<div class="chat-bubble">' + esc(data.emote) + '</div>' : '') +
 '<div class="name-pill">' + (isFly ? '🚁 ' : '') + '<b>Lv.' + (data.lv || 1) + '</b> ' + esc(data.name || 'Explorer') + '</div>';
+if (av.lastHtml !== nextTagHtml) {
+  av.lastHtml = nextTagHtml;
+  av.tag.innerHTML = nextTagHtml;
+}
 } else {
 av.tag.style.display = 'none';
 }
@@ -4757,7 +4821,11 @@ v3.set(P.x, P.y + (P.flying ? 3.5 : 3.25), P.z).project(cam);
 myTagEl.style.display = v3.z < 1 ? 'flex' : 'none';
 myTagEl.style.left = (v3.x * 0.5 + 0.5) * stg.clientWidth + 'px';
 myTagEl.style.top = (-v3.y * 0.5 + 0.5) * stg.clientHeight + 'px';
-myTagEl.innerHTML = '<div class="chat-bubble">' + esc(myEmote) + '</div>';
+const nextMyHtml = '<div class="chat-bubble">' + esc(myEmote) + '</div>';
+if (myTagEl._lastHtml !== nextMyHtml) {
+  myTagEl._lastHtml = nextMyHtml;
+  myTagEl.innerHTML = nextMyHtml;
+}
 } else {
 myTagEl.style.display = 'none';
 }
@@ -4770,6 +4838,8 @@ lastPushTime = now;
 pushState(false);
 }
 
+if (!window._lastMmDraw || now - window._lastMmDraw >= 50) {
+window._lastMmDraw = now;
 mctx.clearRect(0, 0, 140, 140);
 mctx.fillStyle = currentDim === 'hub' ? '#2c4a3e' : (currentDim === 'pvp' ? '#292008' : (currentDim === 'gameroom' ? '#260e3d' : '#131b3a'));
 mctx.fillRect(0, 0, 140, 140);
@@ -4811,6 +4881,7 @@ mctx.fill();
 mctx.strokeStyle = '#8b5cf6';
 mctx.lineWidth = 2;
 mctx.stroke();
+}
 
 R.render(sc, cam);
 }
@@ -5032,6 +5103,157 @@ document.getElementById('me').addEventListener('click', () => {
   const n = Date.now(); admTaps = n - admTapT < 1500 ? admTaps + 1 : 1; admTapT = n;
   if (admTaps >= 5) { admTaps = 0; askAdminPin(); }
 });
+
+// =========================================================================
+// INQUIRY WORLD v15: AUDIO ENGINE, GPU CLEANUP, QUICK PLAZA WARP & BANDWIDTH OPT
+// =========================================================================
+(function () {
+  let sfxMuted = localStorage.getItem('iw_muted') === '1';
+  let audioCtx = null;
+
+  function playSfx(type) {
+    if (sfxMuted) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'click') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(540, now);
+        osc.frequency.exponentialRampToValueAtTime(810, now + 0.055);
+        gain.gain.setValueAtTime(0.07, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+        osc.start(now); osc.stop(now + 0.065);
+      } else if (type === 'star') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(587.33, now);
+        osc.frequency.setValueAtTime(880, now + 0.09);
+        osc.frequency.setValueAtTime(1174.66, now + 0.18);
+        gain.gain.setValueAtTime(0.13, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.34);
+        osc.start(now); osc.stop(now + 0.34);
+      } else if (type === 'warp') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.26);
+        gain.gain.setValueAtTime(0.11, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+        osc.start(now); osc.stop(now + 0.28);
+      } else if (type === 'err') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(165, now);
+        osc.frequency.linearRampToValueAtTime(110, now + 0.18);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.start(now); osc.stop(now + 0.2);
+      }
+    } catch (e) {}
+  }
+  window.playSfx = playSfx;
+
+  const sfxBtn = document.getElementById('sfx-btn');
+  if (sfxBtn) {
+    const syncSfxBtn = () => {
+      sfxBtn.textContent = sfxMuted ? '🔇' : '🔊';
+      sfxBtn.classList.toggle('muted', sfxMuted);
+    };
+    syncSfxBtn();
+    sfxBtn.onclick = () => {
+      sfxMuted = !sfxMuted;
+      localStorage.setItem('iw_muted', sfxMuted ? '1' : '0');
+      syncSfxBtn();
+      if (!sfxMuted) playSfx('click');
+    };
+  }
+
+  document.addEventListener('pointerdown', (e) => {
+    if (e.target && e.target.closest('button')) playSfx('click');
+  }, { passive: true });
+
+  function disposeThreeObject(obj) {
+    if (!obj) return;
+    obj.traverse((node) => {
+      if (node.geometry) node.geometry.dispose();
+      if (node.material) {
+        const mats = Array.isArray(node.material) ? node.material : [node.material];
+        mats.forEach((m) => {
+          for (const key of Object.keys(m)) {
+            if (m[key] && m[key].isTexture) m[key].dispose();
+          }
+          m.dispose();
+        });
+      }
+    });
+  }
+  window.disposeThreeObject = disposeThreeObject;
+
+  const origBuildWorld = window.buildWorldForDimension;
+  if (typeof origBuildWorld === 'function') {
+    window.buildWorldForDimension = function (dimKey) {
+      if (typeof worldGroup !== 'undefined' && worldGroup) {
+        disposeThreeObject(worldGroup);
+      }
+      origBuildWorld.apply(this, arguments);
+      const homeBtn = document.getElementById('home-btn');
+      if (homeBtn) homeBtn.classList.toggle('show', dimKey !== 'hub' && dimKey !== 'detention');
+    };
+  }
+
+  const origEnterDim = window.enterDimension;
+  if (typeof origEnterDim === 'function') {
+    window.enterDimension = function (dimKey) {
+      playSfx('warp');
+      return origEnterDim.apply(this, arguments);
+    };
+  }
+
+  const origStopPvpLoop = window.stopPvpLoop;
+  window.stopPvpLoop = function () {
+    if (typeof window._saeCleanup === 'function') {
+      try { window._saeCleanup(); } catch (e) {}
+      window._saeCleanup = null;
+    }
+    if (typeof origStopPvpLoop === 'function') origStopPvpLoop();
+  };
+
+  const homeBtn = document.getElementById('home-btn');
+  if (homeBtn) {
+    homeBtn.onclick = () => {
+      if (typeof isInDetention === 'function' && isInDetention()) {
+        playSfx('err');
+        say('🚨 You cannot warp out while in Detention!', 2500);
+        return;
+      }
+      if (typeof enterDimension === 'function') enterDimension('hub');
+    };
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (document.activeElement && ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+    if (document.getElementById('sx')) return;
+    if ((e.key === 'h' || e.key === 'H') && typeof currentDim !== 'undefined' && currentDim !== 'hub') {
+      homeBtn?.click();
+    }
+  });
+
+  const origPushState = window.pushState;
+  let lastPushedSig = '', lastForcedPush = 0;
+  if (typeof origPushState === 'function') {
+    window.pushState = function (force) {
+      const now = Date.now();
+      const sig = `${currentDim}|${P.x.toFixed(1)}|${P.y.toFixed(1)}|${P.z.toFixed(1)}|${P.ry.toFixed(1)}|${P.flying}|${S.outfit}|${myEmote}`;
+      if (!force && sig === lastPushedSig && now - lastForcedPush < 4500) return;
+      lastPushedSig = sig;
+      lastForcedPush = now;
+      return origPushState.apply(this, arguments);
+    };
+  }
+})();
 </script>
 </body>
 </html>
