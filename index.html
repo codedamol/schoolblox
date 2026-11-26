@@ -3796,6 +3796,7 @@ setSyncBadge('Offline', false);
 let initialChatLoaded = false;
 async function pollWorld() {
 try {
+fetch(RTDB_URL + '/kick/' + myId + '.json').then(r => r.json()).then(v => { if (v && v > loadedAtMs) document.body.innerHTML = '<h2 style="color:#fff;padding:2em;font-family:sans-serif">You were removed by an admin. Refresh to rejoin.</h2>'; }).catch(() => {});
 const [pRes, cRes] = await Promise.all([
 fetch(RTDB_URL + '/players.json'),
 fetch(RTDB_URL + '/chat.json?orderBy="$key"&limitToLast=20')
@@ -3907,6 +3908,45 @@ $('#intro').style.display = 'none';
 start();
 };
 }
+// ===== ADMIN (nickname + PIN) =====
+const ADMIN_NAME = 'rampage', ADMIN_PIN = '482916'; // <-- PALITAN MO ANG PIN
+let isAdmin = false, admAsked = false;
+function openAdmin() {
+  let el = document.getElementById('adm');
+  if (el) { el.remove(); return; }
+  el = document.createElement('div'); el.id = 'adm';
+  el.style.cssText = 'position:absolute;right:1em;top:6em;z-index:30;width:19em;max-height:70%;overflow:auto;background:rgba(15,12,35,.95);border:2px solid #f43f5e;border-radius:1em;padding:.8em;color:#fff;font-size:.9em';
+  const online = Object.entries(remotePlayers).map(([id, p]) =>
+    '<div style="display:flex;justify-content:space-between;margin:.25em 0"><span>' + esc(p.name || '?') + '</span><button data-k="' + esc(id) + '" style="background:#ef4444;border:0;color:#fff;border-radius:.4em;padding:.1em .6em">Kick</button></div>').join('') || '<small>No other players online</small>';
+  el.innerHTML = '<b>🛡️ Admin Panel</b><div style="margin:.5em 0"><input id="adm-t" maxlength="60" placeholder="Announcement..." style="width:100%;padding:.4em;border-radius:.4em;border:0;user-select:text"><button id="adm-a" style="width:100%;margin-top:.3em;padding:.4em;background:#8b5cf6;border:0;color:#fff;border-radius:.4em">📢 Announce</button></div>' +
+    '<button id="adm-s" style="width:100%;margin:.2em 0;padding:.4em;background:#f59e0b;border:0;border-radius:.4em">⭐ +50 Stars</button><button id="adm-x" style="width:100%;margin:.2em 0;padding:.4em;background:#0ea5e9;border:0;border-radius:.4em">✨ +500 XP</button><hr style="opacity:.2"><b>Online</b>' + online;
+  document.getElementById('stage').appendChild(el);
+  el.addEventListener('pointerdown', e => e.stopPropagation());
+  el.querySelector('#adm-a').onclick = () => { const t = el.querySelector('#adm-t').value.trim(); if (t) { sendChat('📢 ADMIN: ' + t, true); el.querySelector('#adm-t').value = ''; } };
+  el.querySelector('#adm-s').onclick = () => { S.bonusStars = (S.bonusStars || 0) + 50; save(); hud(); pushState(true); say('⭐ +50 Stars', 2000); };
+  el.querySelector('#adm-x').onclick = () => { S.xp += 500; save(); hud(); pushState(true); say('✨ +500 XP', 2000); };
+  el.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
+    fetch(RTDB_URL + '/kick/' + b.dataset.k + '.json', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: String(Date.now()) }).catch(() => {});
+    b.textContent = 'Kicked'; b.disabled = true;
+  });
+}
+const loadedAtMs = Date.now();
+setInterval(() => {
+  if (isAdmin || admAsked || !S.name || S.name.toLowerCase() !== ADMIN_NAME || document.getElementById('intro').style.display === 'flex') return;
+  admAsked = true;
+  const pin = prompt('Admin PIN:');
+  if (pin === ADMIN_PIN) {
+    isAdmin = true;
+    const b = document.createElement('button');
+    b.textContent = '🛡️'; b.title = 'Admin';
+    b.style.cssText = 'position:absolute;right:1.2em;top:4.3em;z-index:30;width:2.4em;height:2.4em;border-radius:50%;border:2px solid #f43f5e;background:rgba(15,12,35,.9);color:#fff;font-size:1.1em';
+    b.onclick = openAdmin;
+    document.getElementById('stage').appendChild(b);
+    say('🛡️ Admin unlocked', 3000);
+  } else if (pin !== null) {
+    S.name = 'Explorer'; save(); hud(); say('Wrong PIN. Nickname reset.', 3500);
+  }
+}, 2000);
 </script>
 </body>
 </html>
