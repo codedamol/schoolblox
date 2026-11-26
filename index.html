@@ -336,44 +336,48 @@ button:active{transform:scale(0.92);}
   cursor: not-allowed;
 }
 #sx{position:absolute;inset:0;z-index:20;overflow:hidden;font-family:'Fredoka',sans-serif;touch-action:none;background:#7ec8ff}
-#sx canvas{position:absolute;inset:0;width:100%;height:100%}
-#sx button{font-family:inherit}
+#sx canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#sx button{font-family:inherit;cursor:pointer}
 .sx-t{font-weight:700;font-style:italic;color:#fff;-webkit-text-stroke:.14em #000;paint-order:stroke fill;text-shadow:0 .1em 0 #000;letter-spacing:.01em}
-#sx-top{position:absolute;left:.8em;top:.7em;display:flex;gap:.3em;background:rgba(20,20,24,.8);border-radius:2em;padding:.25em .35em}
-#sx-top button{width:2.1em;height:2.1em;border-radius:50%;border:0;background:transparent;color:#fff;font-size:1em;font-weight:900}
-.sx-b{position:absolute;left:.9em;width:8.6em;padding:.38em .5em;border:.2em solid #000;border-radius:.3em;color:#fff;font-size:1.5em;font-weight:700;text-shadow:0 .08em 0 #000,0 0 .15em #000;text-align:left;box-shadow:inset 0 -.28em 0 rgba(0,0,0,.22),inset 0 .12em 0 rgba(255,255,255,.35)}
-.sx-b.shop{top:41%;background:#3ed42b}.sx-b.idx{top:calc(41% + 3.3em);background:#2cb5f5}
-.sx-b i{position:absolute;right:-.5em;top:-.6em;width:1.2em;height:1.2em;border-radius:50%;background:#ef2f2f;border:.1em solid #fff;font-size:.65em;font-style:normal;display:flex;align-items:center;justify-content:center}
-#sx-slow{position:absolute;left:.9em;top:calc(41% + 6.6em);display:flex;align-items:center;gap:.5em;color:#fff;font-weight:700;font-size:1.1em;text-shadow:0 .08em 0 #000,0 0 .2em #000;cursor:pointer}
-#sx-slow b{width:3.4em;height:1.9em;border-radius:.35em;border:.15em solid #000;background:#2f3a2f;position:relative}
+#sx-top{position:absolute;left:.8em;top:.7em;display:flex;gap:.35em;background:rgba(15,18,28,.85);border:.14em solid rgba(255,255,255,.25);border-radius:2em;padding:.25em .4em;z-index:4}
+#sx-top button{width:2.1em;height:2.1em;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;font-size:1em;font-weight:900}
+#sx-top button:hover{background:#ef4444}
+.sx-b{position:absolute;left:.9em;width:8.6em;padding:.38em .5em;border:.2em solid #000;border-radius:.38em;color:#fff;font-size:1.35em;font-weight:700;text-shadow:0 .08em 0 #000,0 0 .15em #000;text-align:left;box-shadow:inset 0 -.28em 0 rgba(0,0,0,.25),inset 0 .12em 0 rgba(255,255,255,.38);z-index:4}
+.sx-b.shop{top:34%;background:#3ed42b}.sx-b.idx{top:calc(34% + 3.1em);background:#2cb5f5}.sx-b.lock{top:calc(34% + 6.2em);background:#f59e0b}
+.sx-b i{position:absolute;right:-.5em;top:-.6em;width:1.25em;height:1.25em;border-radius:50%;background:#ef2f2f;border:.1em solid #fff;font-size:.65em;font-style:normal;display:flex;align-items:center;justify-content:center}
+#sx-slow{position:absolute;left:.9em;top:calc(34% + 9.4em);display:flex;align-items:center;gap:.5em;color:#fff;font-weight:700;font-size:1.05em;text-shadow:0 .08em 0 #000,0 0 .2em #000;cursor:pointer;z-index:4}
+#sx-slow b{width:3.4em;height:1.85em;border-radius:.35em;border:.15em solid #000;background:#2f3a2f;position:relative}
 #sx-slow b::after{content:'';position:absolute;left:.15em;top:.15em;width:1.2em;height:1.2em;background:#3ed42b;border-radius:.2em;transition:left .15s}
 #sx-slow.on b::after{left:1.75em}
-#sx-side{position:absolute;right:.5em;top:34%;display:flex;flex-direction:column;gap:.5em}
-#sx-side button{position:relative;width:3.6em;height:3.6em;border:.2em solid #000;border-radius:.3em;font-size:1.4em;box-shadow:inset 0 -.2em 0 rgba(0,0,0,.25),inset 0 .1em 0 rgba(255,255,255,.35)}
+#sx-side{position:absolute;right:.6em;top:33%;display:flex;flex-direction:column;gap:.5em;z-index:4}
+#sx-side button{position:relative;width:3.5em;height:3.5em;border:.2em solid #000;border-radius:.38em;font-size:1.35em;box-shadow:inset 0 -.2em 0 rgba(0,0,0,.25),inset 0 .1em 0 rgba(255,255,255,.35)}
 #sx-side .e{background:#e53935}#sx-side .p{background:#f98a1a}#sx-side .z{background:#7e3ff2}
 #sx-side i{position:absolute;left:-.55em;bottom:-.4em;width:1.25em;height:1.25em;border-radius:50%;background:#e53935;border:.1em solid #fff;color:#fff;font-size:.6em;font-style:normal;font-weight:900;display:flex;align-items:center;justify-content:center}
-#sx-stats{position:absolute;left:.7em;bottom:.7em;display:flex;flex-direction:column;gap:.1em}
-#sx-stats div{display:flex;align-items:center;gap:.25em;font-size:2.1em;line-height:1.05}
+#sx-stats{position:absolute;left:.8em;bottom:.7em;display:flex;flex-direction:column;gap:.1em;z-index:4;pointer-events:none}
+#sx-stats div{display:flex;align-items:center;gap:.25em;font-size:2em;line-height:1.05}
 #sx-stats span{font-size:.9em;-webkit-text-stroke:0}
 #sx-sp{color:#c455ff}#sx-cash{color:#3ee63e}
-#sx-hot{position:absolute;left:50%;bottom:.5em;transform:translateX(-50%);display:flex;gap:.3em}
-#sx-hot button{position:relative;width:3.5em;height:3.5em;background:rgba(25,25,30,.72);border:.15em solid rgba(255,255,255,.35);border-radius:.3em;color:#fff;font-size:1.1em}
-#sx-hot button.sel{border-color:#fff}
-#sx-hot u{position:absolute;left:.25em;top:.1em;font-size:.55em;text-decoration:none}
+#sx-hot{position:absolute;left:50%;bottom:.6em;transform:translateX(-50%);display:flex;gap:.35em;z-index:4}
+#sx-hot button{position:relative;width:3.6em;height:3.6em;background:rgba(20,22,32,.82);border:.18em solid rgba(255,255,255,.35);border-radius:.4em;color:#fff;font-size:1.1em}
+#sx-hot button.sel{border-color:#fde047;box-shadow:0 0 12px rgba(253,224,71,.6)}
+#sx-hot u{position:absolute;left:.28em;top:.12em;font-size:.55em;text-decoration:none}
 #sx-hot small{position:absolute;right:.25em;bottom:.1em;font-size:.6em;font-weight:700}
-#sx-night{position:absolute;right:.9em;bottom:.6em;font-size:2em;display:flex;align-items:center;gap:.25em}
-#sx-ev{position:absolute;left:50%;top:.8em;transform:translateX(-50%);font-size:1.5em;text-align:center;max-width:70%}
+#sx-night{position:absolute;right:.9em;bottom:.6em;font-size:1.85em;display:flex;align-items:center;gap:.25em;z-index:4;pointer-events:none}
+#sx-ev{position:absolute;left:50%;top:.75em;transform:translateX(-50%);font-size:1.45em;text-align:center;max-width:64%;z-index:4;pointer-events:none}
 #sx-ev.bad{color:#ff5252}
-#sx-lb{position:absolute;right:.6em;top:.6em;min-width:16em;background:rgba(20,22,30,.82);border-radius:.4em;padding:.4em .6em;font-size:.8em;color:#fff}
+#sx-lb{position:absolute;right:.6em;top:.6em;min-width:16.5em;background:rgba(15,18,28,.85);border:.14em solid rgba(255,255,255,.22);border-radius:.45em;padding:.45em .65em;font-size:.82em;color:#fff;z-index:4}
 #sx-lb div{display:grid;grid-template-columns:1fr 5em 5em;gap:.4em;padding:.15em 0}
-#sx-lb div:first-child{color:#9aa}
-#sx-pn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(34em,92%);max-height:80%;overflow:auto;display:none;background:#1f2b45;border:.2em solid #fff;border-radius:.6em;padding:.7em;color:#fff;box-shadow:0 0 0 .2em #000,0 1em 3em rgba(0,0,0,.6)}
-#sx-pn h3{margin:0 0 .5em;display:flex;justify-content:space-between;font-size:1.3em}
+#sx-lb div:first-child{color:#94a3b8;font-weight:800;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:.15em}
+#sx-pn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(34em,92%);max-height:80%;overflow:auto;display:none;background:#1e293b;border:.2em solid #fff;border-radius:.65em;padding:.75em;color:#fff;box-shadow:0 0 0 .2em #000,0 1em 3em rgba(0,0,0,.65);z-index:6}
+#sx-pn h3{margin:0 0 .5em;display:flex;justify-content:space-between;align-items:center;font-size:1.3em}
 #sx-pn h3 button{background:#e53935;border:.12em solid #000;color:#fff;border-radius:.3em;width:1.8em;font-weight:900}
-.sx-r{width:100%;display:flex;justify-content:space-between;gap:.5em;margin:.25em 0;padding:.5em .7em;border-radius:.4em;border:.12em solid #000;background:#2c4a7a;color:#fff;font-weight:700;font-size:.95em;text-align:left}
-.sx-r:disabled{opacity:.45}.sx-r.g{background:#2f9e2f}.sx-r.r{background:#c62f2f}#sx-joy{position:absolute;left:1.6em;bottom:7.6em;width:8em;height:8em;border-radius:50%;background:rgba(255,255,255,.16);border:.15em solid rgba(255,255,255,.55);touch-action:none;z-index:3}
-#sx-kn{position:absolute;left:50%;top:50%;width:3.4em;height:3.4em;margin:-1.7em 0 0 -1.7em;border-radius:50%;background:rgba(255,255,255,.65);border:.15em solid rgba(0,0,0,.45);pointer-events:none}
-.sx-r.o{background:#d97a12}
+.sx-r{width:100%;display:flex;justify-content:space-between;align-items:center;gap:.5em;margin:.28em 0;padding:.52em .72em;border-radius:.42em;border:.14em solid #000;background:#2c4a7a;color:#fff;font-weight:700;font-size:.95em;text-align:left}
+.sx-r:disabled{opacity:.45;cursor:not-allowed}.sx-r.g{background:#2f9e2f}.sx-r.r{background:#c62f2f}.sx-r.o{background:#d97a12}
+#sx-joy{position:absolute;left:1.5em;bottom:7.4em;width:7.8em;height:7.8em;border-radius:50%;background:rgba(255,255,255,.16);border:.15em solid rgba(255,255,255,.55);touch-action:none;z-index:4}
+#sx-kn{position:absolute;left:50%;top:50%;width:3.3em;height:3.3em;margin:-1.65em 0 0 -1.65em;border-radius:50%;background:rgba(255,255,255,.72);border:.15em solid rgba(0,0,0,.5);pointer-events:none}
+#sx-jump{position:absolute;right:1.5em;bottom:5.2em;width:4.4em;height:4.4em;border-radius:50%;background:rgba(255,255,255,.24);border:.18em solid #fff;color:#fff;font-size:1.1em;font-weight:900;text-shadow:0 2px 0 #000;z-index:4;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#sx-jump:active{transform:scale(.92);background:rgba(255,255,255,.45)}
+#sx-camhint{position:absolute;left:50%;top:3.3em;transform:translateX(-50%);font-size:.78em;color:rgba(255,255,255,.88);background:rgba(0,0,0,.45);padding:.2em .7em;border-radius:99px;z-index:4;pointer-events:none}
 </style>
 </head>
 <body>
@@ -1760,158 +1764,726 @@ if(!sessionObj||sessionObj.expiresAt<=Date.now()){finalizeExpiredOrCompletedSess
 cs='pvp';$('#dlg').style.display='none';
 const es=S.eggStats||{};
 let cash=Math.max(50,Math.floor(es.cash||100)),rebirths=es.rebirths||0,steals=es.steals||0,speed=es.speed||0,tlv=es.tlv||1;
-let baseEggs=[{...EGG_CATALOG[0],hatched:false,hatchProg:0}],trapsCount=2,banner='Train on the treadmill, then steal eggs!',bannerT=7,tab=null,slow=false,batCd=0;
+let baseEggs=[{...EGG_CATALOG[0],hatched:false,hatchProg:0}],trapsCount=2,banner='🏃 Step on the Treadmill for Speed, then steal Eggs!',bannerT=7,tab=null,slow=false,batCd=0,baseLockT=0;
 const n0=Date.now();
 const live=Object.values(remotePlayers).filter(rp=>rp&&n0-(rp.ts||0)<25000&&rp.name).map(rp=>rp.name);
 const rivalNames=[live[0]||'ShadowThief99',live[1]||'EggTycoon_TH'];
-const ZN=[{n:'Your Pen',a:0,b:.7,c:['#4fd13a','#46c633'],wall:'#c97b52'},
-{n:'Forest',a:.7,b:1.9,req:0,c:['#58d12c','#4fc626'],wall:'#c97b52',w:[.85,.15,0,0]},
-{n:'Lake',a:1.9,b:3,req:900,c:['#38cdb2','#2fbba2'],wall:'#4aa3e0',w:[.2,.55,.25,0]},
-{n:'Desert',a:3,b:4,req:10000,c:['#ecca74','#dfbb62'],wall:'#d9a441',w:[0,.2,.55,.25]}];
-const zoneAt=x=>ZN.find(z=>x>=z.a&&x<z.b)||ZN[3];
+
+const ZN=[
+  {n:'Your Base',x0:-28,x1:-10,req:0,c:0x4ade80,wall:0xc97b52},
+  {n:'Forest Biome',x0:-10,x1:10,req:0,c:0x22c55e,wall:0x15803d,w:[.82,.18,0,0]},
+  {n:'Crystal Lake',x0:10,x1:30,req:900,c:0x2dd4bf,wall:0x0284c7,w:[.15,.55,.30,0]},
+  {n:'Solar Desert',x0:30,x1:52,req:10000,c:0xfacc15,wall:0xd97706,w:[0,.15,.55,.30]}
+];
+const zoneAt=x=>ZN.find(z=>x>=z.x0&&x<z.x1)||ZN[3];
 const RAR={common:'Common',rare:'Rare',epic:'Epic',mythic:'Mythic'},PET={common:'Chicken',rare:'Raptor',epic:'Phoenix',mythic:'Dragon'};
-const COL={common:'#ffffff',rare:'#4fc3ff',epic:'#ff9a3c',mythic:'#e46bff'};
+const COL={common:'#ffffff',rare:'#38bdf8',epic:'#fb923c',mythic:'#e879f9'};
+const HEX={common:0xf8fafc,rare:0x38bdf8,epic:0xfb923c,mythic:0xe879f9};
 const fmt=n=>n>=1e9?(n/1e9).toFixed(1)+'B':n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e4?Math.floor(n/1e3)+'K':n>=1e3?(n/1e3).toFixed(1)+'K':String(Math.floor(n));
 const getMult=()=>1+rebirths*0.75,income=()=>Math.round(baseEggs.reduce((s,e)=>s+(e.hatched?e.rate*e.mult:e.rate*.25),0)*getMult()),rebCost=()=>1500*Math.pow(2,rebirths),tCost=()=>Math.floor(100*Math.pow(3,tlv-1)),tGain=()=>tlv*tlv*30;
 const sync=()=>{S.eggStats={cash:Math.floor(cash),rebirths,steals,speed:Math.floor(speed),tlv,bestEgg:baseEggs.length?baseEggs[baseEggs.length-1].name:'None'};save();};
-let eggsW=[],respawns=[],traps=[],floats=[],carry=null,stunT=0;
-const roll=w=>{let r=Math.random(),i=0;for(;i<3;i++){r-=w[i];if(r<0)break;}return EGG_CATALOG[i];};
-const spawnIn=zi=>{const z=ZN[zi];if(!z||!z.w)return;eggsW.push({x:z.a+.1+Math.random()*(z.b-z.a-.2),y:.55+Math.random()*.38,e:roll(z.w),st:0});};
-for(let i=1;i<4;i++)for(let k=0;k<3;k++)spawnIn(i);
-const guards=[1,2,3].map(i=>({zi:i,x:(ZN[i].a+ZN[i].b)/2,y:.6,dx:1,chase:false}));
-let bots=[{name:rivalNames[0],x:1.2,y:.7,carry:null,stun:0,money:0,spd:.2,tz:1},{name:rivalNames[1],x:1.6,y:.8,carry:null,stun:0,money:0,spd:.23,tz:2}];
-let px=.35,py=.82,tx=.35,ty=.82,camX=0,jx=0,jy=0;const hk={};
+
 const sx=document.createElement('div');sx.id='sx';
-sx.innerHTML='<canvas></canvas><div id="sx-top"><button id="sx-menu">≡</button><button id="sx-exit" title="End session">✕</button></div><div id="sx-ev" class="sx-t"></div><div id="sx-lb"></div>'+
-'<button class="sx-b shop" id="sx-shop">🛒 Shop<i>!</i></button><button class="sx-b idx" id="sx-idx">📖 Index</button><div id="sx-slow"><b></b><span>Slow Mode</span></div>'+
+sx.innerHTML='<canvas></canvas><div id="sx-top"><button id="sx-menu" title="Menu">≡</button><button id="sx-exit" title="Exit Game">✕</button></div><div id="sx-ev" class="sx-t"></div><div id="sx-camhint">🖱️ Drag to Orbit Camera · Space/Jump · 1 Bat · 2 Trap</div><div id="sx-lb"></div>'+
+'<button class="sx-b shop" id="sx-shop">🛒 Shop<i>!</i></button><button class="sx-b idx" id="sx-idx">📖 Index</button><button class="sx-b lock" id="sx-lock">🛡️ Lock Base</button><div id="sx-slow"><b></b><span>Slow Mode</span></div>'+
 '<div id="sx-side"><button class="e" data-t="e">🥚<i id="sx-ec"></i></button><button class="p" data-t="p">🗺️</button><button class="z" data-t="z">🧪</button></div>'+
 '<div id="sx-stats"><div class="sx-t"><span>👟</span><b id="sx-sp"></b></div><div class="sx-t"><span>💵</span><b id="sx-cash"></b></div></div>'+
 '<div id="sx-hot"><button id="sx-h1" class="sel"><u>1</u>🏏</button><button id="sx-h2"><u>2</u>🪤<small id="sx-tr"></small></button></div>'+
-'<div id="sx-joy"><div id="sx-kn"></div></div><div id="sx-night" class="sx-t">🌙 in <span id="sx-tm"></span></div><div id="sx-pn"></div>';
+'<div id="sx-joy"><div id="sx-kn"></div></div><button id="sx-jump">JUMP</button><div id="sx-night" class="sx-t">🌙 in <span id="sx-tm"></span></div><div id="sx-pn"></div>';
 $('#stage').appendChild(sx);
-const q=s=>sx.querySelector(s),cv=q('canvas'),ctx=cv.getContext('2d'),pn=q('#sx-pn');
+
+const q=s=>sx.querySelector(s),cv3=q('canvas'),pn=q('#sx-pn');
 const rem=()=>Math.max(0,Math.ceil((sessionObj.expiresAt-Date.now())/1000));
 const say2=(t,s)=>{banner=t;bannerT=s||4;};
-function hudSx(){
-const z=zoneAt(px),slowZ=z.req&&speed<z.req;
-q('#sx-sp').textContent=fmt(speed);q('#sx-cash').textContent='$'+fmt(cash);q('#sx-ec').textContent=baseEggs.length;q('#sx-tr').textContent='x'+trapsCount;
-const r=rem();q('#sx-tm').textContent=Math.floor(r/60)+'m '+(r%60)+'s';
-const ev=q('#sx-ev');ev.className='sx-t'+(slowZ&&bannerT<=0?' bad':'');
-ev.textContent=bannerT>0?banner:(z.n+(z.req?' · needs ⚡'+fmt(z.req)+(slowZ?' (TOO SLOW!)':' ✔'):'')+(carry?' · carrying '+carry.e.icon:''));
-q('#sx-lb').innerHTML='<div><span>People</span><span>Money/s</span><span>Speed</span></div><div><span>'+esc(S.name||'You')+'</span><span>'+fmt(income())+'</span><span>'+fmt(speed)+'</span></div>'+bots.map(b=>'<div><span>'+esc(b.name)+'</span><span>'+fmt(b.money)+'</span><span>'+fmt(Math.round(b.spd*4000))+'</span></div>').join('');
-}
-function pnx(){
-if(!tab){pn.style.display='none';return;}
-pn.style.display='block';let h='',T={shop:'🛒 Shop',idx:'📖 Index',e:'🥚 My Pen ('+baseEggs.length+'/8)',p:'🗺️ Biomes',z:'🧪 Rebirth'}[tab];
-if(tab==='shop')h='<button class="sx-r g" data-a="tread" '+(cash<tCost()?'disabled':'')+'><span>🏃 Treadmill Lv.'+tlv+' → '+(tlv+1)+' (+'+fmt(tGain())+'→'+fmt((tlv+1)*(tlv+1)*30)+' speed/s)</span><b>$'+fmt(tCost())+'</b></button><button class="sx-r g" data-a="buytrap" '+(cash<150?'disabled':'')+'><span>🪤 Bear Trap (you have '+trapsCount+')</span><b>$150</b></button>';
-if(tab==='idx')h=EGG_CATALOG.map(e=>'<div class="sx-r" style="border-color:'+e.color+'"><span>'+e.icon+' '+RAR[e.id]+' '+PET[e.id]+'</span><b>$'+e.rate+'/s · x'+e.mult+' · '+e.hatchSec+'s</b></div>').join('');
-if(tab==='e')h=(carry?'<div class="sx-r o"><span>Carrying '+carry.e.icon+' '+carry.e.name+'</span><b>Run home!</b></div>':'')+(baseEggs.map(e=>'<div class="sx-r"><span>'+(e.hatched?'🐣':e.icon)+' '+RAR[e.id]+' '+PET[e.id]+'</span><b>'+(e.hatched?'$'+Math.round(e.rate*e.mult*getMult())+'/s':Math.min(100,Math.round(e.hatchProg/e.hatchSec*100))+'%')+'</b></div>').join('')||'<small>No eggs yet</small>');
-if(tab==='p')h=ZN.slice(1).map(z=>'<div class="sx-r"><span>'+z.n+'</span><b>'+(speed>=z.req?'✔ ':'🔒 ')+(z.req?'⚡'+fmt(z.req):'No minimum')+'</b></div>').join('')+'<small>Too slow = guardian flings your egg and stuns you.</small>';
-if(tab==='z')h='<div class="sx-r"><span>Rebirths: '+rebirths+' · Eggs stolen: '+steals+'</span><b>'+getMult().toFixed(2)+'x cash</b></div><button class="sx-r o" data-a="reb" '+(cash<rebCost()?'disabled':'')+'><span>🔄 Rebirth (resets speed, treadmill, eggs)</span><b>$'+fmt(rebCost())+'</b></button>';
-pn.innerHTML='<h3><span>'+T+'</span><button data-a="x">✕</button></h3>'+h;
-pn.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>act(b.dataset.a));
-}
-function refresh(){sync();hudSx();pnx();}
-function act(a){
-if(a==='x'){tab=null;return pnx();}
-if(a==='tread'&&cash>=tCost()){cash-=tCost();tlv++;say2('🏃 Treadmill Lv.'+tlv+'!');}
-if(a==='buytrap'&&cash>=150){cash-=150;trapsCount++;say2('🪤 Bear trap bought!');}
-if(a==='reb'){const c=rebCost();if(cash<c)return;rebirths++;cash=150*rebirths;speed=0;tlv=1;trapsCount=2+rebirths;carry=null;baseEggs=[{...EGG_CATALOG[Math.min(3,rebirths)],hatched:false,hatchProg:0}];px=.35;tx=px;say2('🔄 REBIRTH #'+rebirths+'! '+getMult().toFixed(2)+'x cash!');}
-refresh();}
-function bat(){
-if(batCd>0)return;batCd=.6;
-const b=bots.filter(b=>Math.abs(b.x-px)<.13&&Math.abs(b.y-py)<.12)[0];
-if(!b){say2('🏏 Swung the bat!',1.5);return;}
-b.stun=3;if(b.carry){eggsW.push({x:b.x,y:b.y,e:b.carry.e,st:1});b.carry=null;}say2('🏏 Smacked '+b.name+'! Grab the egg!');}
-function trap(){if(trapsCount<=0){say2('No traps! Buy more in the Shop ($150).');return;}trapsCount--;traps.push({x:px,y:py});say2('🪤 Trap placed!',2);refresh();}
-q('#sx-shop').onclick=()=>{tab=tab==='shop'?null:'shop';pnx();};
-q('#sx-idx').onclick=()=>{tab=tab==='idx'?null:'idx';pnx();};
-sx.querySelectorAll('#sx-side button').forEach(b=>b.onclick=()=>{tab=tab===b.dataset.t?null:b.dataset.t;pnx();});
-q('#sx-slow').onclick=e=>{slow=!slow;e.currentTarget.classList.toggle('on',slow);};
-q('#sx-h1').onclick=()=>{q('#sx-h1').classList.add('sel');q('#sx-h2').classList.remove('sel');bat();};
-q('#sx-h2').onclick=()=>{q('#sx-h2').classList.add('sel');q('#sx-h1').classList.remove('sel');trap();};
-q('#sx-exit').onclick=q('#sx-menu').onclick=()=>{sync();finalizeExpiredOrCompletedSession(sessionObj,false,true);};
-const joy=q('#sx-joy'),kn=q('#sx-kn');
-const jm=e=>{const r=joy.getBoundingClientRect(),R=r.width/2;let dx=e.clientX-r.left-R,dy=e.clientY-r.top-R;const d=Math.hypot(dx,dy),m=Math.min(d,R*.7);if(d>0){dx=dx/d*m;dy=dy/d*m;}kn.style.transform='translate('+dx+'px,'+dy+'px)';jx=dx/(R*.7);jy=dy/(R*.7);};
-joy.onpointerdown=e=>{e.stopPropagation();joy.setPointerCapture(e.pointerId);joy.dataset.on='1';jm(e);};
-joy.onpointermove=e=>{if(joy.dataset.on)jm(e);};
-joy.onpointerup=joy.onpointercancel=()=>{joy.dataset.on='';jx=jy=0;kn.style.transform='';};
-const kd=e=>{if(!document.getElementById('sx')){document.removeEventListener('keydown',kd);document.removeEventListener('keyup',ku);return;}const k=e.key.toLowerCase();hk[k]=1;if(k==='1')q('#sx-h1').click();if(k==='2')q('#sx-h2').click();if(e.key.startsWith('Arrow'))e.preventDefault();};
-const ku=e=>{hk[e.key.toLowerCase()]=0;};
-document.addEventListener('keydown',kd);document.addEventListener('keyup',ku);
-cv.onpointerdown=e=>{const r=cv.getBoundingClientRect();tx=camX+(e.clientX-r.left)/r.width;ty=Math.min(.95,Math.max(.5,(e.clientY-r.top)/r.height));};
-const dropEgg=(x,y,e)=>eggsW.push({x,y,e,st:1});
-function step(dt){
-batCd-=dt;bannerT-=dt;
-const bs=(.2+.09*Math.log10(1+speed))*(slow?.5:1);
-if(stunT>0)stunT-=dt;else{
-const mx=jx||((hk.d||hk.arrowright?1:0)-(hk.a||hk.arrowleft?1:0)),my=jy||((hk.s||hk.arrowdown?1:0)-(hk.w||hk.arrowup?1:0));
-if(mx||my){px+=mx*bs*dt;py+=my*bs*dt*.8;tx=px;ty=py;}
-else{const dx=tx-px,dy=ty-py,d=Math.hypot(dx,dy);if(d>.005){const m=Math.min(d,bs*dt);px+=dx/d*m;py+=dy/d*m*.8;}}}
-px=Math.min(3.97,Math.max(.03,px));py=Math.min(.95,Math.max(.5,py));camX=Math.min(3,Math.max(0,px-.5));
-if(stunT<=0&&Math.abs(px-.3)<.07&&Math.abs(py-.72)<.06)speed+=tGain()*dt;
-guards.forEach(g=>{const z=ZN[g.zi];g.chase=px>=z.a&&px<z.b&&speed<z.req&&stunT<=0;
-if(g.chase){const dx=px-g.x,dy=py-g.y,d=Math.hypot(dx,dy)||1;g.x+=dx/d*.3*dt;g.y+=dy/d*.3*dt*.8;
-if(d<.05){if(carry){say2('💥 The '+z.n+' guardian flung your egg away!');carry=null;}else say2('💥 Caught by the '+z.n+' guardian! Need ⚡'+fmt(z.req));stunT=2.5;px=z.a-.15;py=.8;tx=px;ty=py;}}
-else{g.x+=g.dx*.08*dt;if(g.x>z.b-.1)g.dx=-1;if(g.x<z.a+.1)g.dx=1;g.y=.6+Math.sin(g.x*9)*.1;}});
-if(!carry&&stunT<=0)for(let i=0;i<eggsW.length;i++){const w=eggsW[i];if(Math.abs(w.x-px)<.05&&Math.abs(w.y-py)<.07){carry=w;eggsW.splice(i,1);if(!w.st)respawns.push({zi:ZN.indexOf(zoneAt(w.x)),t:15});say2('Got '+w.e.icon+' '+w.e.name+'! Run back to your Pen!');break;}}
-if(carry&&px<.65){if(baseEggs.length>=8)baseEggs.shift();baseEggs.push({...carry.e,hatched:false,hatchProg:0});if(carry.st)steals++;say2('✅ Delivered '+carry.e.icon+' '+carry.e.name+'!');carry=null;refresh();}
-respawns.forEach(r=>r.t-=dt);respawns=respawns.filter(r=>{if(r.t<=0){spawnIn(r.zi);return false;}return true;});
-bots.forEach(b=>{
-if(b.stun>0){b.stun-=dt;return;}
-if(b.carry){b.x-=b.spd*dt;b.y+=(.8-b.y)*dt;if(b.x<.6){b.money+=b.carry.e.rate;b.carry=null;b.tz=1+Math.floor(Math.random()*2);}}
-else{const tg=eggsW.filter(w=>zoneAt(w.x)===ZN[b.tz]).sort((a,c)=>Math.abs(a.x-b.x)-Math.abs(c.x-b.x))[0];
-if(!tg){b.tz=1+Math.floor(Math.random()*2);}else{const dx=tg.x-b.x,dy=tg.y-b.y,d=Math.hypot(dx,dy)||1;b.x+=dx/d*b.spd*dt;b.y+=dy/d*b.spd*dt;
-if(d<.04){b.carry=tg;eggsW.splice(eggsW.indexOf(tg),1);if(!tg.st)respawns.push({zi:ZN.indexOf(zoneAt(tg.x)),t:15});}}}
-for(let i=traps.length-1;i>=0;i--)if(Math.hypot(traps[i].x-b.x,traps[i].y-b.y)<.05){traps.splice(i,1);b.stun=5;if(b.carry){dropEgg(b.x,b.y,b.carry.e);b.carry=null;}say2('🪤 '+b.name+' hit your trap! Grab the egg!');}
-if(carry&&Math.hypot(b.x-px,b.y-py)<.05&&Math.random()<dt*.8){dropEgg(px,py,carry.e);carry=null;stunT=1.5;say2('🏏 '+b.name+' smacked you and took your egg!');}
-});
-}
-const tag=(s,x,y,f,col)=>{ctx.font='italic 700 '+Math.max(8,f)+'px Fredoka';ctx.textAlign='center';ctx.lineWidth=f/4;ctx.strokeStyle='#000';ctx.strokeText(s,x,y);ctx.fillStyle=col;ctx.fillText(s,x,y);};
-const eggS=(x,y,s,e)=>{ctx.fillStyle=COL[e.id];ctx.beginPath();ctx.ellipse(x,y,13*s,18*s,0,0,7);ctx.fill();ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.stroke();};
-function human(x,y,s,jk,sh,t,nm,stun,cr){
-ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(x,y,22*s,7*s,0,0,7);ctx.fill();
-const bob=stun?0:Math.sin(t*10)*2*s;ctx.fillStyle='#fff';ctx.fillRect(x-14*s,y-6*s,10*s,6*s);ctx.fillRect(x+4*s,y-6*s,10*s,6*s);
-ctx.fillStyle='#111';ctx.fillRect(x-13*s,y-30*s,9*s,25*s);ctx.fillRect(x+4*s,y-30*s,9*s,25*s);ctx.fillStyle=jk;ctx.fillRect(x-17*s,y-62*s+bob,34*s,32*s);ctx.fillStyle=sh;ctx.fillRect(x-6*s,y-56*s+bob,12*s,18*s);
-ctx.fillStyle='#fff';ctx.fillRect(x-22*s,y-60*s+bob,6*s,22*s);ctx.fillRect(x+16*s,y-60*s+bob,6*s,22*s);ctx.fillStyle='#f4d6b8';ctx.fillRect(x-11*s,y-84*s+bob,22*s,22*s);ctx.fillStyle='#8a4b1f';ctx.fillRect(x-12*s,y-88*s+bob,24*s,9*s);
-if(cr)eggS(x,y-108*s,s,cr.e);
-tag(nm+(stun?' 💫':''),x,y-(cr?136:98)*s,13*s,'#fff');}
-function render(ts){
-const dpr=Math.min(2,window.devicePixelRatio||1),W=cv.clientWidth,H=cv.clientHeight;
-if(cv.width!==Math.round(W*dpr)){cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);}
-ctx.setTransform(dpr,0,0,dpr,0,0);const t=ts/1000,hz=H*.36;
-const g=ctx.createLinearGradient(0,0,0,hz);g.addColorStop(0,'#5fb8ff');g.addColorStop(1,'#cfeaff');ctx.fillStyle=g;ctx.fillRect(0,0,W,hz+2);
-ctx.fillStyle='rgba(255,255,255,.9)';[[.45,.1,.07],[.7,.06,.09],[.85,.15,.06]].forEach(c=>{ctx.beginPath();ctx.ellipse(W*c[0]-camX*W*.15,H*c[1],W*c[2],H*.035,0,0,7);ctx.fill();});
-ZN.forEach(z=>{const x0=(z.a-camX)*W,x1=(z.b-camX)*W;if(x1<0||x0>W)return;ctx.fillStyle=z.wall;ctx.fillRect(Math.max(0,x0),hz*.55,Math.min(W,x1)-Math.max(0,x0),hz*.45+2);});
-const N=14;
-for(let r=0;r<N;r++){const k1=Math.pow((r+1)/N,1.8),y0=hz+(H-hz)*Math.pow(r/N,1.8),y1=hz+(H-hz)*k1,cw=W*.08*(.3+.7*k1),off=(camX*W*(.3+.7*k1))%(cw*2);
-for(let x=-off-cw*2,c=0;x<W;x+=cw,c++){const zc=zoneAt(Math.max(0,camX+(x+cw/2)/W)).c;ctx.fillStyle=((c+r)%2)?zc[0]:zc[1];ctx.fillRect(x,y0,cw+1,y1-y0+1);}}
-const sc=y=>.25+.95*((y-hz)/(H-hz));
-[.7,1.9,3].forEach((bx,i)=>{const sxp=(bx-camX)*W;if(sxp<-20||sxp>W+20)return;const z=ZN[i+1];ctx.fillStyle='#3a3a42';ctx.fillRect(sxp-4,hz+4,8,H-hz);ctx.fillStyle='#d9531e';ctx.fillRect(sxp-30,hz+8,60,14);tag(z.n+(z.req?' ⚡'+fmt(z.req):''),sxp,hz+4,14,'#fff');});
-const items=[];
-const addTread=()=>items.push({y:H*.74,f:()=>{const x=(.3-camX)*W,y=H*.74,s=sc(y);if(x<-100||x>W+100)return;ctx.fillStyle='#3a2a2a';ctx.beginPath();ctx.moveTo(x-30*s,y);ctx.lineTo(x+30*s,y);ctx.lineTo(x+40*s,y+22*s);ctx.lineTo(x-40*s,y+22*s);ctx.fill();ctx.fillStyle='#ff7a1a';ctx.fillRect(x-24*s,y+4*s,48*s,12*s);ctx.fillStyle='#222';ctx.fillRect(x-34*s,y-40*s,8*s,44*s);ctx.fillRect(x+26*s,y-40*s,8*s,44*s);tag('TREADMILL +'+fmt(tGain())+'/s',x,y-48*s,12*s,'#ffd54a');}});
-addTread();
-baseEggs.slice(-8).forEach((e,i)=>{const y=H*(.52+.1*(i%4)),u=.1+((i*.17)%.5)+Math.sin(t*.6+i*2)*.03;items.push({y,f:()=>{const x=(u-camX)*W,s=sc(y),c=COL[e.id];if(x<-60||x>W+60)return;ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(x,y,20*s,6*s,0,0,7);ctx.fill();
-if(e.hatched){const b=Math.abs(Math.sin(t*3+i))*5*s;ctx.fillStyle=c;ctx.fillRect(x-15*s,y-24*s-b,30*s,20*s);ctx.fillRect(x+8*s,y-34*s-b,16*s,14*s);ctx.fillStyle='#222';ctx.fillRect(x+17*s,y-30*s-b,3*s,3*s);tag(RAR[e.id]+' '+PET[e.id],x,y-48*s,11*s,c);tag('$'+Math.round(e.rate*e.mult*getMult())+'/s',x,y-38*s,11*s,'#3ee63e');}
-else{eggS(x,y-18*s,s,e);ctx.fillStyle='rgba(0,0,0,.35)';ctx.fillRect(x-16*s,y-44*s,32*s,5*s);ctx.fillStyle='#3ee63e';ctx.fillRect(x-16*s,y-44*s,32*s*Math.min(1,e.hatchProg/e.hatchSec),5*s);}}});});
-eggsW.forEach(w=>{const y=H*w.y;items.push({y,f:()=>{const x=(w.x-camX)*W,s=sc(y);if(x<-40||x>W+40)return;ctx.fillStyle='rgba(0,0,0,.18)';ctx.beginPath();ctx.ellipse(x,y,16*s,5*s,0,0,7);ctx.fill();eggS(x,y-18*s-Math.abs(Math.sin(t*3+w.x*9))*4*s,s*1.1,w.e);tag(RAR[w.e.id]+' Egg',x,y-48*s,10*s,COL[w.e.id]);}});});
-traps.forEach(p=>{const y=H*p.y;items.push({y,f:()=>{const x=(p.x-camX)*W,s=sc(y);ctx.fillStyle='#555';ctx.fillRect(x-14*s,y-4*s,28*s,8*s);ctx.fillStyle='#ccc';for(let k=-12;k<=8;k+=8)ctx.fillRect(x+k*s,y-9*s,4*s,6*s);}});});
-guards.forEach(gd=>{const y=H*gd.y;items.push({y,f:()=>{const x=(gd.x-camX)*W,s=sc(y)*1.6;if(x<-120||x>W+120)return;ctx.fillStyle='rgba(0,0,0,.2)';ctx.beginPath();ctx.ellipse(x,y,34*s,9*s,0,0,7);ctx.fill();ctx.fillStyle=gd.chase?'#c0182f':'#6d2a7a';ctx.fillRect(x-28*s,y-60*s,56*s,56*s);ctx.fillStyle='#ffe44d';ctx.fillRect(x-18*s,y-44*s,12*s,12*s);ctx.fillRect(x+6*s,y-44*s,12*s,12*s);ctx.fillStyle='#fff';for(let k=-16;k<=8;k+=12)ctx.fillRect(x+k*s,y-18*s,8*s,8*s);tag(gd.chase?'RUN!!':'Guardian ⚡'+fmt(ZN[gd.zi].req),x,y-68*s,13*s,gd.chase?'#ff5252':'#fff');}});});
-bots.forEach(b=>{const y=H*b.y;items.push({y,f:()=>{const x=(b.x-camX)*W;if(x<-60||x>W+60)return;human(x,y,sc(y),'#2a5d34','#e0a43a',t+b.x,esc(b.name),b.stun>0,b.carry);}});});
-items.push({y:H*py,f:()=>human((px-camX)*W,H*py,sc(H*py),'#161616','#2b7bd6',t,esc(S.name||'You'),stunT>0,carry)});
-items.sort((a,b)=>a.y-b.y).forEach(i=>i.f());
-floats=floats.filter(f=>ts-f.t0<1400);floats.forEach(f=>{const a=(ts-f.t0)/1400;ctx.globalAlpha=1-a;tag(f.txt,(f.x-camX)*W,H*f.y-60-a*50,16,'#3ee63e');});ctx.globalAlpha=1;
-}
-let last=0,hudAcc=0;
-function frame(ts){const dt=Math.min(.05,(ts-(last||ts))/1000);last=ts;step(dt);render(ts);hudAcc+=dt;if(hudAcc>.25){hudAcc=0;hudSx();}activePvpLoop=requestAnimationFrame(frame);}
-activePvpLoop=requestAnimationFrame(frame);hudSx();
-activeSaeInterval=setInterval(()=>{
-if(sessionObj.expiresAt-Date.now()<=0){sync();finalizeExpiredOrCompletedSession(sessionObj,true,true);return;}
-cash+=income();
-baseEggs.forEach((e,i)=>{if(e.hatched)floats.push({t0:performance.now(),x:.1+Math.random()*.5,y:.55+Math.random()*.3,txt:'+$'+Math.round(e.rate*e.mult*getMult())});else{e.hatchProg++;if(e.hatchProg>=e.hatchSec){e.hatched=true;say2('🐣 '+e.name+' HATCHED! '+e.mult+'x cash!');}}});
-refresh();},1000);
+
+// --- ROBLOX-STYLE 3D THREE.JS ENGINE FOR STEAL AN EGG ---
+const r3 = new THREE.WebGLRenderer({ canvas: cv3, antialias: true });
+r3.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+r3.shadowMap.enabled = true;
+const sc3 = new THREE.Scene();
+sc3.background = new THREE.Color(0x7cc8ff);
+sc3.fog = new THREE.Fog(0x7cc8ff, 48, 125);
+
+const cam3 = new THREE.PerspectiveCamera(54, 16 / 9, 0.1, 200);
+sc3.add(new THREE.AmbientLight(0xffffff, 0.72));
+const sun3 = new THREE.DirectionalLight(0xfff6e5, 0.92);
+sun3.position.set(22, 42, 24);
+sc3.add(sun3);
+
+// Roblox Classic Stud Texture Generator
+function makeStudTex(hexColor) {
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#' + hexColor.toString(16).padStart(6, '0');
+  ctx.fillRect(0, 0, 128, 128);
+  ctx.fillStyle = 'rgba(255,255,255,0.16)';
+  ctx.beginPath(); ctx.arc(32, 32, 16, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(96, 32, 16, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(32, 96, 16, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(96, 96, 16, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(0, 0, 128, 128);
+  const tx = new THREE.CanvasTexture(c);
+  tx.wrapS = tx.wrapT = THREE.RepeatWrapping;
+  return tx;
 }
 
+// Build 3D Zones (Studded Baseplate + Biome Borders + Arches)
+ZN.forEach((z, idx) => {
+  const w = z.x1 - z.x0;
+  const cx = (z.x0 + z.x1) / 2;
+  const stx = makeStudTex(z.c);
+  stx.repeat.set(w / 2, 18);
+  const floor = new THREE.Mesh(
+    new THREE.BoxGeometry(w, 1, 36),
+    new THREE.MeshLambertMaterial({ map: stx })
+  );
+  floor.position.set(cx, -0.5, 0);
+  sc3.add(floor);
+
+  const backWall = new THREE.Mesh(
+    new THREE.BoxGeometry(w, 6, 1.5),
+    new THREE.MeshLambertMaterial({ color: z.wall })
+  );
+  backWall.position.set(cx, 3, -18.5);
+  sc3.add(backWall);
+
+  if (idx > 0) {
+    // Biome Gate Archway
+    const pillarMat = new THREE.MeshLambertMaterial({ color: 0x334155 });
+    const pL = new THREE.Mesh(new THREE.BoxGeometry(0.9, 6.2, 0.9), pillarMat);
+    pL.position.set(z.x0, 3.1, -13);
+    const pR = new THREE.Mesh(new THREE.BoxGeometry(0.9, 6.2, 0.9), pillarMat);
+    pR.position.set(z.x0, 3.1, 13);
+    const topB = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.1, 27), new THREE.MeshLambertMaterial({ color: z.wall }));
+    topB.position.set(z.x0, 6.2, 0);
+    sc3.add(pL, pR, topB);
+
+    const signSp = makeTextSprite(z.n + (z.req ? ' · ⚡' + fmt(z.req) : ' · OPEN'), 'rgba(15,23,42,0.9)', '#fde047', 512, 110, 'bold 40px Fredoka, sans-serif');
+    signSp.position.set(z.x0, 7.6, 0);
+    sc3.add(signSp);
+  }
+});
+
+// Outer perimeter walls
+const wallMat = new THREE.MeshLambertMaterial({ color: 0x1e293b });
+const wFront = new THREE.Mesh(new THREE.BoxGeometry(82, 2.2, 1), wallMat); wFront.position.set(12, 1.1, 18.5);
+const wLeft = new THREE.Mesh(new THREE.BoxGeometry(1, 5, 38), wallMat); wLeft.position.set(-28.5, 2.5, 0);
+const wRight = new THREE.Mesh(new THREE.BoxGeometry(1, 5, 38), wallMat); wRight.position.set(52.5, 2.5, 0);
+sc3.add(wFront, wLeft, wRight);
+
+// Player Base Pen + Forcefield Laser Barrier
+const penFloor = new THREE.Mesh(
+  new THREE.BoxGeometry(14, 0.25, 24),
+  new THREE.MeshLambertMaterial({ color: 0x16a34a })
+);
+penFloor.position.set(-19, 0.12, 2);
+sc3.add(penFloor);
+
+const baseShield = new THREE.Mesh(
+  new THREE.BoxGeometry(0.35, 5.5, 24),
+  new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.35 })
+);
+baseShield.position.set(-11.8, 2.75, 2);
+baseShield.visible = false;
+sc3.add(baseShield);
+
+// 3D Treadmill in Player Base
+const treadGroup = new THREE.Group();
+treadGroup.position.set(-22, 0.25, -8);
+const treadBase = new THREE.Mesh(new THREE.BoxGeometry(4.2, 0.45, 2.4), new THREE.MeshLambertMaterial({ color: 0x1e293b }));
+const treadBelt = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.12, 1.9), new THREE.MeshLambertMaterial({ color: 0xf97316 }));
+treadBelt.position.y = 0.25;
+const treadHandleL = new THREE.Mesh(new THREE.BoxGeometry(0.2, 2.0, 0.2), new THREE.MeshLambertMaterial({ color: 0x94a3b8 }));
+treadHandleL.position.set(-1.6, 1.1, -0.9);
+const treadHandleR = treadHandleL.clone(); treadHandleR.position.z = 0.9;
+const treadBar = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.25, 2.0), new THREE.MeshLambertMaterial({ color: 0x38bdf8 }));
+treadBar.position.set(-1.6, 2.1, 0);
+treadGroup.add(treadBase, treadBelt, treadHandleL, treadHandleR, treadBar);
+sc3.add(treadGroup);
+
+const treadLabel = makeTextSprite('🏃 TREADMILL +' + fmt(tGain()) + ' SPD/s', 'rgba(15,23,42,0.88)', '#fde047', 512, 100, 'bold 36px Fredoka, sans-serif');
+treadLabel.position.set(-22, 3.5, -8);
+sc3.add(treadLabel);
+
+// 3D Clouds
+for (let i = 0; i < 12; i++) {
+  const cl = new THREE.Mesh(
+    new THREE.BoxGeometry(6 + (i % 4) * 3, 1.4, 4 + (i % 3) * 2),
+    new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.85 })
+  );
+  cl.position.set(-25 + i * 7.5, 19 + (i % 3) * 2.5, -14 + (i % 5) * 6);
+  sc3.add(cl);
+}
+
+// Roblox Blocky Character Builder (R6 Style with Swingable Bat & Carried Egg)
+function makeRobloxRig(shirtHex, pantsHex, skinHex, nameText, isPlayer) {
+  const g = new THREE.Group();
+  const M3 = c => new THREE.MeshLambertMaterial({ color: c });
+  const part = (w, h, d, c, x, y, z) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), M3(c));
+    m.position.set(x, y, z);
+    g.add(m);
+    return m;
+  };
+  const torso = part(1.2, 1.3, 0.65, shirtHex, 0, 1.75, 0);
+  const head = part(0.95, 0.95, 0.95, skinHex, 0, 2.95, 0);
+  // Roblox Classic Smile Face
+  part(0.12, 0.2, 0.05, 0x111827, -0.2, 3.0, 0.48);
+  part(0.12, 0.2, 0.05, 0x111827, 0.2, 3.0, 0.48);
+  part(0.36, 0.1, 0.05, 0x111827, 0, 2.74, 0.48);
+
+  const legL = part(0.52, 1.1, 0.56, pantsHex, -0.32, 0.55, 0);
+  const legR = part(0.52, 1.1, 0.56, pantsHex, 0.32, 0.55, 0);
+
+  const armL = new THREE.Group();
+  armL.position.set(-0.88, 2.25, 0);
+  const armLMesh = new THREE.Mesh(new THREE.BoxGeometry(0.48, 1.15, 0.52), M3(skinHex));
+  armLMesh.position.y = -0.45;
+  armL.add(armLMesh);
+  g.add(armL);
+
+  const armR = new THREE.Group();
+  armR.position.set(0.88, 2.25, 0);
+  const armRMesh = new THREE.Mesh(new THREE.BoxGeometry(0.48, 1.15, 0.52), M3(skinHex));
+  armRMesh.position.y = -0.45;
+  armR.add(armRMesh);
+
+  // 3D Wooden Bat attached to Right Hand
+  const batMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.07, 1.5, 8), M3(0xd97706));
+  batMesh.position.set(0, -1.0, 0.55);
+  batMesh.rotation.x = Math.PI / 2.4;
+  armR.add(batMesh);
+  g.add(armR);
+
+  // Carried 3D Egg above head
+  const carryEgg = new THREE.Mesh(new THREE.SphereGeometry(0.55, 16, 12), M3(0xffffff));
+  carryEgg.scale.set(0.85, 1.25, 0.85);
+  carryEgg.position.set(0, 4.1, 0);
+  carryEgg.visible = false;
+  g.add(carryEgg);
+
+  const tag = makeTextSprite(nameText, isPlayer ? 'rgba(30,27,75,0.85)' : 'rgba(15,23,42,0.82)', isPlayer ? '#fde047' : '#ffffff', 384, 84, 'bold 34px Fredoka, sans-serif');
+  tag.position.set(0, 4.85, 0);
+  g.add(tag);
+
+  g.userData = { torso, head, legL, legR, armL, armR, batMesh, carryEgg, tag, swingT: 0 };
+  sc3.add(g);
+  return g;
+}
+
+const myOutfit = OUTFITS[S.outfit] || OUTFITS[0];
+const playerRig = makeRobloxRig(myOutfit.shirt, myOutfit.pants, 0xf5cd30, esc(S.name || 'You'), true);
+const p3 = { x: -18, y: 0, z: 4, vy: 0, ry: Math.PI / 2, grounded: true, stun: 0 };
+playerRig.position.set(p3.x, 0, p3.z);
+
+// 3D Egg & Trap & Guardian & Rival Pools
+let eggsW = [], respawns = [], traps = [], baseEggMeshes = [], carry = null;
+const roll = w => { let r = Math.random(), i = 0; for (; i < 3; i++) { r -= w[i]; if (r < 0) break; } return EGG_CATALOG[i]; };
+
+function createEggMesh(eSpec, x, y, z, scale = 1) {
+  const m = new THREE.Mesh(
+    new THREE.SphereGeometry(0.62 * scale, 18, 14),
+    new THREE.MeshLambertMaterial({ color: HEX[eSpec.id] || 0xffffff })
+  );
+  m.scale.set(0.85, 1.28, 0.85);
+  m.position.set(x, y, z);
+  sc3.add(m);
+  return m;
+}
+
+function spawnIn(zi) {
+  const z = ZN[zi];
+  if (!z || !z.w) return;
+  const eSpec = roll(z.w);
+  const ex = z.x0 + 2.5 + Math.random() * (z.x1 - z.x0 - 5);
+  const ez = -13 + Math.random() * 26;
+  const mesh = createEggMesh(eSpec, ex, 0.8, ez, 1.05);
+  eggsW.push({ x: ex, z: ez, e: eSpec, st: 0, mesh, phase: Math.random() * 6 });
+}
+for (let i = 1; i < 4; i++) for (let k = 0; k < 4; k++) spawnIn(i);
+
+// 3D Biome Guardians
+const guards = [1, 2, 3].map(i => {
+  const z = ZN[i];
+  const gx = (z.x0 + z.x1) / 2;
+  const gGroup = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.BoxGeometry(2.0, 2.4, 2.0), new THREE.MeshLambertMaterial({ color: 0x7e22ce }));
+  body.position.y = 1.2;
+  const eyeL = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.35, 0.15), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
+  eyeL.position.set(-0.45, 1.7, 1.02);
+  const eyeR = eyeL.clone(); eyeR.position.x = 0.45;
+  gGroup.add(body, eyeL, eyeR);
+  const lbl = makeTextSprite('Guardian ⚡' + fmt(z.req), 'rgba(127,29,29,0.88)', '#fecaca', 384, 80, 'bold 30px Fredoka, sans-serif');
+  lbl.position.y = 3.2;
+  gGroup.add(lbl);
+  gGroup.position.set(gx, 0, 0);
+  sc3.add(gGroup);
+  return { zi: i, x: gx, z: 0, dz: 1, chase: false, mesh: gGroup, body };
+});
+
+// 3D Rival Roblox Thieves
+let bots = [
+  { name: rivalNames[0], x: -2, z: -6, carry: null, stun: 0, money: 0, spd: 6.2, tz: 1, rig: makeRobloxRig(0x16a34a, 0x1e293b, 0xf4d6b8, rivalNames[0], false) },
+  { name: rivalNames[1], x: 4, z: 7, carry: null, stun: 0, money: 0, spd: 7.0, tz: 2, rig: makeRobloxRig(0xe11d48, 0x0f172a, 0xe0ac69, rivalNames[1], false) }
+];
+
+function rebuildBaseEggs3D() {
+  baseEggMeshes.forEach(m => sc3.remove(m));
+  baseEggMeshes = [];
+  baseEggs.slice(-8).forEach((e, i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const bx = -22 + col * 4.5;
+    const bz = -3 + row * 4.2;
+    const grp = new THREE.Group();
+    grp.position.set(bx, 0.25, bz);
+    const nest = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.3, 0.3, 14), new THREE.MeshLambertMaterial({ color: 0x92400e }));
+    grp.add(nest);
+    if (e.hatched) {
+      // Hatched 3D Roblox Pet
+      const petBody = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.9, 1.3), new THREE.MeshLambertMaterial({ color: HEX[e.id] }));
+      petBody.position.y = 0.65;
+      const petHead = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.75, 0.75), new THREE.MeshLambertMaterial({ color: HEX[e.id] }));
+      petHead.position.set(0, 1.25, 0.55);
+      grp.add(petBody, petHead);
+    } else {
+      const eggM = new THREE.Mesh(new THREE.SphereGeometry(0.72, 16, 12), new THREE.MeshLambertMaterial({ color: HEX[e.id] }));
+      eggM.scale.set(0.85, 1.25, 0.85);
+      eggM.position.y = 0.95;
+      grp.add(eggM);
+    }
+    const sp = makeTextSprite(e.hatched ? (PET[e.id] + ' $' + Math.round(e.rate * e.mult * getMult()) + '/s') : (Math.min(100, Math.round(e.hatchProg / e.hatchSec * 100)) + '% Hatching'), 'rgba(15,23,42,0.82)', e.hatched ? '#4ade80' : '#fde047', 384, 76, 'bold 28px Fredoka, sans-serif');
+    sp.position.y = 2.35;
+    grp.add(sp);
+    sc3.add(grp);
+    baseEggMeshes.push(grp);
+  });
+}
+rebuildBaseEggs3D();
+
+function hudSx() {
+  const z = zoneAt(p3.x), slowZ = z.req && speed < z.req;
+  q('#sx-sp').textContent = fmt(speed);
+  q('#sx-cash').textContent = '$' + fmt(cash);
+  q('#sx-ec').textContent = baseEggs.length;
+  q('#sx-tr').textContent = 'x' + trapsCount;
+  const r = rem();
+  q('#sx-tm').textContent = Math.floor(r / 60) + 'm ' + (r % 60) + 's';
+  const lockBtn = q('#sx-lock');
+  if (baseLockT > 0) {
+    lockBtn.textContent = '🛡️ Locked (' + Math.ceil(baseLockT) + 's)';
+    lockBtn.style.background = '#10b981';
+  } else {
+    lockBtn.textContent = '🛡️ Lock Base ($100)';
+    lockBtn.style.background = '#f59e0b';
+  }
+  const ev = q('#sx-ev');
+  ev.className = 'sx-t' + (slowZ && bannerT <= 0 ? ' bad' : '');
+  ev.textContent = bannerT > 0 ? banner : (z.n + (z.req ? ' · needs ⚡' + fmt(z.req) + (slowZ ? ' (TOO SLOW!)' : ' ✔') : '') + (carry ? ' · Carrying ' + carry.e.icon : ''));
+  q('#sx-lb').innerHTML = '<div><span>Players</span><span>Cash/s</span><span>Speed</span></div>' +
+    '<div><span>' + esc(S.name || 'You') + '</span><span>$' + fmt(income()) + '</span><span>' + fmt(speed) + '</span></div>' +
+    bots.map(b => '<div><span>' + esc(b.name) + '</span><span>$' + fmt(b.money) + '</span><span>' + fmt(Math.round(b.spd * 650)) + '</span></div>').join('');
+}
+
+function pnx() {
+  if (!tab) { pn.style.display = 'none'; return; }
+  pn.style.display = 'block';
+  let h = '', T = { shop: '🛒 Roblox Upgrade Shop', idx: '📖 Egg Index', e: '🥚 My Base Pen (' + baseEggs.length + '/8)', p: '🗺️ 3D Biomes', z: '🧪 Rebirth' }[tab];
+  if (tab === 'shop') {
+    h = '<button class="sx-r g" data-a="tread" ' + (cash < tCost() ? 'disabled' : '') + '><span>🏃 Upgrade Treadmill Lv.' + tlv + ' → ' + (tlv + 1) + ' (+' + fmt(tGain()) + ' → +' + fmt((tlv + 1) * (tlv + 1) * 30) + ' spd/s)</span><b>$' + fmt(tCost()) + '</b></button>' +
+        '<button class="sx-r g" data-a="buytrap" ' + (cash < 150 ? 'disabled' : '') + '><span>🪤 Buy Bear Trap (Owned: ' + trapsCount + ')</span><b>$150</b></button>' +
+        '<button class="sx-r o" data-a="lockbase" ' + (cash < 100 || baseLockT > 0 ? 'disabled' : '') + '><span>🛡️ Activate Base Laser Shield (45s)</span><b>$100</b></button>';
+  }
+  if (tab === 'idx') h = EGG_CATALOG.map(e => '<div class="sx-r" style="border-color:' + e.color + '"><span>' + e.icon + ' ' + RAR[e.id] + ' ' + PET[e.id] + '</span><b>$' + e.rate + '/s · x' + e.mult + ' · ' + e.hatchSec + 's</b></div>').join('');
+  if (tab === 'e') h = (carry ? '<div class="sx-r o"><span>Carrying ' + carry.e.icon + ' ' + carry.e.name + '</span><b>Run back to Green Base!</b></div>' : '') + (baseEggs.map(e => '<div class="sx-r"><span>' + (e.hatched ? '🐣' : e.icon) + ' ' + RAR[e.id] + ' ' + PET[e.id] + '</span><b>' + (e.hatched ? '$' + Math.round(e.rate * e.mult * getMult()) + '/s' : Math.min(100, Math.round(e.hatchProg / e.hatchSec * 100)) + '%') + '</b></div>').join('') || '<small>No eggs yet</small>');
+  if (tab === 'p') h = ZN.slice(1).map(z => '<div class="sx-r"><span>' + z.n + '</span><b>' + (speed >= z.req ? '✔ Unlocked ' : '🔒 Needs ') + (z.req ? '⚡' + fmt(z.req) : 'Free') + '</b></div>').join('') + '<small>Guardians chase slow players and fling carried eggs!</small>';
+  if (tab === 'z') h = '<div class="sx-r"><span>Rebirths: ' + rebirths + ' · Eggs Stolen: ' + steals + '</span><b>' + getMult().toFixed(2) + 'x Cash</b></div><button class="sx-r o" data-a="reb" ' + (cash < rebCost() ? 'disabled' : '') + '><span>🔄 Rebirth (Reset speed/eggs for permanent +0.75x Cash!)</span><b>$' + fmt(rebCost()) + '</b></button>';
+  pn.innerHTML = '<h3><span>' + T + '</span><button data-a="x">✕</button></h3>' + h;
+  pn.querySelectorAll('[data-a]').forEach(b => b.onclick = () => act(b.dataset.a));
+}
+
+function refresh() { sync(); hudSx(); pnx(); }
+function act(a) {
+  if (a === 'x') { tab = null; return pnx(); }
+  if (a === 'tread' && cash >= tCost()) {
+    cash -= tCost(); tlv++;
+    sc3.remove(treadLabel);
+    const nl = makeTextSprite('🏃 TREADMILL +' + fmt(tGain()) + ' SPD/s', 'rgba(15,23,42,0.88)', '#fde047', 512, 100, 'bold 36px Fredoka, sans-serif');
+    nl.position.set(-22, 3.5, -8);
+    sc3.add(nl);
+    say2('🏃 Treadmill upgraded to Lv.' + tlv + '!');
+  }
+  if (a === 'buytrap' && cash >= 150) { cash -= 150; trapsCount++; say2('🪤 Bear trap purchased!'); }
+  if (a === 'lockbase' && cash >= 100 && baseLockT <= 0) { cash -= 100; baseLockT = 45; baseShield.visible = true; say2('🛡️ Base Laser Shield Activated for 45s!'); }
+  if (a === 'reb') {
+    const c = rebCost(); if (cash < c) return;
+    rebirths++; cash = 150 * rebirths; speed = 0; tlv = 1; trapsCount = 2 + rebirths; carry = null;
+    playerRig.userData.carryEgg.visible = false;
+    baseEggs = [{ ...EGG_CATALOG[Math.min(3, rebirths)], hatched: false, hatchProg: 0 }];
+    p3.x = -18; p3.z = 4; rebuildBaseEggs3D();
+    say2('🔄 REBIRTH #' + rebirths + '! Permanent ' + getMult().toFixed(2) + 'x cash!');
+  }
+  refresh();
+}
+
+function bat() {
+  if (batCd > 0) return;
+  batCd = 0.55;
+  playerRig.userData.swingT = 0.35;
+  const hitBot = bots.find(b => Math.hypot(b.x - p3.x, b.z - p3.z) < 3.4);
+  if (!hitBot) { say2('🏏 Swung the bat!', 1.2); return; }
+  hitBot.stun = 3.5;
+  if (hitBot.carry) {
+    const dropped = createEggMesh(hitBot.carry.e, hitBot.x, 0.8, hitBot.z, 1.05);
+    eggsW.push({ x: hitBot.x, z: hitBot.z, e: hitBot.carry.e, st: 1, mesh: dropped, phase: 0 });
+    hitBot.carry = null;
+    hitBot.rig.userData.carryEgg.visible = false;
+    say2('🏏 SMACKED ' + hitBot.name + '! Grab their dropped egg!');
+  } else {
+    say2('🏏 Bonked ' + hitBot.name + ' (Stunned 3.5s)!');
+  }
+}
+
+function trap() {
+  if (trapsCount <= 0) { say2('No traps left! Buy more in Shop ($150).'); return; }
+  trapsCount--;
+  const tMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 1.05, 0.22, 12), new THREE.MeshLambertMaterial({ color: 0x334155 }));
+  tMesh.position.set(p3.x, 0.12, p3.z);
+  sc3.add(tMesh);
+  traps.push({ x: p3.x, z: p3.z, mesh: tMesh });
+  say2('🪤 Bear Trap placed!', 2);
+  refresh();
+}
+
+q('#sx-shop').onclick = () => { tab = tab === 'shop' ? null : 'shop'; pnx(); };
+q('#sx-idx').onclick = () => { tab = tab === 'idx' ? null : 'idx'; pnx(); };
+q('#sx-lock').onclick = () => {
+  if (baseLockT > 0) { say2('🛡️ Base Shield already active (' + Math.ceil(baseLockT) + 's left)!', 2); return; }
+  if (cash < 100) { say2('Need $100 to lock your base!', 2.5); return; }
+  act('lockbase');
+};
+sx.querySelectorAll('#sx-side button').forEach(b => b.onclick = () => { tab = tab === b.dataset.t ? null : b.dataset.t; pnx(); });
+q('#sx-slow').onclick = e => { slow = !slow; e.currentTarget.classList.toggle('on', slow); };
+q('#sx-h1').onclick = () => { q('#sx-h1').classList.add('sel'); q('#sx-h2').classList.remove('sel'); bat(); };
+q('#sx-h2').onclick = () => { q('#sx-h2').classList.add('sel'); q('#sx-h1').classList.remove('sel'); trap(); };
+q('#sx-exit').onclick = q('#sx-menu').onclick = () => { sync(); finalizeExpiredOrCompletedSession(sessionObj, false, true); };
+
+// Roblox Orbit Camera Controls (Drag Mouse / Touch) + Third-Person Follow
+let camYaw = 0, camPitch = 0.42, camDist = 13.5, draggingCam = false, lastCamX = 0, lastCamY = 0;
+cv3.addEventListener('pointerdown', e => {
+  draggingCam = true; lastCamX = e.clientX; lastCamY = e.clientY;
+  cv3.setPointerCapture(e.pointerId);
+});
+cv3.addEventListener('pointermove', e => {
+  if (!draggingCam) return;
+  camYaw -= (e.clientX - lastCamX) * 0.008;
+  camPitch = Math.max(0.15, Math.min(1.15, camPitch + (e.clientY - lastCamY) * 0.006));
+  lastCamX = e.clientX; lastCamY = e.clientY;
+});
+cv3.addEventListener('pointerup', () => { draggingCam = false; });
+cv3.addEventListener('wheel', e => {
+  camDist = Math.max(7, Math.min(24, camDist + e.deltaY * 0.01));
+}, { passive: true });
+
+// Virtual Joystick + Jump Button
+let jx = 0, jy = 0;
+const hk = {};
+const joy = q('#sx-joy'), kn = q('#sx-kn');
+const jm = e => {
+  const r = joy.getBoundingClientRect(), R = r.width / 2;
+  let dx = e.clientX - r.left - R, dy = e.clientY - r.top - R;
+  const d = Math.hypot(dx, dy), m = Math.min(d, R * 0.72);
+  if (d > 0) { dx = dx / d * m; dy = dy / d * m; }
+  kn.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+  jx = dx / (R * 0.72); jy = dy / (R * 0.72);
+};
+joy.onpointerdown = e => { e.stopPropagation(); joy.setPointerCapture(e.pointerId); joy.dataset.on = '1'; jm(e); };
+joy.onpointermove = e => { if (joy.dataset.on) jm(e); };
+joy.onpointerup = joy.onpointercancel = () => { joy.dataset.on = ''; jx = jy = 0; kn.style.transform = ''; };
+
+const doJump = () => { if (p3.grounded && p3.stun <= 0) { p3.vy = 11.5; p3.grounded = false; } };
+q('#sx-jump').onpointerdown = e => { e.stopPropagation(); doJump(); };
+
+const kd = e => {
+  if (!document.getElementById('sx')) { document.removeEventListener('keydown', kd); document.removeEventListener('keyup', ku); return; }
+  const k = e.key.toLowerCase(); hk[k] = 1;
+  if (k === ' ') { e.preventDefault(); doJump(); }
+  if (k === '1') q('#sx-h1').click();
+  if (k === '2') q('#sx-h2').click();
+  if (e.key.startsWith('Arrow')) e.preventDefault();
+};
+const ku = e => { hk[e.key.toLowerCase()] = 0; };
+document.addEventListener('keydown', kd); document.addEventListener('keyup', ku);
+
+function step3D(dt, tSec) {
+  batCd -= dt; bannerT -= dt;
+  if (baseLockT > 0) {
+    baseLockT = Math.max(0, baseLockT - dt);
+    baseShield.visible = baseLockT > 0;
+  }
+
+  // Player Movement relative to Roblox Camera Yaw
+  const walkSpd = (8.5 + 3.8 * Math.log10(1 + speed)) * (slow ? 0.5 : 1);
+  let moving = false;
+  if (p3.stun > 0) {
+    p3.stun -= dt;
+  } else {
+    const inX = jx || ((hk.d || hk.arrowright ? 1 : 0) - (hk.a || hk.arrowleft ? 1 : 0));
+    const inZ = jy || ((hk.s || hk.arrowdown ? 1 : 0) - (hk.w || hk.arrowup ? 1 : 0));
+    if (Math.hypot(inX, inZ) > 0.08) {
+      const m = Math.max(1, Math.hypot(inX, inZ));
+      const nx = inX / m, nz = inZ / m;
+      const sinC = Math.sin(camYaw), cosC = Math.cos(camYaw);
+      const wx = nx * cosC + nz * sinC;
+      const wz = -nx * sinC + nz * cosC;
+      p3.x += wx * walkSpd * dt;
+      p3.z += wz * walkSpd * dt;
+      p3.ry = Math.atan2(wx, wz);
+      moving = true;
+    }
+  }
+
+  // Jump & Gravity Physics
+  if (!p3.grounded) {
+    p3.y += p3.vy * dt;
+    p3.vy -= 28 * dt;
+    if (p3.y <= 0) { p3.y = 0; p3.vy = 0; p3.grounded = true; }
+  }
+
+  p3.x = Math.max(-27.2, Math.min(51.2, p3.x));
+  p3.z = Math.max(-17.0, Math.min(17.0, p3.z));
+
+  // Treadmill Speed Training
+  if (p3.stun <= 0 && Math.hypot(p3.x - (-22), p3.z - (-8)) < 2.5) {
+    speed += tGain() * dt;
+  }
+
+  // Animate Player Roblox Rig
+  playerRig.position.set(p3.x, p3.y, p3.z);
+  playerRig.rotation.y = p3.ry;
+  const u = playerRig.userData;
+  const legSw = moving && p3.grounded ? Math.sin(tSec * 14) * 0.65 : 0;
+  u.legL.rotation.x = legSw;
+  u.legR.rotation.x = -legSw;
+  u.armL.rotation.x = -legSw * 0.75;
+  if (u.swingT > 0) {
+    u.swingT -= dt;
+    u.armR.rotation.x = -2.2 + Math.sin((0.35 - u.swingT) * 18) * 2.4;
+  } else {
+    u.armR.rotation.x = carry ? -2.6 : legSw * 0.75;
+  }
+
+  // Biome Guardians AI
+  guards.forEach(g => {
+    const z = ZN[g.zi];
+    g.chase = p3.x >= z.x0 && p3.x < z.x1 && speed < z.req && p3.stun <= 0;
+    if (g.chase) {
+      g.body.material.color.setHex(0xef4444);
+      const dx = p3.x - g.x, dz = p3.z - g.z, d = Math.hypot(dx, dz) || 1;
+      g.x += (dx / d) * 11.5 * dt;
+      g.z += (dz / d) * 11.5 * dt;
+      g.mesh.rotation.y = Math.atan2(dx, dz);
+      if (d < 1.8) {
+        if (carry) {
+          say2('💥 ' + z.n + ' Guardian smashed you & flung your egg!');
+          carry = null;
+          u.carryEgg.visible = false;
+        } else {
+          say2('💥 Caught by ' + z.n + ' Guardian! Train ⚡' + fmt(z.req) + ' Speed!');
+        }
+        p3.stun = 2.2;
+        p3.x = z.x0 - 2.5;
+        p3.z = 0;
+      }
+    } else {
+      g.body.material.color.setHex(0x7e22ce);
+      g.z += g.dz * 3.2 * dt;
+      if (g.z > 13) g.dz = -1;
+      if (g.z < -13) g.dz = 1;
+      g.mesh.rotation.y = g.dz > 0 ? 0 : Math.PI;
+    }
+    g.mesh.position.set(g.x, Math.abs(Math.sin(tSec * 4 + g.zi)) * 0.25, g.z);
+  });
+
+  // Egg Pickup & Floating Animation
+  for (let i = eggsW.length - 1; i >= 0; i--) {
+    const w = eggsW[i];
+    w.mesh.position.y = 0.85 + Math.sin(tSec * 3.2 + w.phase) * 0.22;
+    w.mesh.rotation.y += 1.5 * dt;
+    if (!carry && p3.stun <= 0 && Math.hypot(w.x - p3.x, w.z - p3.z) < 1.8) {
+      carry = w;
+      sc3.remove(w.mesh);
+      eggsW.splice(i, 1);
+      u.carryEgg.material.color.setHex(HEX[w.e.id] || 0xffffff);
+      u.carryEgg.visible = true;
+      if (!w.st) respawns.push({ zi: ZN.indexOf(zoneAt(w.x)), t: 12 });
+      say2('🥚 Picked up ' + w.e.name + '! Sprint back to your Green Base!');
+      break;
+    }
+  }
+
+  // Deliver Egg to Base
+  if (carry && p3.x < -11.5) {
+    if (baseEggs.length >= 8) baseEggs.shift();
+    baseEggs.push({ ...carry.e, hatched: false, hatchProg: 0 });
+    if (carry.st) steals++;
+    say2('✅ Delivered ' + carry.e.icon + ' ' + carry.e.name + ' to your Base!');
+    carry = null;
+    u.carryEgg.visible = false;
+    rebuildBaseEggs3D();
+    refresh();
+  }
+
+  respawns.forEach(r => r.t -= dt);
+  respawns = respawns.filter(r => { if (r.t <= 0) { spawnIn(r.zi); return false; } return true; });
+
+  // Rival Thieves AI
+  bots.forEach((b, bi) => {
+    const bu = b.rig.userData;
+    if (b.stun > 0) {
+      b.stun -= dt;
+      b.rig.rotation.z = 0.45;
+      return;
+    }
+    b.rig.rotation.z = 0;
+
+    if (b.carry) {
+      // Run toward rival stash on far side
+      const dx = 48 - b.x, dz = (bi === 0 ? -10 : 10) - b.z, d = Math.hypot(dx, dz) || 1;
+      b.x += (dx / d) * b.spd * dt;
+      b.z += (dz / d) * b.spd * dt;
+      b.rig.rotation.y = Math.atan2(dx, dz);
+      if (d < 2.0) {
+        b.money += b.carry.e.rate;
+        b.carry = null;
+        bu.carryEgg.visible = false;
+        b.tz = 1 + Math.floor(Math.random() * 2);
+      }
+    } else {
+      // Chance to raid player's base if shield is down and player has eggs!
+      if (baseLockT <= 0 && baseEggs.length > 1 && Math.random() < dt * 0.08 && b.x < 5) {
+        b.raiding = true;
+      }
+      if (b.raiding && baseLockT <= 0 && baseEggs.length > 1) {
+        const dx = -19 - b.x, dz = 2 - b.z, d = Math.hypot(dx, dz) || 1;
+        b.x += (dx / d) * b.spd * dt;
+        b.z += (dz / d) * b.spd * dt;
+        b.rig.rotation.y = Math.atan2(dx, dz);
+        if (d < 2.2) {
+          const stolen = baseEggs.pop();
+          rebuildBaseEggs3D();
+          b.carry = { e: stolen };
+          bu.carryEgg.material.color.setHex(HEX[stolen.id] || 0xffffff);
+          bu.carryEgg.visible = true;
+          b.raiding = false;
+          say2('🚨 ' + b.name + ' STOLE ' + stolen.name + ' from your Base! Smack them with [1] Bat!');
+        }
+      } else {
+        b.raiding = false;
+        const tg = eggsW.filter(w => zoneAt(w.x) === ZN[b.tz]).sort((a, c) => Math.hypot(a.x - b.x, a.z - b.z) - Math.hypot(c.x - b.x, c.z - b.z))[0];
+        if (!tg) {
+          b.tz = 1 + Math.floor(Math.random() * 2);
+        } else {
+          const dx = tg.x - b.x, dz = tg.z - b.z, d = Math.hypot(dx, dz) || 1;
+          b.x += (dx / d) * b.spd * dt;
+          b.z += (dz / d) * b.spd * dt;
+          b.rig.rotation.y = Math.atan2(dx, dz);
+          if (d < 1.6) {
+            b.carry = tg;
+            sc3.remove(tg.mesh);
+            eggsW.splice(eggsW.indexOf(tg), 1);
+            bu.carryEgg.material.color.setHex(HEX[tg.e.id] || 0xffffff);
+            bu.carryEgg.visible = true;
+            if (!tg.st) respawns.push({ zi: ZN.indexOf(zoneAt(tg.x)), t: 12 });
+          }
+        }
+      }
+    }
+
+    // Bear Trap Check
+    for (let i = traps.length - 1; i >= 0; i--) {
+      if (Math.hypot(traps[i].x - b.x, traps[i].z - b.z) < 1.6) {
+        sc3.remove(traps[i].mesh);
+        traps.splice(i, 1);
+        b.stun = 5;
+        if (b.carry) {
+          const dm = createEggMesh(b.carry.e, b.x, 0.8, b.z, 1.05);
+          eggsW.push({ x: b.x, z: b.z, e: b.carry.e, st: 1, mesh: dm, phase: 0 });
+          b.carry = null;
+          bu.carryEgg.visible = false;
+        }
+        say2('🪤 ' + b.name + ' stepped in your Bear Trap! Grab the egg!');
+      }
+    }
+
+    // Rival Bat Smack Check
+    if (carry && Math.hypot(b.x - p3.x, b.z - p3.z) < 1.8 && Math.random() < dt * 0.75) {
+      const dm = createEggMesh(carry.e, p3.x, 0.8, p3.z, 1.05);
+      eggsW.push({ x: p3.x, z: p3.z, e: carry.e, st: 1, mesh: dm, phase: 0 });
+      carry = null;
+      u.carryEgg.visible = false;
+      p3.stun = 1.4;
+      say2('🏏 ' + b.name + ' smacked you and knocked your egg loose!');
+    }
+
+    b.rig.position.set(b.x, 0, b.z);
+    const bSw = Math.sin(tSec * 12 + bi) * 0.55;
+    bu.legL.rotation.x = bSw; bu.legR.rotation.x = -bSw;
+    bu.armL.rotation.x = -bSw * 0.7; bu.armR.rotation.x = b.carry ? -2.6 : bSw * 0.7;
+  });
+
+  // Third-Person Roblox Camera Orbit & Smooth Follow
+  const W = cv3.clientWidth, H = cv3.clientHeight;
+  if (cv3.width !== Math.round(W * (r3.getPixelRatio())) || cv3.height !== Math.round(H * (r3.getPixelRatio()))) {
+    r3.setSize(W, H, false);
+    cam3.aspect = W / H;
+    cam3.updateProjectionMatrix();
+  }
+  const cx = p3.x + Math.sin(camYaw) * Math.cos(camPitch) * camDist;
+  const cy = Math.max(1.8, p3.y + 2.2 + Math.sin(camPitch) * camDist);
+  const cz = p3.z + Math.cos(camYaw) * Math.cos(camPitch) * camDist;
+  cam3.position.lerp(new THREE.Vector3(cx, cy, cz), 0.18);
+  cam3.lookAt(p3.x, p3.y + 2.0, p3.z);
+  r3.render(sc3, cam3);
+}
+
+let last = 0, hudAcc = 0;
+function frame(ts) {
+  const dt = Math.min(0.05, (ts - (last || ts)) / 1000);
+  last = ts;
+  step3D(dt, ts / 1000);
+  hudAcc += dt;
+  if (hudAcc > 0.25) { hudAcc = 0; hudSx(); }
+  activePvpLoop = requestAnimationFrame(frame);
+}
+activePvpLoop = requestAnimationFrame(frame);
+hudSx();
+
+activeSaeInterval = setInterval(() => {
+  if (sessionObj.expiresAt - Date.now() <= 0) {
+    sync();
+    finalizeExpiredOrCompletedSession(sessionObj, true, true);
+    return;
+  }
+  cash += income();
+  let changed = false;
+  baseEggs.forEach(e => {
+    if (!e.hatched) {
+      e.hatchProg++;
+      changed = true;
+      if (e.hatchProg >= e.hatchSec) {
+        e.hatched = true;
+        say2('🐣 ' + e.name + ' HATCHED into a ' + PET[e.id] + '! (' + e.mult + 'x cash!)');
+      }
+    }
+  });
+  if (changed) rebuildBaseEggs3D();
+  refresh();
+}, 1000);
+}
 let lastPvpXpAt = 0;
 function recordPvpWin(gameKey, label) {
 S.pvpWins = S.pvpWins || { graphwars: 0, football: 0, basketball: 0, dronerace: 0 };
