@@ -3919,12 +3919,19 @@ function openAdmin() {
   const online = Object.entries(remotePlayers).map(([id, p]) =>
     '<div style="display:flex;justify-content:space-between;margin:.25em 0"><span>' + esc(p.name || '?') + '</span><button data-k="' + esc(id) + '" style="background:#ef4444;border:0;color:#fff;border-radius:.4em;padding:.1em .6em">Kick</button></div>').join('') || '<small>No other players online</small>';
   el.innerHTML = '<b>🛡️ Admin Panel</b><div style="margin:.5em 0"><input id="adm-t" maxlength="60" placeholder="Announcement..." style="width:100%;padding:.4em;border-radius:.4em;border:0;user-select:text"><button id="adm-a" style="width:100%;margin-top:.3em;padding:.4em;background:#8b5cf6;border:0;color:#fff;border-radius:.4em">📢 Announce</button></div>' +
-    '<button id="adm-s" style="width:100%;margin:.2em 0;padding:.4em;background:#f59e0b;border:0;border-radius:.4em">⭐ +50 Stars</button><button id="adm-x" style="width:100%;margin:.2em 0;padding:.4em;background:#0ea5e9;border:0;border-radius:.4em">✨ +500 XP</button><hr style="opacity:.2"><b>Online</b>' + online;
+    '<button id="adm-s" style="width:100%;margin:.2em 0;padding:.4em;background:#f59e0b;border:0;border-radius:.4em">⭐ +50 Stars</button><button id="adm-x" style="width:100%;margin:.2em 0;padding:.4em;background:#0ea5e9;border:0;border-radius:.4em">✨ +500 XP</button><button id="adm-m" style="width:100%;margin:.2em 0;padding:.4em;background:#f43f5e;border:0;color:#fff;border-radius:.4em">👑 Max Out: 1M ⭐ + Lv.1000</button><hr style="opacity:.2"><b>Online</b>' + online;
   document.getElementById('stage').appendChild(el);
   el.addEventListener('pointerdown', e => e.stopPropagation());
   el.querySelector('#adm-a').onclick = () => { const t = el.querySelector('#adm-t').value.trim(); if (t) { sendChat('📢 ADMIN: ' + t, true); el.querySelector('#adm-t').value = ''; } };
   el.querySelector('#adm-s').onclick = () => { S.bonusStars = (S.bonusStars || 0) + 50; save(); hud(); pushState(true); say('⭐ +50 Stars', 2000); };
   el.querySelector('#adm-x').onclick = () => { S.xp += 500; save(); hud(); pushState(true); say('✨ +500 XP', 2000); };
+  el.querySelector('#adm-m').onclick = () => {
+    let xp = 0; for (let l = 1; l < 1000; l++) xp += xpReqForLv(l);
+    S.xp = Math.max(S.xp, xp);
+    S.bonusStars = Math.max(0, 1000000 - S.stars.reduce((a, b) => a + b, 0));
+    S.spentStars = 0; save(); hud(); pushState(true);
+    say('👑 Level 1000 + 1,000,000 ⭐ applied!', 4000);
+  };
   el.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
     fetch(RTDB_URL + '/kick/' + b.dataset.k + '.json', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: String(Date.now()) }).catch(() => {});
     b.textContent = 'Kicked'; b.disabled = true;
