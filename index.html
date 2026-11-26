@@ -1,4 +1,4 @@
-<!-- Developer: johnicebourne@gmail.com | Inquiry World v13 -->
+<!-- Developer: johnicebourne@gmail.com | Inquiry World v14 Pre-Deployment Audited Build -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
-<title>Inquiry World · Live MMO & FPV</title>
+<title>Inquiry World · Live MMO, FPV & Game Room</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
@@ -71,7 +71,7 @@ button:active{transform:scale(0.92);}
 .chat-bubble{background:rgba(255, 255, 255, 0.95);color:#1e1b4b;font-weight:700;font-size:0.86em;padding:0.35em 0.75em;border-radius:1em;max-width:14em;word-wrap:break-word;text-align:center;box-shadow:0 4px 12px rgba(0, 0, 0, 0.35);border:2px solid #8b5cf6;animation:popIn 0.2s ease-out;}
 .name-pill{background:rgba(15, 23, 42, 0.78);backdrop-filter:blur(6px);color:#fff;font-size:0.76em;font-weight:700;padding:0.2em 0.65em;border-radius:99px;border:1px solid rgba(56, 189, 248, 0.55);white-space:nowrap;display:flex;align-items:center;gap:0.35em;box-shadow:0 2px 8px rgba(0, 0, 0, 0.4);}
 .name-pill b{color:#38bdf8;}
-#cap{left:50%;top:15%;transform:translateX(-50%);text-align:center;color:#fff;font-family:'Fredoka', sans-serif;font-weight:700;font-size:1.3em;background:rgba(19, 16, 38, 0.84);backdrop-filter:blur(10px);border:1px solid rgba(167, 139, 250, 0.45);border-radius:99px;padding:0.45em 1.3em;pointer-events:none;max-width:82%;box-shadow:0 8px 24px rgba(0, 0, 0, 0.45);opacity:0;transition:opacity 0.25s;}
+#cap{left:50%;top:15%;transform:translateX(-50%);text-align:center;color:#fff;font-family:'Fredoka', sans-serif;font-weight:700;font-size:1.3em;background:rgba(19, 16, 38, 0.84);backdrop-filter:blur(10px);border:1px solid rgba(167, 139, 250, 0.45);border-radius:99px;padding:0.45em 1.3em;pointer-events:none;max-width:82%;box-shadow:0 8px 24px rgba(0, 0, 0, 0.45);opacity:0;transition:opacity 0.25s;z-index:18;}
 #cap.show{opacity:1;}
 #chat-box{left:1.2em;bottom:14.2em;width:21em;border-radius:1.1em;padding:0.6em;display:flex;flex-direction:column;gap:0.45em;transition:height 0.2s, opacity 0.2s;}
 #chat-box.minimized #chat-feed, #chat-box.minimized #emote-row, #chat-box.minimized #chat-form{display:none;}
@@ -138,8 +138,8 @@ button:active{transform:scale(0.92);}
 .flt-btn span{font-size:1.2em;line-height:1;}
 .flt-btn small{font-size:0.55em;color:var(--text-muted);margin-top:0.15em;}
 #dlg, #intro{position:absolute;inset:0;background:rgba(11, 8, 24, 0.74);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:10;padding:1em;}
-.panel{width:100%;max-width:38em;max-height:90%;overflow-y:auto;background:linear-gradient(165deg, rgba(28, 23, 56, 0.96), rgba(16, 13, 34, 0.98));border:1.5px solid rgba(167, 139, 250, 0.45);border-radius:1.4em;padding:1.5em 1.7em;color:#f8fafc;box-shadow:0 20px 50px rgba(0, 0, 0, 0.75);font-size:1.08em;touch-action:pan-y;}
-.panel h2{margin:0 0 0.5em;font-family:'Fredoka', sans-serif;font-size:1.55em;background:linear-gradient(90deg, #fff, #c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.panel{width:100%;max-width:42em;max-height:92%;overflow-y:auto;background:linear-gradient(165deg, rgba(28, 23, 56, 0.96), rgba(16, 13, 34, 0.98));border:1.5px solid rgba(167, 139, 250, 0.45);border-radius:1.4em;padding:1.4em 1.6em;color:#f8fafc;box-shadow:0 20px 50px rgba(0, 0, 0, 0.75);font-size:1.05em;touch-action:pan-y;}
+.panel h2{margin:0 0 0.5em;font-family:'Fredoka', sans-serif;font-size:1.5em;background:linear-gradient(90deg, #fff, #c4b5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .steps{display:flex;gap:0.4em;margin-bottom:0.9em;}
 .steps i{flex:1;height:0.45em;border-radius:99px;background:rgba(255, 255, 255, 0.14);transition:background 0.3s;}
 .steps i.on{background:var(--accent-secondary);box-shadow:0 0 10px var(--accent-secondary);}
@@ -186,7 +186,6 @@ button:active{transform:scale(0.92);}
 .portal-sign{background:rgba(15, 23, 42, 0.88);border-width:2px;padding:0.35em 0.95em 0.35em 0.45em;font-size:0.92em;box-shadow:0 0 18px rgba(139, 92, 246, 0.55);}
 .portal-sign u{width:1.7em;height:1.7em;font-size:0.95em;}
 
-/* v13 PVP Arena & Minigame Styles */
 .pvp-hud-card {
   background: rgba(15, 23, 42, 0.88);
   border: 1px solid rgba(253, 224, 71, 0.4);
@@ -227,12 +226,14 @@ button:active{transform:scale(0.92);}
   justify-content: space-between;
   align-items: center;
   font-weight: 800;
-  font-size: 0.9em;
-  padding: 0.35em 0.7em;
+  font-size: 0.88em;
+  padding: 0.4em 0.75em;
   border-radius: 0.6em;
   background: rgba(253, 224, 71, 0.14);
   border: 1px solid rgba(253, 224, 71, 0.35);
   margin-bottom: 0.45em;
+  gap: 0.5em;
+  flex-wrap: wrap;
 }
 .drone-race-hud {
   position: fixed;
@@ -253,6 +254,87 @@ button:active{transform:scale(0.92);}
   box-shadow: 0 6px 24px rgba(244, 114, 182, 0.35);
 }
 .drone-race-hud.active { display: flex; }
+
+.sae-timer-pill {
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  color: #fff;
+  padding: 0.2em 0.7em;
+  border-radius: 99px;
+  font-weight: 900;
+  border: 1px solid #fff;
+}
+.sae-timer-pill.low {
+  background: linear-gradient(135deg, #ef4444, #991b1b);
+  animation: pulseDot 0.9s infinite;
+}
+.sae-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55em;
+  margin-top: 0.45em;
+}
+.sae-box {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 0.75em;
+  padding: 0.55em;
+}
+.sae-box h4 {
+  margin: 0 0 0.35em;
+  font-size: 0.84em;
+  color: #38bdf8;
+  display: flex;
+  justify-content: space-between;
+}
+.sae-btn {
+  width: 100%;
+  padding: 0.42em 0.6em;
+  margin: 0.22em 0;
+  border-radius: 0.6em;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(139, 92, 246, 0.25);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8em;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sae-btn:hover:not(:disabled) {
+  background: rgba(139, 92, 246, 0.5);
+  border-color: #fff;
+}
+.sae-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.sae-btn.steal { background: rgba(244, 63, 94, 0.28); border-color: rgba(251, 113, 133, 0.5); }
+.sae-btn.def { background: rgba(16, 185, 129, 0.25); border-color: rgba(52, 211, 153, 0.5); }
+.sae-btn.rebirth { background: linear-gradient(135deg, rgba(245, 158, 11, 0.38), rgba(236, 72, 153, 0.38)); border-color: #fbbf24; }
+.time-pkg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5em, 1fr));
+  gap: 0.5em;
+  margin: 0.65em 0;
+}
+.time-pkg {
+  background: rgba(255,255,255,0.07);
+  border: 1.5px solid rgba(251, 191, 36, 0.45);
+  border-radius: 0.85em;
+  padding: 0.65em 0.5em;
+  color: #fff;
+  text-align: center;
+  font-weight: 800;
+}
+.time-pkg:hover:not(:disabled) {
+  background: rgba(251, 191, 36, 0.25);
+  border-color: #fde047;
+}
+.time-pkg:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 </style>
 </head>
 <body>
@@ -288,7 +370,7 @@ button:active{transform:scale(0.92);}
 </div>
 <div class="bar-row">
 <span class="bar-lbl">XP</span>
-<div class="bar" id="xp"><i></i><span id="xp-txt">0/60</span></div>
+<div class="bar" id="xp"><i></i><span id="xp-txt">0/120</span></div>
 </div>
 </div>
 </div>
@@ -341,13 +423,13 @@ button:active{transform:scale(0.92);}
 <button id="chat-toggle" type="button">−</button>
 </div>
 <div id="chat-feed">
-<div class="msg-line sys">Welcome to Inquiry World! Step into a Dimension Portal or talk to Gatekeepers!</div>
+<div class="msg-line sys">Welcome to Inquiry World! Earn Stars in 8 Dimensions & spend them in the Game Room!</div>
 </div>
 <div id="emote-row">
 <button class="em-btn" type="button" data-em="👋">👋</button>
 <button class="em-btn" type="button" data-em="🎉">🎉</button>
 <button class="em-btn" type="button" data-em="💡">💡</button>
-<button class="em-btn" type="button" data-em="❓">❓</button>
+<button class="em-btn" type="button" data-em="🥚">🥚</button>
 <button class="em-btn" type="button" data-em="🔥">🔥</button>
 </div>
 <form id="chat-form">
@@ -376,7 +458,7 @@ button:active{transform:scale(0.92);}
 <div id="intro">
 <div class="panel" style="max-width:29em">
 <h2>Welcome to Inquiry World!</h2>
-<p style="color:#cbd5e1;line-height:1.45">Explore the <b>Main Plaza</b>, fly drones with live players, and enter the <b>Math</b>, <b>Science</b>, <b>English</b>, and <b>Thai Language</b> Dimensions to solve 16 interactive quests!</p>
+<p style="color:#cbd5e1;line-height:1.45">Explore the <b>Main Plaza</b>, solve quests across <b>8 Subject Dimensions</b> to earn ⭐ Stars, and enter the <b>🕹️ Game Room</b> to play <b>🥚 Steal an Egg</b>!</p>
 <label style="font-weight:700;font-size:0.92em">Your Explorer Nickname:
 <input id="ni" maxlength="14" placeholder="Explorer">
 </label>
@@ -389,9 +471,32 @@ button:active{transform:scale(0.92);}
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
+// =========================================================================
+// PRIORITY 1: FIXED HTML ENTITY ESCAPING (prevents SyntaxError on single quote)
+// =========================================================================
+const HTML_ENTITIES = {
+  '&': '&',
+  '<': '<',
+  '>': '>',
+  '"': '"',
+  "'": '''
+};
+const esc = s => String(s ?? '').replace(/[&<>"']/g, m => HTML_ENTITIES[m]);
+
 const RTDB_URL = 'https://schoolblox-e6b0f-default-rtdb.asia-southeast1.firebasedatabase.app';
 const $ = s => document.querySelector(s);
 if (!window.THREE) { $('#err').style.display = 'flex'; }
+
+// =========================================================================
+// PRIORITY 2: EXACT STAR ACCESS PACKAGES (50/5m, 100/10m, 200/15m, 300/20m, 400/30m)
+// =========================================================================
+const GAME_PACKAGES = [
+  { id: 'pkg_5m',  stars: 50,  minutes: 5,  label: '5 Minutes'  },
+  { id: 'pkg_10m', stars: 100, minutes: 10, label: '10 Minutes' },
+  { id: 'pkg_15m', stars: 200, minutes: 15, label: '15 Minutes' },
+  { id: 'pkg_20m', stars: 300, minutes: 20, label: '20 Minutes' },
+  { id: 'pkg_30m', stars: 400, minutes: 30, label: '30 Minutes' }
+];
 
 const OUTFITS = [
 { id: 0, name: 'Violet Cadet', icon: '👕', cost: 0, minLv: 1, shirt: 0x7b4fd0, pants: 0x2c2f4a, hair: 0xdfe3ee, hex: '#8b5cf6', desc: 'Classic Inquiry Explorer tunic.' },
@@ -412,6 +517,7 @@ const DRONES = [
 
 const DIMS = {
 hub: { name: 'Main Plaza', icon: '🌐', color: '#a78bfa' },
+gameroom: { name: 'Game Room', icon: '🕹️', color: '#f472b6' },
 math: { name: 'Math Dimension', icon: '📐', color: '#38bdf8' },
 science: { name: 'Science Dimension', icon: '🔬', color: '#fbbf24' },
 english: { name: 'English Dimension', icon: '📚', color: '#f472b6' },
@@ -428,8 +534,13 @@ let S = {
 name: '',
 xp: 0,
 stars: Array(32).fill(0),
+bonusStars: 0,
 pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 },
+eggStats: { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' },
 spentStars: 0,
+starTransactions: [],
+activeGameSession: null,
+completedSessionIds: [],
 ownedOutfits: [0],
 ownedDrones: [0],
 droneModel: 0,
@@ -441,15 +552,30 @@ try {
 Object.assign(S, JSON.parse(localStorage.getItem('iw1') || '{}'));
 } catch (e) {}
 while (S.stars.length < 32) S.stars.push(0);
+if (typeof S.bonusStars !== 'number' || S.bonusStars < 0) S.bonusStars = 0;
 if (!S.pvpWins || typeof S.pvpWins !== 'object') S.pvpWins = { graphwars: 0, football: 0, basketball: 0, dronerace: 0 };
+if (!S.eggStats || typeof S.eggStats !== 'object') S.eggStats = { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' };
 if (!Array.isArray(S.ownedOutfits)) S.ownedOutfits = [0];
 if (!S.ownedOutfits.includes(0)) S.ownedOutfits.push(0);
 if (!Array.isArray(S.ownedDrones)) S.ownedDrones = [0];
 if (!S.ownedDrones.includes(0)) S.ownedDrones.push(0);
+if (!Array.isArray(S.starTransactions)) S.starTransactions = [];
+if (!Array.isArray(S.completedSessionIds)) S.completedSessionIds = [];
 if (typeof S.spentStars !== 'number' || S.spentStars < 0) S.spentStars = 0;
 if (typeof S.outfit !== 'number' || !OUTFITS[S.outfit]) S.outfit = 0;
 if (typeof S.droneModel !== 'number' || !DRONES[S.droneModel]) S.droneModel = 0;
 if (typeof S.detentionUntil !== 'number') S.detentionUntil = 0;
+
+// Validate persisted activeGameSession against wall-clock bounds (anti-tamper clamp)
+if (S.activeGameSession && typeof S.activeGameSession === 'object') {
+  const maxAllowedMs = 30 * 60 * 1000;
+  const sAt = Number(S.activeGameSession.startAt) || 0;
+  const eAt = Number(S.activeGameSession.expiresAt) || 0;
+  const dur = Number(S.activeGameSession.durationSec) || 0;
+  if (sAt <= 0 || eAt <= sAt || (eAt - sAt) > maxAllowedMs + 2000 || dur <= 0 || dur > 1800) {
+    S.activeGameSession = null;
+  }
+}
 
 let myId = '';
 try { myId = sessionStorage.getItem('iw_uid') || ''; } catch (e) {}
@@ -464,16 +590,16 @@ const xpReqForLv = lv => 120 + (lv - 1) * 55;
 function getLevelInfo(totalXp = S.xp) {
 let lv = 1;
 let rem = Math.max(0, Math.floor(totalXp));
-while (lv < 100) {
+while (lv < 1000) {
 const req = xpReqForLv(lv);
 if (rem < req) return { lv, cur: rem, req };
 rem -= req;
 lv++;
 }
-return { lv: 100, cur: rem, req: xpReqForLv(99) };
+return { lv: 1000, cur: rem, req: xpReqForLv(999) };
 }
 const lvl = () => getLevelInfo().lv;
-const totalStars = () => S.stars.reduce((a, b) => a + b, 0);
+const totalStars = () => S.stars.reduce((a, b) => a + b, 0) + (S.bonusStars || 0);
 const availStars = () => Math.max(0, totalStars() - (S.spentStars || 0));
 
 function checkLevel100Fashion() {
@@ -494,8 +620,8 @@ $('#lv').textContent = lvl();
 $('#hp i').style.width = S.hp + '%';
 $('#hp-txt').textContent = S.hp + '/100';
 const lInfo = getLevelInfo();
-$('#xp i').style.width = (lInfo.lv >= 100 ? 100 : Math.min(100, (lInfo.cur / lInfo.req * 100))) + '%';
-$('#xp-txt').textContent = lInfo.lv >= 100 ? 'MAX' : (lInfo.cur + '/' + lInfo.req);
+$('#xp i').style.width = (lInfo.lv >= 1000 ? 100 : Math.min(100, (lInfo.cur / lInfo.req * 100))) + '%';
+$('#xp-txt').textContent = lInfo.lv >= 1000 ? 'MAX' : (lInfo.cur + '/' + lInfo.req);
 $('#tot').textContent = availStars();
 $('#badge').textContent = S.stars.filter(x => x > 0).length;
 $('#av-shirt').setAttribute('fill', OUTFITS[S.outfit].hex);
@@ -504,9 +630,8 @@ $('#dim-name').textContent = dm.icon + ' ' + dm.name;
 $('#dim-pill').style.borderColor = dm.color;
 }
 
-// 12 Quests partitioned across Math (4), Science (4), and English (4) Dimensions
+// 32 Quests partitioned across 8 Subject Dimensions
 const C = [
-// --- MATH DIMENSION: Arithmetics, Patterns & Algebra (0..3) ---
 {
 idx: 0, dim: 'math', sub: 'Math · Arithmetics', icon: '📐',
 n: 'Archimedes Jr.', sg: 'ARITHMETICS', p: [-14, -6], a: [-12, -3.5], hair: 0xfde047, sh: 0x0284c7, pa: 0x1e293b, t: 'Arithmetics: Order & Operations',
@@ -551,8 +676,6 @@ v: { n: 'Scale factor (k)', u: '×', L: [1, 2, 3, 4, 5], R: [5, 10, 15, 20, 25],
 c: ['Since (3k)² + (4k)² = (5k)², hypotenuse c = 5, 10, 15, 20, 25', 'c is always equal to a × b', 'Right triangles follow no formula'],
 tip: 'Formula: a² + b² = c². For k = 1: 3² + 4² = 9 + 16 = 25 → c = 5!'
 },
-
-// --- SCIENCE DIMENSION: Biology & Chemistry (4..7) ---
 {
 idx: 4, dim: 'science', sub: 'Science · Biology', icon: '🧬',
 n: 'Dr. Mendel', sg: 'BIOLOGY: PHOTOSYNTHESIS', p: [-14, -6], a: [-12, -3.5], hair: 0x34d399, sh: 0x059669, pa: 0x1e293b, t: 'Biology: Photosynthesis & Oxygen',
@@ -597,8 +720,6 @@ v: { n: 'Base Added', u: 'mL', L: [0, 5, 10, 15, 20], R: [2.0, 3.2, 4.5, 5.8, 7.
 c: ['Chemistry: Acid + Base → Salt + Water, raising pH from acidic (2) to neutral (7)', 'Bases lower pH below 1', 'Neutral water has a pH of 14'],
 tip: 'pH Scale: 0–6 is Acidic, 7 is Neutral (pure water), and 8–14 is Basic/Alkaline!'
 },
-
-// --- ENGLISH DIMENSION (8..11) ---
 {
 idx: 8, dim: 'english', sub: 'English', icon: '📚',
 n: 'Lady Sonnet', sg: 'CONTEXT CLUES', p: [-14, -6], a: [-12, -3.5], hair: 0xf43f5e, sh: 0xbe123c, pa: 0x312e81, t: 'Decoding Vocabulary',
@@ -643,8 +764,6 @@ v: { n: 'Imagery layers', u: 'devices', L: [1, 2, 3, 4, 5], R: [25, 50, 70, 88, 
 c: ['Similes (like/as) and metaphors create memorable, vivid mental images', 'Metaphors should never be used in stories', 'All comparisons must be literal'],
 tip: 'Remember: Similes use "like" or "as"; metaphors make a direct comparison!'
 },
-
-// --- THAI LANGUAGE DIMENSION (12..15) ---
 {
 idx: 12, dim: 'thai', sub: 'Thai', icon: '🇹🇭',
 n: 'Kru Somchai', sg: 'SAWADEE GREETINGS', p: [-14, -6], a: [-12, -3.5], hair: 0x1e293b, sh: 0x0d9488, pa: 0x1e1b4b, t: 'Polite Particles (ครับ / ค่ะ)',
@@ -689,8 +808,6 @@ v: { n: 'Phrases used', u: 'orders', L: [1, 2, 3, 4, 5], R: [25, 50, 75, 90, 100
 c: ['Saying "ไม่เผ็ดครับ/ค่ะ" (mâi phèt) lets you customize spice levels like a local!', 'Adding "ไม่" means extra chili', 'Thai food has no spice words'],
 tip: 'Say "อร่อยมาก" (aròi mâak) to tell the chef the food is super delicious!'
 },
-
-// --- ICT & ROBOTICS DIMENSION (16..19) ---
 {
 idx: 16, dim: 'ict', sub: 'ICT & Robotics', icon: '🤖',
 n: 'Commander Ada', sg: 'ALGORITHMS & LOOPS', p: [-14, -6], a: [-12, -3.5], hair: 0x38bdf8, sh: 0x2563eb, pa: 0x0f172a, t: 'Algorithms & Loop Efficiency',
@@ -735,8 +852,6 @@ v: { n: 'PWM Duty Cycle', u: '%', L: [20, 40, 60, 80, 100], R: [30, 60, 90, 120,
 c: ['Robotics: PWM precisely regulates actuator speed and torque using digital pulses', 'Motors only have on/off speeds', 'Lower duty cycle makes motors spin faster'],
 tip: '50% PWM duty cycle = ON half the time, OFF half the time = 50% average power!'
 },
-
-// --- MAKERSPACE DIMENSION (20..23) ---
 {
 idx: 20, dim: 'makerspace', sub: 'Makerspace', icon: '🛠️',
 n: 'Master Maker', sg: '3D PRINTING & INFILL', p: [-14, -6], a: [-12, -3.5], hair: 0xfb923c, sh: 0xea580c, pa: 0x1e293b, t: '3D Printing: Infill & Strength',
@@ -781,8 +896,6 @@ v: { n: 'Truss Bays', u: 'bays', L: [1, 2, 3, 4, 5], R: [12, 26, 42, 60, 80], ru
 c: ['Makerspace: Triangle geometry locks structural joints and maximizes load-to-weight ratio', 'Single flat planks hold more than trusses', 'Triangles collapse immediately under load'],
 tip: 'Engineering Secret: Triangles are the strongest geometric shape in architecture!'
 },
-
-// --- ARTS DIMENSION (24..27) ---
 {
 idx: 24, dim: 'arts', sub: 'Arts', icon: '🎨',
 n: 'Maestro Chroma', sg: 'COLOR THEORY', p: [-14, -6], a: [-12, -3.5], hair: 0xe879f9, sh: 0xa21caf, pa: 0x1e1b4b, t: 'Color Theory: Complementary Contrast',
@@ -827,8 +940,6 @@ v: { n: 'Value Tones', u: 'steps', L: [1, 2, 3, 4, 5], R: [20, 45, 70, 88, 100],
 c: ['Arts: Mastering value scales (light to dark) gives drawings weight, form, and realism', 'Highlights should be darkest black', 'Reflected light never appears in shadows'],
 tip: 'Shading Tip: Always decide where your light source is coming from before shading!'
 },
-
-// --- DIGITAL DESIGN DIMENSION (28..31) ---
 {
 idx: 28, dim: 'design', sub: 'Digital Design', icon: '🖥️',
 n: 'Pixel Director', sg: 'UI/UX HIERARCHY', p: [-14, -6], a: [-12, -3.5], hair: 0x34d399, sh: 0x059669, pa: 0x0f172a, t: 'UI/UX: Visual Hierarchy & Flow',
@@ -876,6 +987,7 @@ tip: 'Motion Rule: Keep UI micro-interactions snappy (150ms–300ms) with ease-o
 ];
 
 const HUB_PORTALS = [
+{ target: 'gameroom', n: 'GAME ROOM (ALL LV)', icon: '🕹️', color: '#f472b6', hex: 0xec4899, p: [0, 6], a: [0, 9] },
 { target: 'math', n: 'MATH PORTAL', icon: '📐', color: '#38bdf8', hex: 0x0284c7, p: [-21, -8], a: [-19, -5] },
 { target: 'science', n: 'SCIENCE PORTAL', icon: '🔬', color: '#fbbf24', hex: 0xd97706, p: [-13, -11], a: [-12, -8] },
 { target: 'english', n: 'ENGLISH PORTAL', icon: '📚', color: '#f472b6', hex: 0xdb2777, p: [-5, -13], a: [-5, -10] },
@@ -887,6 +999,10 @@ const HUB_PORTALS = [
 { target: 'pvp', n: 'LV.100 PVP ARENA', icon: '⚔️', color: '#fde047', hex: 0xeab308, p: [0, 18], a: [0, 15], minLv: 100 }
 ];
 const RETURN_PORTAL = { target: 'hub', n: 'MAIN PLAZA', icon: '🌐', color: '#a78bfa', hex: 0x7c3aed, p: [0, -18], a: [0, -15] };
+
+const GAMEROOM_STATIONS = [
+{ id: 'stealanegg', n: 'STEAL AN EGG (50–400⭐)', icon: '🥚', color: '#fde047', p: [0, -4], a: [0, 0] }
+];
 
 const PVP_STATIONS = [
 { id: 'graphwars', n: 'GRAPH WARS', icon: '📈', color: '#38bdf8', p: [-14, -6], a: [-11, -4] },
@@ -955,7 +1071,7 @@ function containsBadWord(str) {
     .replace(/0/g, 'o')
     .replace(/[$5]/g, 's')
     .replace(/7/g, 't')
-    .replace(/[^a-z฀-๿]/g, '');
+    .replace(/[^a-z\u0E00-\u0E7F]/g, '');
   return BAD_WORDS_REGEX.test(str) || BAD_WORDS_REGEX.test(normalized);
 }
 
@@ -963,6 +1079,7 @@ function triggerDetention(reason = 'rapid') {
   S.detentionUntil = Date.now() + 60000;
   wrongClickTimes = [];
   save();
+  stopPvpLoop();
   $('#dlg').style.display = 'none';
   cs = null;
   enterDimension('detention');
@@ -1051,13 +1168,13 @@ const nowDone = Date.now();
 const onCooldown = prevStars > 0 && (nowDone - (S.questLastXpAt[cs.i] || 0) < 90000);
 let bonusXp = 0;
 if (prevStars === 0) {
-bonusXp = 210 + st * 30; // First-time mastery: 350 to 440 total XP
+bonusXp = 210 + st * 30;
 S.questLastXpAt[cs.i] = nowDone;
 } else if (st > prevStars) {
-bonusXp = (st - prevStars) * 60; // Star upgrade bonus
+bonusXp = (st - prevStars) * 60;
 S.questLastXpAt[cs.i] = nowDone;
 } else if (!onCooldown) {
-bonusXp = 35; // Practice replay XP (90s cooldown per NPC to stop spamming)
+bonusXp = 35;
 S.questLastXpAt[cs.i] = nowDone;
 }
 const totalRunXp = (cs.earnedXp || 0) + bonusXp;
@@ -1159,7 +1276,7 @@ else btnHtml = '<button class="shop-buy" data-buy-drone="' + d.id + '" ' + (star
 
 const hexCol = '#' + d.accent.toString(16).padStart(6, '0');
 bodyHtml += '<div class="shop-card ' + (equipped ? 'equipped' : '') + '">' +
-'<div><h4><span style="display:inline-block;width:0.9em;height:0.9em;border-radius:50%;background:' + hexCol + ';border:1px solid #fff"></span> ' + d.icon + ' ' + d.name + '</h4>' +
+'<div><h4><span style="display:inline-block;width:0.9em;width:0.9em;height:0.9em;border-radius:50%;background:' + hexCol + ';border:1px solid #fff"></span> ' + d.icon + ' ' + d.name + '</h4>' +
 '<p style="margin-top:0.3em">' + d.desc + '</p></div>' + btnHtml + '</div>';
 });
 }
@@ -1228,7 +1345,6 @@ openStarShop();
 }
 $('#i-shop').onclick = openStarShop;
 
-// Dimension Quick-Switch Modal on top pill click
 $('#dim-pill').onclick = () => {
 if (isInDetention()) {
 const rem = Math.ceil((S.detentionUntil - Date.now()) / 1000);
@@ -1241,6 +1357,8 @@ const isCur = currentDim === key;
 const locked = d.minLv && curLv < d.minLv;
 const subStars = key === 'hub'
 ? totalStars() + '/96 ⭐'
+: key === 'gameroom'
+? '🥚 Steal an Egg (50–400⭐)'
 : key === 'pvp'
 ? (locked ? '🔒 Requires Lv.' + d.minLv : '⚔️ ' + Object.values(S.pvpWins || {}).reduce((a, b) => a + b, 0) + ' Wins')
 : C.filter(q => q.dim === key).reduce((acc, q) => acc + S.stars[q.idx], 0) + '/12 ⭐';
@@ -1248,7 +1366,7 @@ return '<button class="opt ' + (isCur ? 'good' : '') + '" data-dim="' + key + '"
 '<span><b>' + d.icon + ' ' + d.name + '</b>' + (isCur ? ' (Current)' : '') + '</span>' +
 '<span style="color:#fbbf24;font-weight:800">' + subStars + '</span></button>';
 }).join('');
-infoPanel('<h2>🌐 Dimension Teleporter (8 Worlds + Lv.100 PVP)</h2><p style="color:#cbd5e1;font-size:0.9em">Walk into any glowing 3D Portal in the plaza or select a dimension below:</p>' + dimBtns);
+infoPanel('<h2>🌐 Dimension Teleporter (8 Worlds + Game Room)</h2><p style="color:#cbd5e1;font-size:0.9em">Walk into any glowing 3D Portal in the plaza or select a dimension below:</p>' + dimBtns);
 $('#pn').querySelectorAll('button[data-dim]:not([disabled])').forEach(btn => {
 btn.onclick = () => {
 $('#dlg').style.display = 'none';
@@ -1273,9 +1391,16 @@ const rows = C.filter(c => c.dim === g.key)
 return '<h3 style="margin:0.65em 0 0.2em;color:' + g.col + ';font-size:0.96em;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.2em">' + g.label + '</h3>' + rows;
 }).join('');
 const w = S.pvpWins || {};
-const pvpSummary = '<h3 style="margin:0.65em 0 0.2em;color:#fde047;font-size:0.96em;border-bottom:1px solid rgba(253,224,71,0.25);padding-bottom:0.2em">⚔️ Lv.100 PVP Arena Record</h3>' +
+const es = S.eggStats || { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' };
+const recentTx = (S.starTransactions || []).slice(-5).reverse().map(tx =>
+'<div style="font-size:0.8em;color:#cbd5e1;display:flex;justify-content:space-between;padding:0.2em 0;border-bottom:1px solid rgba(255,255,255,0.06)"><span>' + esc(tx.label) + ' (-' + tx.stars + '⭐)</span><span>' + new Date(tx.ts).toLocaleTimeString() + '</span></div>'
+).join('');
+const pvpSummary = '<h3 style="margin:0.65em 0 0.2em;color:#f472b6;font-size:0.96em;border-bottom:1px solid rgba(244,114,182,0.25);padding-bottom:0.2em">🕹️ Game Room · Steal an Egg Stats</h3>' +
+'<p style="font-size:0.88em;color:#e2e8f0">🥚 Egg Cash: <b>$' + Math.floor(es.cash || 100).toLocaleString() + '</b> · 🔄 Rebirths: <b>' + (es.rebirths || 0) + '</b> · 🥷 Eggs Stolen: <b>' + (es.steals || 0) + '</b></p>' +
+(recentTx ? '<div style="margin:0.4em 0">' + recentTx + '</div>' : '') +
+'<h3 style="margin:0.65em 0 0.2em;color:#fde047;font-size:0.96em;border-bottom:1px solid rgba(253,224,71,0.25);padding-bottom:0.2em">⚔️ Lv.100 PVP Arena Record</h3>' +
 '<p style="font-size:0.88em;color:#e2e8f0">📈 Graph Wars: <b>' + (w.graphwars || 0) + 'W</b> · ⚽ Football: <b>' + (w.football || 0) + 'W</b> · 🏀 Basketball: <b>' + (w.basketball || 0) + 'W</b> · 🚁 Drone Race: <b>' + (w.dronerace || 0) + 'W</b></p>';
-infoPanel('<h2>' + S.name + ' · Lv.' + lvl() + ' (Earned: ' + totalStars() + '/96 ⭐ · Wallet: ' + availStars() + ' ⭐)</h2>' + groups + pvpSummary + '<p style="color:#a5b4fc;margin-top:0.6em">Total XP: ' + S.xp + '</p>');
+infoPanel('<h2>' + esc(S.name) + ' · Lv.' + lvl() + ' (Earned: ' + totalStars() + '/96 ⭐ · Wallet: ' + availStars() + ' ⭐)</h2>' + groups + pvpSummary + '<p style="color:#a5b4fc;margin-top:0.6em">Total XP: ' + S.xp + '</p>');
 };
 
 $('#i2').onclick = () => {
@@ -1295,24 +1420,27 @@ return;
 }
 const nextAny = C.find(q => S.stars[q.idx] === 0);
 if (!nextAny) {
-say('All 32 quests across all 8 dimensions solved! Reach Lv.100 to enter the PVP Arena!', 4500);
+say('All 32 quests solved! Spend your ⭐ Stars in the 🕹️ Game Room to play Steal an Egg!', 4500);
 } else {
 say('All quests here are done! Warp to ' + DIMS[nextAny.dim].name + ' for ' + nextAny.n + '.', 4500);
 }
 };
 
-$('#i4').onclick = () => infoPanel('<h2>Inquiry World v13 · Explorer Guide</h2>' +
+$('#i4').onclick = () => infoPanel('<h2>Inquiry World v14 · Explorer Guide</h2>' +
 '<p><b>🌐 8 Subject Dimensions (32 Quests · 96 ⭐):</b></p>' +
-'<p style="font-size:0.88em;line-height:1.45">📐 <b>Math</b> (Arithmetics, Patterns, Algebra) · 🔬 <b>Science</b> (Biology & Chemistry) · 📚 <b>English</b> · 🇹🇭 <b>Thai</b> · 🤖 <b>ICT & Robotics</b> · 🛠️ <b>Makerspace</b> · 🎨 <b>Arts</b> · 🖥️ <b>Digital Design</b></p>' +
-'<p><b>⚔️ Lv.100 PVP Arena:</b> Unlock at Level 100 to battle in <b>Graph Wars</b>, <b>PVP Football</b>, <b>PVP Basketball</b>, and <b>3D Drone Racing</b>!</p>' +
+'<p style="font-size:0.88em;line-height:1.45">📐 <b>Math</b> · 🔬 <b>Science</b> · 📚 <b>English</b> · 🇹🇭 <b>Thai</b> · 🤖 <b>ICT & Robotics</b> · 🛠️ <b>Makerspace</b> · 🎨 <b>Arts</b> · 🖥️ <b>Digital Design</b></p>' +
+'<p><b>🕹️ Game Room · 🥚 Steal an Egg Access Packages:</b><br>' +
+'⭐ <b>50 Stars</b> = 5 mins · ⭐ <b>100 Stars</b> = 10 mins · ⭐ <b>200 Stars</b> = 15 mins · ⭐ <b>300 Stars</b> = 20 mins · ⭐ <b>400 Stars</b> = 30 mins.<br>' +
+'Sessions persist across page refreshes and auto-terminate when time expires!</p>' +
 '<p><b>🚁 Drone Flight:</b> Press <b>F</b> or tap <b>Drone</b> anytime to fly around any dimension!</p>' +
 '<hr style="border:0;border-top:1px solid rgba(255,255,255,0.15);margin:0.8em 0;">' +
 '<p style="font-size:0.85em;color:#c4b5fd;text-align:center;margin:0;">💻 <b>Developer:</b> johnicebourne@gmail.com</p>');
 
 $('#i5').onclick = () => {
-infoPanel('<h2>Reset progress?</h2><p>This erases your stars and XP on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
+infoPanel('<h2>Reset progress?</h2><p>This erases your stars, XP, and Game Room stats on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
 $('#rs').onclick = () => {
-S = { name: S.name, xp: 0, stars: Array(32).fill(0), questLastXpAt: {}, pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 }, spentStars: 0, ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0 };
+stopPvpLoop();
+S = { name: S.name, xp: 0, stars: Array(32).fill(0), bonusStars: 0, questLastXpAt: {}, pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 }, eggStats: { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' }, spentStars: 0, starTransactions: [], activeGameSession: null, completedSessionIds: [], ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0 };
 rebuildLocalAvatar();
 save();
 hud();
@@ -1394,13 +1522,477 @@ P.pend = { type: 'pvp', item: stObj };
 }
 
 let activePvpLoop = null;
+let activeSaeInterval = null;
+let purchaseLock = false; // Priority 2: Idempotency lock against rapid double-clicks
+
 function stopPvpLoop() {
 if (activePvpLoop) {
 cancelAnimationFrame(activePvpLoop);
 activePvpLoop = null;
 }
+if (activeSaeInterval) {
+clearInterval(activeSaeInterval);
+activeSaeInterval = null;
+}
 }
 
+// =========================================================================
+// STEAL AN EGG (PRIORITY 2, 3, 4: ECONOMY, PERSISTENCE & XP EXPLOIT FIXES)
+// =========================================================================
+const EGG_CATALOG = [
+{ id: 'common', name: 'Spotted Chick Egg', icon: '🥚', cost: 25, rate: 8, hatchSec: 6, mult: 1.5, color: '#cbd5e1' },
+{ id: 'rare', name: 'Sapphire Raptor Egg', icon: '🪺', cost: 120, rate: 42, hatchSec: 9, mult: 2.0, color: '#38bdf8' },
+{ id: 'epic', name: 'Magma Phoenix Egg', icon: '🔥', cost: 550, rate: 195, hatchSec: 12, mult: 2.5, color: '#fb923c' },
+{ id: 'mythic', name: 'Galaxy Dragon Egg', icon: '🐉', cost: 2400, rate: 920, hatchSec: 15, mult: 3.5, color: '#e879f9' }
+];
+
+function getActiveGameSession() {
+  const sess = S.activeGameSession;
+  if (!sess || typeof sess !== 'object') return null;
+  const now = Date.now();
+  const maxDurMs = 30 * 60 * 1000;
+  if (sess.expiresAt <= now) {
+    // Session expired while offline/refreshed -> terminate cleanly
+    finalizeExpiredOrCompletedSession(sess, true, false);
+    return null;
+  }
+  // Anti-tamper guard: clamp expiration so remaining time can never exceed purchased duration
+  const maxValidExpire = sess.startAt + Math.min(maxDurMs, sess.durationSec * 1000);
+  if (sess.expiresAt > maxValidExpire) {
+    sess.expiresAt = maxValidExpire;
+    save();
+  }
+  return sess;
+}
+
+function openStealAnEggPaywall() {
+stopPvpLoop();
+// Priority 3: Prevent overlapping active sessions; resume existing session if still valid
+const existing = getActiveGameSession();
+if (existing && existing.expiresAt > Date.now()) {
+  say('⏳ Resuming your active Steal an Egg session!', 2500);
+  launchStealAnEggGame(existing);
+  return;
+}
+
+cs = 'pvp';
+$('#dlg').style.display = 'flex';
+const wallet = availStars();
+
+const pkgButtons = GAME_PACKAGES.map(pkg => {
+  const canAfford = wallet >= pkg.stars;
+  return '<button class="time-pkg" data-pkg-id="' + pkg.id + '" ' + (canAfford ? '' : 'disabled') + '>' +
+    '<div style="font-size:1.15em;color:#fde047">⭐ ' + pkg.stars + ' Stars</div>' +
+    '<div style="font-size:0.9em;margin-top:0.2em">⏱️ ' + pkg.label + '</div>' +
+    '</button>';
+}).join('');
+
+$('#pn').innerHTML = '<h2>🥚 STEAL AN EGG · Arcade Entry</h2>' +
+'<div class="pvp-scorebar"><span>🎟️ Any Level Welcome (You: Lv.' + lvl() + ')</span><span>⭐ Your Wallet: ' + wallet + ' Stars</span></div>' +
+'<div class="story" style="font-size:0.88em">' +
+'<b>Core Gameplay:</b> Buy eggs on the conveyor belt or raid rival player bases to steal their high-tier eggs!<br>' +
+'<b>Base Defense & Traps:</b> Lock your base timer, place traps, and use Slaps to knock away thieves.<br>' +
+'<b>Hatching & Rebirth:</b> Hatch eggs for huge Cash/sec multipliers and Rebirth for higher tiers & longer base locks!' +
+'</div>' +
+'<div style="font-weight:800;color:#f472b6;font-size:0.92em">Select Game Access Package (Persists across refresh · Auto-terminates on expiry):</div>' +
+'<div class="time-pkg-grid">' + pkgButtons + '</div>' +
+(wallet < 50
+? '<div class="fb" style="color:#fca5a5">⚠️ Minimum 50 Stars required! Earn Stars across the 8 Subject Portals first.</div>'
+: '') +
+'<div style="display:flex;gap:0.5em;margin-top:0.6em">' +
+(wallet < 50 ? '<button class="btn" id="sae-go-plaza" style="background:linear-gradient(135deg,#0284c7,#6366f1)">🌐 Return to Plaza to Farm Stars</button>' : '') +
+'<button class="btn" id="pvp-exit" style="background:#475569">Cancel</button>' +
+'</div>';
+
+$('#pvp-exit').onclick = () => { stopPvpLoop(); cs = null; $('#dlg').style.display = 'none'; };
+if ($('#sae-go-plaza')) {
+$('#sae-go-plaza').onclick = () => {
+stopPvpLoop();
+cs = null;
+$('#dlg').style.display = 'none';
+enterDimension('hub');
+};
+}
+
+$('#pn').querySelectorAll('.time-pkg:not([disabled])').forEach(btn => {
+btn.onclick = () => {
+  // Priority 2: Prevent duplicate purchases from rapid clicks or overlapping sessions
+  if (purchaseLock) return;
+  if (getActiveGameSession()) {
+    launchStealAnEggGame(S.activeGameSession);
+    return;
+  }
+  const pkg = GAME_PACKAGES.find(p => p.id === btn.dataset.pkgId);
+  if (!pkg) return;
+  if (availStars() < pkg.stars) {
+    say('⚠️ Insufficient Stars! Need ' + pkg.stars + ' Stars.', 2500);
+    return;
+  }
+
+  purchaseLock = true;
+  // Disable all package buttons immediately in DOM
+  $('#pn').querySelectorAll('.time-pkg').forEach(b => { b.disabled = true; });
+
+  const now = Date.now();
+  const durationSec = pkg.minutes * 60;
+  const sessionId = 'sess_' + now + '_' + Math.random().toString(36).slice(2, 7);
+
+  // Deduct stars exactly once & record transaction
+  S.spentStars = (S.spentStars || 0) + pkg.stars;
+  S.starTransactions.push({
+    txId: 'tx_' + now,
+    sessionId,
+    pkgId: pkg.id,
+    label: 'Steal an Egg (' + pkg.label + ')',
+    stars: pkg.stars,
+    minutes: pkg.minutes,
+    ts: now
+  });
+  if (S.starTransactions.length > 50) S.starTransactions.shift();
+
+  // Persist start and expiration timestamps (Priority 3)
+  S.activeGameSession = {
+    sessionId,
+    pkgId: pkg.id,
+    starsPaid: pkg.stars,
+    durationSec,
+    startAt: now,
+    expiresAt: now + durationSec * 1000,
+    xpAwarded: false
+  };
+
+  save();
+  hud();
+  pushState(true);
+  sendChat('🥚 Unlocked Steal an Egg (' + pkg.label + ' for ⭐' + pkg.stars + ' Stars)!', true);
+
+  setTimeout(() => { purchaseLock = false; }, 400);
+  launchStealAnEggGame(S.activeGameSession);
+};
+});
+}
+
+function finalizeExpiredOrCompletedSession(sessionObj, isCompleted, redirectHub = true) {
+  stopPvpLoop();
+  if (!sessionObj) return;
+
+  const now = Date.now();
+  const elapsedSec = Math.max(0, Math.floor((Math.min(now, sessionObj.expiresAt) - sessionObj.startAt) / 1000));
+  const minValidPlaySec = Math.min(60, Math.floor(sessionObj.durationSec * 0.5));
+  const alreadyRewarded = sessionObj.xpAwarded || S.completedSessionIds.includes(sessionObj.sessionId);
+
+  let awardedXp = 0;
+  // Priority 4: Remove unconditional XP for early exits; validate gameplay duration & deduplicate
+  if (isCompleted && !alreadyRewarded && elapsedSec >= minValidPlaySec) {
+    const es = S.eggStats || { steals: 0, rebirths: 0 };
+    awardedXp = 120 + (es.steals || 0) * 35 + (es.rebirths || 0) * 150;
+    S.xp += awardedXp;
+    sessionObj.xpAwarded = true;
+    S.completedSessionIds.push(sessionObj.sessionId);
+    if (S.completedSessionIds.length > 100) S.completedSessionIds.shift();
+  }
+
+  S.activeGameSession = null;
+  save();
+  hud();
+  pushState(true);
+  cs = null;
+  $('#dlg').style.display = 'none';
+
+  if (isCompleted && awardedXp > 0) {
+    say('⏰ Steal an Egg session complete! +' + awardedXp + ' XP earned. Returning to Main Plaza!', 5000);
+    sendChat('🥚 Completed Steal an Egg session (+' + awardedXp + ' XP)!', true);
+  } else if (!isCompleted) {
+    say('🚪 Exited early (' + elapsedSec + 's played). No completion XP awarded.', 4000);
+  } else {
+    say('⏰ Game session expired! Returning to Main Plaza.', 4000);
+  }
+
+  if (redirectHub && currentDim !== 'hub') {
+    enterDimension('hub');
+  }
+}
+
+function launchStealAnEggGame(sessionObj) {
+stopPvpLoop();
+if (!sessionObj || sessionObj.expiresAt <= Date.now()) {
+  finalizeExpiredOrCompletedSession(sessionObj, true, true);
+  return;
+}
+
+cs = 'pvp';
+$('#dlg').style.display = 'flex';
+
+const es = S.eggStats || { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' };
+let cash = Math.max(50, Math.floor(es.cash || 100));
+let rebirths = es.rebirths || 0;
+let steals = es.steals || 0;
+
+let baseEggs = [
+{ ...EGG_CATALOG[0], hatched: false, hatchProg: 0 }
+];
+let lockRemaining = 25 + rebirths * 10;
+let trapsCount = 1;
+let thiefAlert = null;
+let statusBanner = 'Buy conveyor eggs or raid rival bases!';
+
+const now = Date.now();
+const liveNames = Object.values(remotePlayers)
+.filter(rp => rp && now - (rp.ts || 0) < 25000 && rp.name)
+.map(rp => rp.name);
+const rivalNames = [
+liveNames[0] || 'ShadowThief99',
+liveNames[1] || 'EggTycoon_TH',
+liveNames[2] || 'DragonHunter'
+];
+
+let rivals = [
+{ name: rivalNames[0], locked: false, lockTimer: 0, egg: EGG_CATALOG[1] },
+{ name: rivalNames[1], locked: true, lockTimer: 12, egg: EGG_CATALOG[2] },
+{ name: rivalNames[2], locked: true, lockTimer: 22, egg: EGG_CATALOG[3] }
+];
+
+let belt = [
+EGG_CATALOG[0],
+EGG_CATALOG[1],
+EGG_CATALOG[Math.min(3, 1 + Math.floor(rebirths / 2))]
+];
+
+const getMult = () => 1 + rebirths * 0.75;
+const getIncomePerSec = () => {
+let sum = 0;
+baseEggs.forEach(e => {
+sum += e.rate * (e.hatched ? e.mult : 1);
+});
+return Math.round(sum * getMult());
+};
+const getRebirthCost = () => 1500 * Math.pow(2, rebirths);
+
+function syncEggProgress() {
+  S.eggStats = {
+    cash: Math.floor(cash),
+    rebirths,
+    steals,
+    bestEgg: baseEggs.length ? baseEggs[baseEggs.length - 1].name : 'None'
+  };
+  save();
+}
+
+function renderSaeUI() {
+// Always compute remaining time from persistent expiresAt timestamp (Priority 3)
+const maxValidExpire = sessionObj.startAt + sessionObj.durationSec * 1000;
+if (sessionObj.expiresAt > maxValidExpire) {
+  sessionObj.expiresAt = maxValidExpire;
+  save();
+}
+const remSec = Math.max(0, Math.ceil((sessionObj.expiresAt - Date.now()) / 1000));
+const mm = String(Math.floor(remSec / 60)).padStart(2, '0');
+const ss = String(remSec % 60).padStart(2, '0');
+const income = getIncomePerSec();
+const rebCost = getRebirthCost();
+
+const beltHtml = belt.map((eg, idx) =>
+'<button class="sae-btn" data-buy-egg="' + idx + '" ' + (cash < eg.cost ? 'disabled' : '') + '>' +
+'<span>' + eg.icon + ' ' + eg.name + ' <small style="color:#34d399">(+$' + eg.rate + '/s)</small></span>' +
+'<span style="color:#fde047">$' + eg.cost + '</span></button>'
+).join('');
+
+const rivalsHtml = rivals.map((rv, idx) =>
+'<button class="sae-btn steal" data-steal="' + idx + '" ' + (rv.locked ? 'disabled' : '') + '>' +
+'<span>🥷 ' + esc(rv.name) + ' · ' + rv.egg.icon + ' ' + rv.egg.name.split(' ')[0] + '</span>' +
+'<span>' + (rv.locked ? '🔒 ' + rv.lockTimer + 's' : '⚡ STEAL!') + '</span></button>'
+).join('');
+
+const myEggsHtml = baseEggs.slice(-5).map(e =>
+'<span style="display:inline-flex;align-items:center;gap:0.25em;background:rgba(255,255,255,0.08);border:1px solid ' + e.color + ';padding:0.2em 0.5em;border-radius:99px;font-size:0.78em">' +
+(e.hatched ? '🐣' : e.icon) + ' ' + e.name.split(' ')[0] + (e.hatched ? ' (2x!)' : ' (' + Math.min(100, Math.round((e.hatchProg / e.hatchSec) * 100)) + '%)') +
+'</span>'
+).join(' ');
+
+$('#pn').innerHTML =
+'<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5em;flex-wrap:wrap">' +
+'<h2 style="margin:0">🥚 Steal an Egg · Live Arena</h2>' +
+'<span class="sae-timer-pill ' + (remSec <= 15 ? 'low' : '') + '">⏳ ' + mm + ':' + ss + ' left</span>' +
+'</div>' +
+'<div class="pvp-scorebar">' +
+'<span>💰 Cash: <b style="color:#34d399">$' + cash.toLocaleString() + '</b> (+$' + income + '/s)</span>' +
+'<span>🔄 Rebirths: <b style="color:#fde047">' + rebirths + '</b> (' + getMult().toFixed(2) + 'x)</span>' +
+'<span>🥷 Stolen: <b>' + steals + '</b></span>' +
+'</div>' +
+'<div style="background:rgba(56,189,248,0.14);border:1px solid rgba(56,189,248,0.4);border-radius:0.65em;padding:0.4em 0.7em;font-size:0.84em;font-weight:700;color:#e0f2fe;margin-bottom:0.45em">' +
+(thiefAlert
+? '🚨 ALERT! <b>' + esc(thiefAlert.name) + '</b> is stealing your egg (' + thiefAlert.progress + '%)! Hit SLAP THIEF!'
+: '📢 ' + statusBanner) +
+'</div>' +
+'<div class="sae-grid">' +
+'<div class="sae-box"><h4><span>🏭 Conveyor Belt</span><span>Eggs: ' + baseEggs.length + '/8</span></h4>' + beltHtml + '</div>' +
+'<div class="sae-box"><h4><span>🥷 Rival Bases (Raid!)</span><span>Live/AI</span></h4>' + rivalsHtml + '</div>' +
+'</div>' +
+'<div class="sae-box" style="margin-top:0.5em">' +
+'<h4><span>🛡️ Your Base Defense & Hatchery</span><span>' + (lockRemaining > 0 ? '🔒 Locked (' + lockRemaining + 's)' : '🔓 UNLOCKED!') + ' · Traps: ' + trapsCount + '</span></h4>' +
+'<div style="display:flex;flex-wrap:wrap;gap:0.35em;margin-bottom:0.45em">' + (myEggsHtml || '<small>No eggs yet</small>') + '</div>' +
+'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:0.4em">' +
+'<button class="sae-btn def" id="sae-lock"><span>🔒 Lock Base</span><span>$80</span></button>' +
+'<button class="sae-btn def" id="sae-trap"><span>🪤 Buy Trap</span><span>$150</span></button>' +
+'<button class="sae-btn steal" id="sae-slap"><span>👋 Slap Thief!</span><span>' + (thiefAlert ? '🚨 HIT!' : 'Ready') + '</span></button>' +
+'<button class="sae-btn rebirth" id="sae-rebirth" ' + (cash < rebCost ? 'disabled' : '') + '><span>🔄 Rebirth</span><span>$' + rebCost + '</span></button>' +
+'</div>' +
+'</div>' +
+'<div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.55em">' +
+'<small style="color:#94a3b8">Timer persists across refresh · Early exit forfeits completion XP</small>' +
+'<button class="btn" id="sae-leave-early" style="margin:0;padding:0.4em 1em;background:#475569;font-size:0.82em">End Session Early</button>' +
+'</div>';
+
+$('#pn').querySelectorAll('[data-buy-egg]').forEach(btn => {
+btn.onclick = () => {
+const idx = Number(btn.dataset.buyEgg);
+const eg = belt[idx];
+if (!eg || cash < eg.cost) return;
+if (baseEggs.length >= 8) baseEggs.shift();
+cash -= eg.cost;
+baseEggs.push({ ...eg, hatched: false, hatchProg: 0 });
+const roll = Math.random();
+const nextEgg = roll < 0.45 ? EGG_CATALOG[0] : roll < 0.78 ? EGG_CATALOG[1] : roll < 0.94 ? EGG_CATALOG[2] : EGG_CATALOG[3];
+belt[idx] = nextEgg;
+statusBanner = 'Bought ' + eg.icon + ' ' + eg.name + '! Hatching in your base...';
+syncEggProgress();
+renderSaeUI();
+};
+});
+
+$('#pn').querySelectorAll('[data-steal]').forEach(btn => {
+btn.onclick = () => {
+const idx = Number(btn.dataset.steal);
+const rv = rivals[idx];
+if (!rv || rv.locked) return;
+const chance = Math.min(0.92, 0.62 + rebirths * 0.06);
+if (Math.random() < chance) {
+if (baseEggs.length >= 8) baseEggs.shift();
+baseEggs.push({ ...rv.egg, hatched: false, hatchProg: 0 });
+steals++;
+statusBanner = '🎉 STOLE ' + rv.egg.icon + ' ' + rv.egg.name + ' from ' + rv.name + '!';
+rv.locked = true;
+rv.lockTimer = 18;
+rv.egg = EGG_CATALOG[Math.min(3, Math.floor(Math.random() * 4))];
+} else {
+statusBanner = '👋 Slapped by ' + rv.name + '! Wait for another opening!';
+rv.locked = true;
+rv.lockTimer = 10;
+}
+syncEggProgress();
+renderSaeUI();
+};
+});
+
+$('#sae-lock').onclick = () => {
+if (cash < 80) { statusBanner = 'Need $80 to lock base!'; renderSaeUI(); return; }
+cash -= 80;
+lockRemaining = 45 + rebirths * 12;
+thiefAlert = null;
+statusBanner = '🔒 Base Laser Door Locked for ' + lockRemaining + 's!';
+syncEggProgress();
+renderSaeUI();
+};
+
+$('#sae-trap').onclick = () => {
+if (cash < 150) { statusBanner = 'Need $150 for a Shock Trap!'; renderSaeUI(); return; }
+cash -= 150;
+trapsCount++;
+statusBanner = '🪤 Installed Shock Trap #' + trapsCount + ' at your base entrance!';
+syncEggProgress();
+renderSaeUI();
+};
+
+$('#sae-slap').onclick = () => {
+if (thiefAlert) {
+cash += 65;
+statusBanner = '👋 MEGA SLAP! Knocked out ' + thiefAlert.name + ' and took +$65 bounty!';
+thiefAlert = null;
+} else {
+statusBanner = '👋 Swung Slap Glove! Keep watch for thieves when your lock expires.';
+}
+syncEggProgress();
+renderSaeUI();
+};
+
+$('#sae-rebirth').onclick = () => {
+const cost = getRebirthCost();
+if (cash < cost) return;
+rebirths++;
+cash = 150 * rebirths;
+trapsCount = 1 + rebirths;
+lockRemaining = 45 + rebirths * 12;
+baseEggs = [{ ...EGG_CATALOG[Math.min(3, rebirths)], hatched: false, hatchProg: 0 }];
+statusBanner = '🔄 REBIRTH #' + rebirths + '! Permanent ' + getMult().toFixed(2) + 'x Cash Multiplier unlocked!';
+syncEggProgress();
+renderSaeUI();
+};
+
+$('#sae-leave-early').onclick = () => {
+syncEggProgress();
+finalizeExpiredOrCompletedSession(sessionObj, false, true);
+};
+}
+
+renderSaeUI();
+
+activeSaeInterval = setInterval(() => {
+const remMs = sessionObj.expiresAt - Date.now();
+if (remMs <= 0) {
+syncEggProgress();
+finalizeExpiredOrCompletedSession(sessionObj, true, true);
+return;
+}
+
+cash += getIncomePerSec();
+
+baseEggs.forEach(e => {
+if (!e.hatched) {
+e.hatchProg += 1;
+if (e.hatchProg >= e.hatchSec) {
+e.hatched = true;
+statusBanner = '🐣 ' + e.name + ' HATCHED! Now generating ' + e.mult + 'x cash!';
+}
+}
+});
+
+rivals.forEach(rv => {
+if (rv.locked) {
+rv.lockTimer--;
+if (rv.lockTimer <= 0) {
+rv.locked = false;
+}
+} else if (Math.random() < 0.08) {
+rv.locked = true;
+rv.lockTimer = 14;
+}
+});
+
+if (lockRemaining > 0) {
+lockRemaining--;
+} else {
+if (!thiefAlert && baseEggs.length > 0 && Math.random() < 0.25) {
+const thiefName = rivalNames[Math.floor(Math.random() * rivalNames.length)];
+if (trapsCount > 0) {
+trapsCount--;
+statusBanner = '⚡ Shock Trap zapped ' + thiefName + ' at your door! (' + trapsCount + ' traps left)';
+} else {
+thiefAlert = { name: thiefName, progress: 25 };
+}
+} else if (thiefAlert) {
+thiefAlert.progress += 25;
+if (thiefAlert.progress >= 100) {
+const stolen = baseEggs.pop();
+statusBanner = '😱 ' + thiefAlert.name + ' stole your ' + (stolen ? stolen.name : 'egg') + '! Lock your base!';
+thiefAlert = null;
+}
+}
+}
+
+syncEggProgress();
+renderSaeUI();
+}, 1000);
+}
 
 let lastPvpXpAt = 0;
 function recordPvpWin(gameKey, label) {
@@ -1419,10 +2011,14 @@ say('🏆 Victory in ' + label + '! +' + gain + ' XP · Total Wins: ' + S.pvpWin
 function getPvpOpponentName() {
 const now = Date.now();
 const live = Object.values(remotePlayers).find(rp => rp && now - (rp.ts || 0) < 20000);
-return live ? (live.name + ' (Lv.' + (live.lv || 100) + ')') : 'Grandmaster Bot (Lv.100)';
+return live ? (esc(live.name) + ' (Lv.' + (live.lv || 100) + ')') : 'Grandmaster Bot (Lv.100)';
 }
 
 function openPvpGame(gameId) {
+if (gameId === 'stealanegg') {
+openStealAnEggPaywall();
+return;
+}
 stopPvpLoop();
 cs = 'pvp';
 $('#dlg').style.display = 'flex';
@@ -1476,19 +2072,16 @@ ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(520, py); ctx.stroke();
 ctx.strokeStyle = 'rgba(255,255,255,0.35)';
 ctx.beginPath(); ctx.moveTo(0, 105); ctx.lineTo(520, 105); ctx.moveTo(260, 0); ctx.lineTo(260, 210); ctx.stroke();
 
-// Obstacle
 const [ox, oy] = toPx(obs.x, obs.y);
 ctx.fillStyle = '#475569';
 ctx.beginPath(); ctx.arc(ox, oy, obs.r * 18, 0, 7); ctx.fill();
 ctx.strokeStyle = '#94a3b8'; ctx.stroke();
 
-// Players
 const [x1, y1] = toPx(p1.x, p1.y);
 ctx.fillStyle = '#38bdf8'; ctx.beginPath(); ctx.arc(x1, y1, 9, 0, 7); ctx.fill();
 const [x2, y2] = toPx(p2.x, p2.y);
 ctx.fillStyle = '#f43f5e'; ctx.beginPath(); ctx.arc(x2, y2, 9, 0, 7); ctx.fill();
 
-// Preview curve for player
 if (turn === 'player' && !beam && !done) {
 const m = parseFloat($('#gw-m').value), a = parseFloat($('#gw-a').value);
 ctx.strokeStyle = 'rgba(56,189,248,0.45)';
@@ -1585,7 +2178,6 @@ $('#fb-c').oninput = () => $('#fb-c-v').textContent = $('#fb-c').value;
 function tickFB() {
 ctx.fillStyle = '#064e3b';
 ctx.fillRect(0, 0, 520, 205);
-// Goal frame
 ctx.strokeStyle = '#ffffff';
 ctx.lineWidth = 4;
 ctx.strokeRect(105, 18, 310, 68);
@@ -1601,7 +2193,6 @@ ctx.lineWidth = 2;
 ctx.beginPath(); ctx.arc(aimX, 48, 10, 0, 7); ctx.stroke();
 }
 
-// Goalkeeper
 ctx.fillStyle = '#f43f5e';
 ctx.fillRect(keeperX - 24, 42, 48, 22);
 
@@ -1678,14 +2269,12 @@ ctx.fillRect(0, 0, 520, 205);
 hoopY += hoopDir;
 if (hoopY > 105 || hoopY < 52) hoopDir *= -1;
 
-// Backboard & Rim
 ctx.fillStyle = '#f8fafc';
 ctx.fillRect(455, hoopY - 34, 8, 46);
 ctx.strokeStyle = '#fb923c';
 ctx.lineWidth = 4;
 ctx.beginPath(); ctx.moveTo(418, hoopY); ctx.lineTo(455, hoopY); ctx.stroke();
 
-// Shooter
 ctx.fillStyle = '#38bdf8';
 ctx.fillRect(48, 152, 18, 38);
 
@@ -1841,7 +2430,7 @@ let html = '<div class="pl-item" style="border-color:rgba(251,191,36,0.4)">' +
 active.forEach(([uid, d]) => {
 const col = OUTFITS[d.color % OUTFITS.length]?.hex || '#38bdf8';
 const rDim = DIMS[d.dim || 'hub'] || DIMS.hub;
-html += '<button class="pl-item" data-uid="' + uid + '">' +
+html += '<button class="pl-item" data-uid="' + esc(uid) + '">' +
 '<span><i class="pl-swatch" style="background:' + col + '"></i>' + esc(d.name || 'Explorer') + ' <small style="color:#94a3b8">(' + rDim.icon + ')</small></span>' +
 '<span style="color:#38bdf8;font-weight:700">' + (d.flying ? '🚁 ' : '') + 'Lv.' + (d.lv || 1) + ' →</span></button>';
 });
@@ -1872,7 +2461,6 @@ say('Joining ' + (target.name || 'Explorer') + ' in ' + (DIMS[tDim]?.name || 'Ma
 });
 }
 
-const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 const seenMsgs = new Set();
 function appendChatLine(id, name, text, isMe, isSys) {
 if (id && seenMsgs.has(id)) return;
@@ -1909,7 +2497,7 @@ sendChat(txt);
 
 function sendChat(text, isEvent = false) {
 const now = Date.now();
-const cleanText = text.slice(0, 60);
+const cleanText = String(text).slice(0, 60);
 if (!isEvent && containsBadWord(cleanText)) {
 triggerDetention('chat');
 return;
@@ -2005,7 +2593,6 @@ return sp;
 }
 
 function buildWorldForDimension(dim) {
-// Clear previous dimension geometry & signs
 while (worldGroup.children.length > 0) {
 worldGroup.remove(worldGroup.children[0]);
 }
@@ -2042,7 +2629,6 @@ return m;
 };
 
 if (dim === 'hub') {
-// --- MAIN PLAZA HUB WORLD ---
 sc.background = new THREE.Color(0xa8d4ff);
 sc.fog = new THREE.Fog(0xa8d4ff, 48, 125);
 
@@ -2050,7 +2636,6 @@ const gr = new THREE.Mesh(new THREE.PlaneGeometry(300, 300), M(0x7fbf5a));
 gr.rotation.x = -Math.PI / 2;
 worldGroup.add(gr);
 
-// Cobblestone Plaza
 const tc = document.createElement('canvas');
 tc.width = tc.height = 256;
 const tx = tc.getContext('2d');
@@ -2071,7 +2656,6 @@ plaza.rotation.x = -Math.PI / 2;
 plaza.position.set(0, 0.02, -2);
 worldGroup.add(plaza);
 
-// Central Academy Archway
 box(8.4, 4.4, 0.4, 0xf08a3c, 0, 2.2, -16.9);
 box(0.9, 5.2, 5.2, 0x5a6aa0, -4.3, 2.6, -14.4);
 box(0.9, 5.2, 5.2, 0x5a6aa0, 4.3, 2.6, -14.4);
@@ -2084,7 +2668,6 @@ const banner = makeTextSprite('INQUIRY PLAZA', '#46395f', '#ffe27a', 512, 128, '
 banner.position.set(0, 6.6, -11.5);
 worldGroup.add(banner);
 
-// Cute Porings on the roof
 [[-1.8, 7.9, -14.6, 1], [0.3, 7.7, -14.2, 0.7]].forEach(([x, y, z, s]) => {
 const g = new THREE.Group();
 const b = new THREE.Mesh(new THREE.SphereGeometry(0.9, 18, 14), M(0xff9fb8));
@@ -2102,9 +2685,7 @@ worldGroup.add(g);
 porings.push(g);
 });
 
-// --- INTERACTIVE 3D PLAYGROUND IN MAIN PLAZA (x: -11, z: 14) ---
 const pgX = -11, pgZ = 14;
-// Soft colorful rubber safety mat
 const pgMat = new THREE.Mesh(new THREE.BoxGeometry(10.5, 0.12, 8.5), M(0x38bdf8));
 pgMat.position.set(pgX, 0.06, pgZ);
 worldGroup.add(pgMat);
@@ -2116,26 +2697,22 @@ const pgSign = makeTextSprite('🎡 PLAZA PLAYGROUND', 'rgba(30, 27, 75, 0.88)',
 pgSign.position.set(pgX, 4.6, pgZ - 3.6);
 worldGroup.add(pgSign);
 
-// 1. Rainbow Slide & Ladder Tower (left side of playground)
 const slX = pgX - 3.0, slZ = pgZ - 1.2;
 cyl(0.14, 0.14, 3.0, 0xef4444, slX - 0.8, 1.5, slZ - 0.8);
 cyl(0.14, 0.14, 3.0, 0xef4444, slX + 0.8, 1.5, slZ - 0.8);
 cyl(0.14, 0.14, 3.0, 0xef4444, slX - 0.8, 1.5, slZ + 0.8);
 cyl(0.14, 0.14, 3.0, 0xef4444, slX + 0.8, 1.5, slZ + 0.8);
-box(1.9, 0.22, 1.9, 0xfbbf24, slX, 2.3, slZ); // Platform
-box(1.9, 0.2, 1.9, 0x8b5cf6, slX, 3.2, slZ); // Canopy roof
-// Slide chute
+box(1.9, 0.22, 1.9, 0xfbbf24, slX, 2.3, slZ);
+box(1.9, 0.2, 1.9, 0x8b5cf6, slX, 3.2, slZ);
 const slideChute = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.14, 3.4), M(0xf43f5e));
 slideChute.position.set(slX, 1.25, slZ + 2.1);
 slideChute.rotation.x = 0.62;
 worldGroup.add(slideChute);
-// Ladder rungs
 for (let r = 0; r < 5; r++) {
 box(0.9, 0.1, 0.14, 0xffffff, slX, 0.45 + r * 0.42, slZ - 0.9);
 }
 OB.push([slX - 1.0, slX + 1.0, slZ - 1.0, slZ + 1.0]);
 
-// 2. Animated Swing Set (right side of playground)
 const swX = pgX + 2.4, swZ = pgZ - 1.5;
 cyl(0.13, 0.16, 3.6, 0x3b82f6, swX - 2.1, 1.75, swZ);
 cyl(0.13, 0.16, 3.6, 0x3b82f6, swX + 2.1, 1.75, swZ);
@@ -2157,7 +2734,6 @@ worldGroup.add(pivot);
 playgroundProps.push({ type: 'swing', mesh: pivot, phase: idx * 2.1 });
 });
 
-// 3. Spinning Merry-Go-Round Carousel (front-right of playground)
 const mgX = pgX + 2.3, mgZ = pgZ + 2.0;
 cyl(0.25, 0.35, 0.45, 0x475569, mgX, 0.22, mgZ);
 const carousel = new THREE.Group();
@@ -2177,7 +2753,6 @@ carousel.add(topRing);
 worldGroup.add(carousel);
 playgroundProps.push({ type: 'spin', mesh: carousel });
 
-// 4. Seesaw / Teeter-Totter (front-left of playground)
 const ssX = pgX - 0.3, ssZ = pgZ + 2.5;
 cyl(0.25, 0.35, 0.75, 0x6366f1, ssX, 0.38, ssZ);
 const plank = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.14, 0.55), M(0x34d399));
@@ -2185,7 +2760,6 @@ plank.position.set(ssX, 0.8, ssZ);
 worldGroup.add(plank);
 playgroundProps.push({ type: 'seesaw', mesh: plank });
 
-// Decorative Village Houses
 const house = (x, z, c) => {
 box(6, 3.4, 5, c, x, 1.7, z);
 box(7, 0.3, 3.2, 0xb5503c, x, 4.2, z - 1.2, -0.7);
@@ -2197,7 +2771,6 @@ house(-26, 8, 0xd8c9a8);
 house(26, 16, 0xe0d0b0);
 house(-22, -22, 0xd0c0a0);
 
-// Surrounding Trees
 let sd = 7;
 const rnd = () => (sd = (sd * 9301 + 49297) % 233280) / 233280;
 for (let i = 0; i < 85; i++) {
@@ -2210,8 +2783,73 @@ const f = new THREE.Mesh(new THREE.ConeGeometry(1.6 * s, 3.6 * s, 8), M(0x3f8f45
 f.position.set(x, 3.2 * s, z);
 worldGroup.add(f);
 }
+} else if (dim === 'gameroom') {
+sc.background = new THREE.Color(0x160926);
+sc.fog = new THREE.Fog(0x160926, 42, 115);
+
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x210d38));
+gr.rotation.x = -Math.PI / 2;
+worldGroup.add(gr);
+
+const grid = new THREE.GridHelper(110, 44, 0xf472b6, 0x4c1d95);
+grid.position.y = 0.03;
+worldGroup.add(grid);
+
+cyl(3.2, 3.8, 0.8, 0xec4899, 0, 0.4, -4);
+const giantEgg = new THREE.Mesh(new THREE.SphereGeometry(2.0, 24, 18), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
+giantEgg.scale.set(0.82, 1.22, 0.82);
+giantEgg.position.set(0, 4.4, -4);
+worldGroup.add(giantEgg);
+floaters.push({ mesh: giantEgg, baseY: 4.4, spd: 1.1, rot: true });
+
+const eggRing = new THREE.Mesh(
+new THREE.TorusGeometry(2.9, 0.12, 10, 40),
+new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+);
+eggRing.position.set(0, 4.4, -4);
+eggRing.rotation.x = Math.PI / 2;
+worldGroup.add(eggRing);
+floaters.push({ mesh: eggRing, baseY: 4.4, spd: -1.3, rot: true });
+
+const arcadeBanner = makeTextSprite('🕹️ INQUIRY GAME ROOM · 50–400⭐ ACCESS 🕹️', 'rgba(30, 12, 54, 0.92)', '#fde047', 768, 128, 'bold 38px Fredoka, sans-serif');
+arcadeBanner.position.set(0, 7.6, -4);
+worldGroup.add(arcadeBanner);
+
+[[-14, -8], [14, -8], [-14, 6], [14, 6]].forEach(([ax, az], idx) => {
+box(2.4, 4.2, 2.0, idx % 2 === 0 ? 0x3b82f6 : 0xec4899, ax, 2.1, az);
+box(1.9, 1.4, 0.2, 0x0f172a, ax, 2.7, az + 0.95);
+OB.push([ax - 1.3, ax + 1.3, az - 1.1, az + 1.1]);
+});
+
+activePvpStations = GAMEROOM_STATIONS;
+GAMEROOM_STATIONS.forEach(st => {
+const base = new THREE.Mesh(new THREE.CylinderGeometry(2.4, 2.8, 0.4, 24), M(0x1e293b));
+base.position.set(st.p[0], 0.2, st.p[1]);
+worldGroup.add(base);
+
+const torus = new THREE.Mesh(
+new THREE.TorusGeometry(2.05, 0.2, 14, 36),
+new THREE.MeshBasicMaterial({ color: 0xfde047 })
+);
+torus.position.set(st.p[0], 2.5, st.p[1]);
+worldGroup.add(torus);
+
+const vortex = new THREE.Mesh(
+new THREE.CircleGeometry(1.9, 28),
+new THREE.MeshBasicMaterial({ color: 0xec4899, transparent: true, opacity: 0.42, side: THREE.DoubleSide })
+);
+vortex.position.set(st.p[0], 2.5, st.p[1]);
+worldGroup.add(vortex);
+portalRings.push({ torus, vortex, baseY: 2.5 });
+
+const s = document.createElement('div');
+s.className = 'sign portal-sign';
+s.style.borderColor = st.color;
+s.innerHTML = '<u style="background:' + st.color + '">' + st.icon + '</u>' + st.n;
+stg.appendChild(s);
+pvpSigns.push(s);
+});
 } else if (dim === 'math') {
-// --- MATH DIMENSION: Neon Matrix Grid, Floating Numbers & Formulas ---
 sc.background = new THREE.Color(0x071326);
 sc.fog = new THREE.Fog(0x071326, 42, 115);
 
@@ -2223,7 +2861,6 @@ const grid = new THREE.GridHelper(110, 55, 0x38bdf8, 0x1e3a8a);
 grid.position.y = 0.03;
 worldGroup.add(grid);
 
-// Central Glowing Geometric Pyramid Monument
 const pyr = new THREE.Mesh(
 new THREE.OctahedronGeometry(3.2, 0),
 new THREE.MeshBasicMaterial({ color: 0x38bdf8, wireframe: true })
@@ -2237,7 +2874,6 @@ core.position.set(0, 4.5, -2);
 worldGroup.add(core);
 floaters.push({ mesh: core, baseY: 4.5, spd: -1.8, rot: true });
 
-// Formula Pillars & Floating Numbers/Equations everywhere!
 const formulas = [
 'a² + b² = c²', 'y = mx + b', 'π ≈ 3.14159', 'A = s²',
 'd = r × t', '∑ (n = 1..∞)', '√144 = 12', 'E = mc²',
@@ -2259,7 +2895,6 @@ cyl(0.6, 0.8, 3.2, 0x1e293b, fx, 1.6, fz);
 }
 });
 } else if (dim === 'science') {
-// --- SCIENCE DIMENSION: Cosmic Orbital Lab & Atoms ---
 sc.background = new THREE.Color(0x0b0f29);
 sc.fog = new THREE.Fog(0x0b0f29, 42, 115);
 
@@ -2271,7 +2906,6 @@ const grid = new THREE.GridHelper(110, 44, 0xfbbf24, 0x1e293b);
 grid.position.y = 0.03;
 worldGroup.add(grid);
 
-// Central Floating Atom Nucleus & Electron Rings
 const nuc = new THREE.Mesh(new THREE.IcosahedronGeometry(1.8, 1), new THREE.MeshBasicMaterial({ color: 0xfbbf24 }));
 nuc.position.set(0, 4.8, -2);
 worldGroup.add(nuc);
@@ -2301,7 +2935,6 @@ worldGroup.add(sp);
 floaters.push({ mesh: sp, baseY: fy, spd: 0.9, rot: false });
 });
 } else if (dim === 'english') {
-// --- ENGLISH DIMENSION: Sky Library, Giant Books & Floating Words ---
 sc.background = new THREE.Color(0x23112b);
 sc.fog = new THREE.Fog(0x23112b, 42, 115);
 
@@ -2313,7 +2946,6 @@ const grid = new THREE.GridHelper(110, 44, 0xf472b6, 0x4c1d95);
 grid.position.y = 0.03;
 worldGroup.add(grid);
 
-// Central Floating Story Crystal & Book Pedestal
 box(5.5, 0.7, 4.2, 0x7c2d12, 0, 0.35, -2);
 const tome = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.45, 2.0), new THREE.MeshBasicMaterial({ color: 0xf472b6 }));
 tome.position.set(0, 3.6, -2);
@@ -2336,7 +2968,6 @@ worldGroup.add(sp);
 floaters.push({ mesh: sp, baseY: fy, spd: 0.85, rot: false });
 });
 } else if (dim === 'thai') {
-// --- THAI LANGUAGE DIMENSION: Golden Temple Sanctuary, Thai Script & Numerals ---
 sc.background = new THREE.Color(0x0b2928);
 sc.fog = new THREE.Fog(0x0b2928, 42, 115);
 
@@ -2348,7 +2979,6 @@ const grid = new THREE.GridHelper(110, 44, 0x2dd4bf, 0x115e59);
 grid.position.y = 0.03;
 worldGroup.add(grid);
 
-// Central Golden Thai Chedi / Stupa Spire Monument
 cyl(2.6, 3.2, 0.8, 0xf59e0b, 0, 0.4, -2);
 cyl(1.8, 2.3, 1.4, 0xfbbf24, 0, 1.5, -2);
 const spire = new THREE.Mesh(new THREE.ConeGeometry(1.5, 4.2, 12), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
@@ -2365,7 +2995,6 @@ halo.rotation.x = Math.PI / 2;
 worldGroup.add(halo);
 floaters.push({ mesh: halo, baseY: 4.8, spd: -1.1, rot: true });
 
-// Floating Thai Phrases, Script & Thai Numerals (๑-๕)
 const thaiWords = [
 'สวัสดีครับ / ค่ะ', 'ขอบคุณ (Khòp khun)', '๑ ๒ ๓ ๔ ๕', 'อร่อยมาก (Aròi mâak)',
 'ไม่เป็นไร (Mâi pen rai)', 'ก ข ฃ ค ฅ ฆ ง', 'รักภาษาไทย 🇹🇭', '๕๕๕ (Ha-Ha-Ha)'
@@ -2386,7 +3015,6 @@ cyl(0.55, 0.75, 3.0, 0xb45309, fx, 1.5, fz);
 }
 });
 } else if (dim === 'ict') {
-// --- ICT & ROBOTICS DIMENSION ---
 sc.background = new THREE.Color(0x061024);
 sc.fog = new THREE.Fog(0x061024, 42, 115);
 const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x0b1936));
@@ -2412,7 +3040,6 @@ floaters.push({ mesh: sp, baseY: fy, spd: 0.9, rot: false });
 box(1.4, 3.2, 1.4, 0x1e293b, fx, 1.6, fz);
 });
 } else if (dim === 'makerspace') {
-// --- MAKERSPACE DIMENSION ---
 sc.background = new THREE.Color(0x231309);
 sc.fog = new THREE.Fog(0x231309, 42, 115);
 const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x331c0e));
@@ -2437,7 +3064,6 @@ worldGroup.add(sp);
 floaters.push({ mesh: sp, baseY: fy, spd: 0.9, rot: false });
 });
 } else if (dim === 'arts') {
-// --- ARTS DIMENSION ---
 sc.background = new THREE.Color(0x220c2e);
 sc.fog = new THREE.Fog(0x220c2e, 42, 115);
 const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x321242));
@@ -2462,7 +3088,6 @@ worldGroup.add(sp);
 floaters.push({ mesh: sp, baseY: fy, spd: 0.85, rot: false });
 });
 } else if (dim === 'design') {
-// --- DIGITAL DESIGN DIMENSION ---
 sc.background = new THREE.Color(0x06211d);
 sc.fog = new THREE.Fog(0x06211d, 42, 115);
 const gr = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), M(0x0b332d));
@@ -2487,7 +3112,6 @@ worldGroup.add(sp);
 floaters.push({ mesh: sp, baseY: fy, spd: 0.9, rot: false });
 });
 } else if (dim === 'pvp') {
-// --- LV.100 CHAMPION PVP ARENA ---
 sc.background = new THREE.Color(0x181204);
 sc.fog = new THREE.Fog(0x181204, 48, 130);
 const gr = new THREE.Mesh(new THREE.PlaneGeometry(260, 260), M(0x261d08));
@@ -2497,7 +3121,6 @@ const grid = new THREE.GridHelper(120, 48, 0xfde047, 0x713f12);
 grid.position.y = 0.03;
 worldGroup.add(grid);
 
-// Golden Trophy Monument
 cyl(3.2, 3.8, 0.8, 0xf59e0b, 0, 0.4, -2);
 const trophy = new THREE.Mesh(new THREE.OctahedronGeometry(2.1, 0), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
 trophy.position.set(0, 4.4, -2);
@@ -2508,7 +3131,6 @@ const arenaBanner = makeTextSprite('⚔️ LV.100 CHAMPION PVP ARENA ⚔️', 'r
 arenaBanner.position.set(0, 7.2, -2);
 worldGroup.add(arenaBanner);
 
-// Spawn 4 PVP Game Stations
 activePvpStations = PVP_STATIONS;
 PVP_STATIONS.forEach(st => {
 const ped = new THREE.Mesh(new THREE.CylinderGeometry(2.0, 2.3, 0.6, 20), M(0x1e293b));
@@ -2527,74 +3149,90 @@ stg.appendChild(s);
 pvpSigns.push(s);
 });
 
-// Spawn 6 Aerial Drone Racing Checkpoint Rings
 const ringCoords = [
-[0, 6, 6], [16, 9, -4], [14, 13, -18], [0, 15, -24], [-15, 11, -14], [-14, 7, 4]
+[0, 6, 4], [14, 9, -6], [10, 12, -20], [-10, 10, -20], [-16, 7, -4], [0, 5, 8]
 ];
-ringCoords.forEach(([rx, ry, rz], idx) => {
+droneRace.rings = ringCoords.map(([rx, ry, rz], idx) => {
 const mesh = new THREE.Mesh(
-new THREE.TorusGeometry(3.2, 0.25, 12, 32),
+new THREE.TorusGeometry(2.6, 0.22, 12, 32),
 new THREE.MeshBasicMaterial({ color: idx === 0 ? 0xfde047 : 0xf472b6 })
 );
 mesh.position.set(rx, ry, rz);
 worldGroup.add(mesh);
-droneRace.rings.push({ x: rx, y: ry, z: rz, mesh });
+return { x: rx, y: ry, z: rz, mesh };
 });
 } else if (dim === 'detention') {
-// --- DETENTION ROOM (1-minute Anti-Rapid-Guess Time-Out) ---
-sc.background = new THREE.Color(0x1f090d);
-sc.fog = new THREE.Fog(0x1f090d, 25, 75);
+sc.background = new THREE.Color(0x1f070a);
+sc.fog = new THREE.Fog(0x1f070a, 35, 95);
 
-const gr = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), M(0x2d1117));
+const gr = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), M(0x2b0d12));
 gr.rotation.x = -Math.PI / 2;
 worldGroup.add(gr);
 
-const grid = new THREE.GridHelper(32, 16, 0xef4444, 0x450a0a);
+const grid = new THREE.GridHelper(80, 40, 0xef4444, 0x450a0a);
 grid.position.y = 0.03;
 worldGroup.add(grid);
 
-// Enclosed Detention Cell Walls & Iron Bars
-box(24, 6, 0.8, 0x3f151d, 0, 3, -12);
-box(24, 6, 0.8, 0x3f151d, 0, 3, 12);
-box(0.8, 6, 24, 0x3f151d, -12, 3, 0);
-box(0.8, 6, 24, 0x3f151d, 12, 3, 0);
-for (let bx = -10; bx <= 10; bx += 2) {
-cyl(0.12, 0.12, 5.5, 0x94a3b8, bx, 2.75, -11.4);
-cyl(0.12, 0.12, 5.5, 0x94a3b8, bx, 2.75, 11.4);
+box(14, 0.4, 14, 0x18181b, 0, 0.2, 0);
+for (let i = -6; i <= 6; i += 2) {
+cyl(0.12, 0.12, 5.2, 0x94a3b8, i, 2.6, -6.8);
+cyl(0.12, 0.12, 5.2, 0x94a3b8, i, 2.6, 6.8);
+cyl(0.12, 0.12, 5.2, 0x94a3b8, -6.8, 2.6, i);
+cyl(0.12, 0.12, 5.2, 0x94a3b8, 6.8, 2.6, i);
 }
-OB.push([-13, 13, -13, -11.2], [-13, 13, 11.2, 13], [-13, -11.2, -13, 13], [11.2, 13, -13, 13]);
+OB.push([-7.2, 7.2, -7.2, -6.4], [-7.2, 7.2, 6.4, 7.2], [-7.2, -6.4, -7.2, 7.2], [6.4, 7.2, -7.2, 7.2]);
 
-const signSp = makeTextSprite('🚨 DETENTION ROOM · THINK BEFORE GUESSING 🚨', 'rgba(69, 10, 10, 0.92)', '#fca5a5', 768, 128, 'bold 38px Inter, sans-serif');
-signSp.position.set(0, 4.6, -9.5);
-worldGroup.add(signSp);
+const detSign = makeTextSprite('🚨 DETENTION ROOM · NO RAPID GUESSING / BAD WORDS! 🚨', 'rgba(127, 29, 29, 0.92)', '#fecaca', 768, 128, 'bold 34px Inter, sans-serif');
+detSign.position.set(0, 6.2, -6.5);
+worldGroup.add(detSign);
 }
 
-// Spawn Dimension Portals (either 3 Subject Portals in Hub, or 1 Return Portal inside a Dimension)
+activeQuests = (dim === 'hub' || dim === 'pvp' || dim === 'detention' || dim === 'gameroom') ? [] : C.filter(q => q.dim === dim);
+activeQuests.forEach(c => {
+const n = buildCharacterFn(c.hair, c.sh, c.pa, 1.15);
+n.position.set(c.p[0], 0, c.p[1]);
+n.rotation.y = Math.atan2(c.a[0] - c.p[0], c.a[1] - c.p[1]);
+worldGroup.add(n);
+npcs.push(n);
+
+const ring = new THREE.Mesh(
+new THREE.RingGeometry(0.95, 1.25, 24),
+new THREE.MeshBasicMaterial({ color: (DIMS[dim] && DIMS[dim].color) || 0xfde047, side: THREE.DoubleSide })
+);
+ring.rotation.x = -Math.PI / 2;
+ring.position.set(c.p[0], 0.05, c.p[1]);
+worldGroup.add(ring);
+
+const s = document.createElement('div');
+s.className = 'sign';
+s.innerHTML = '<u>' + c.icon + '</u>' + c.sg + '<i class="mk">!</i>';
+stg.appendChild(s);
+questSigns.push(s);
+});
+
 activePortals = dim === 'detention' ? [] : (dim === 'hub' ? HUB_PORTALS : [RETURN_PORTAL]);
 activePortals.forEach(pt => {
-const pGroup = new THREE.Group();
-pGroup.position.set(pt.p[0], 0, pt.p[1]);
-
-const base = new THREE.Mesh(new THREE.CylinderGeometry(2.1, 2.4, 0.35, 24), M(0x1e293b));
-base.position.y = 0.18;
-pGroup.add(base);
+const base = new THREE.Mesh(new THREE.CylinderGeometry(2.3, 2.7, 0.4, 24), M(0x1e293b));
+base.position.set(pt.p[0], 0.2, pt.p[1]);
+worldGroup.add(base);
 
 const torus = new THREE.Mesh(
-new THREE.TorusGeometry(1.85, 0.18, 14, 36),
+new THREE.TorusGeometry(2.0, 0.22, 14, 36),
 new THREE.MeshBasicMaterial({ color: pt.hex })
 );
-torus.position.y = 2.35;
-pGroup.add(torus);
+torus.position.set(pt.p[0], 2.4, pt.p[1]);
+torus.rotation.y = Math.atan2(pt.a[0] - pt.p[0], pt.a[1] - pt.p[1]);
+worldGroup.add(torus);
 
 const vortex = new THREE.Mesh(
-new THREE.CircleGeometry(1.72, 28),
-new THREE.MeshBasicMaterial({ color: pt.hex, transparent: true, opacity: 0.36, side: THREE.DoubleSide })
+new THREE.CircleGeometry(1.85, 28),
+new THREE.MeshBasicMaterial({ color: pt.hex, transparent: true, opacity: 0.42, side: THREE.DoubleSide })
 );
-vortex.position.y = 2.35;
-pGroup.add(vortex);
+vortex.position.set(pt.p[0], 2.4, pt.p[1]);
+vortex.rotation.y = torus.rotation.y;
+worldGroup.add(vortex);
 
-worldGroup.add(pGroup);
-portalRings.push({ torus, vortex, baseY: 2.35 });
+portalRings.push({ torus, vortex, baseY: 2.4 });
 
 const s = document.createElement('div');
 s.className = 'sign portal-sign';
@@ -2603,960 +3241,797 @@ s.innerHTML = '<u style="background:' + pt.color + '">' + pt.icon + '</u>' + pt.
 stg.appendChild(s);
 portalSigns.push(s);
 });
-
-// Spawn Quests/NPCs belonging to this dimension
-activeQuests = C.filter(q => q.dim === dim);
-activeQuests.forEach(q => {
-const g = buildCharacterFn(q.sh, q.pa, q.hair, null);
-g.position.set(q.p[0], 0, q.p[1]);
-worldGroup.add(g);
-npcs.push(g);
-
-const s = document.createElement('div');
-s.className = 'sign';
-const subCol = (DIMS[q.dim] && DIMS[q.dim].color) || '#fbbf24';
-s.style.borderColor = subCol;
-s.innerHTML = '<u style="background:' + subCol + '">' + q.icon + '</u>' + q.sg + '<div class="mk">!</div>';
-stg.appendChild(s);
-questSigns.push(s);
-});
 }
 
-function enterDimension(dimKey, afterWarpFn) {
-if (dimKey !== 'detention' && isInDetention()) {
+let isWarping = false;
+function enterDimension(targetDim, onReady) {
+if (!DIMS[targetDim] || isWarping) return;
+if (targetDim !== 'detention' && isInDetention()) {
 const rem = Math.ceil((S.detentionUntil - Date.now()) / 1000);
-say('🚨 Cannot leave Detention Room yet! ' + rem + 's remaining.', 2500);
+say('🚨 Locked in Detention Room for ' + rem + 's!', 2500);
 return;
 }
-if (!DIMS[dimKey]) dimKey = 'hub';
-if (DIMS[dimKey].minLv && lvl() < DIMS[dimKey].minLv) {
-say('⚔️ Lv.100 PVP Arena requires Level ' + DIMS[dimKey].minLv + '! (Current: Lv.' + lvl() + ')', 3500);
+if (DIMS[targetDim].minLv && lvl() < DIMS[targetDim].minLv) {
+say('⚔️ ' + DIMS[targetDim].name + ' requires Level ' + DIMS[targetDim].minLv + '! (You are Lv.' + lvl() + ')', 3800);
 return;
 }
+if (targetDim === currentDim) {
+if (onReady) onReady();
+return;
+}
+isWarping = true;
+stopPvpLoop();
+if (P.flying) toggleDrone(false);
 const fx = $('#warp-fx');
-const info = DIMS[dimKey];
-fx.textContent = info.icon + ' Warping to ' + info.name + '...';
+fx.textContent = DIMS[targetDim].icon + ' Warping to ' + DIMS[targetDim].name + '...';
 fx.classList.add('show');
 
 setTimeout(() => {
-currentDim = dimKey;
-buildWorldForDimension(dimKey);
-P.x = 0;
+currentDim = targetDim;
+buildWorldForDimension(targetDim);
+if (targetDim === 'detention') {
+P.x = 0; P.z = 0; P.tx = 0; P.tz = 0; P.ry = 0;
+} else if (targetDim === 'hub') {
+P.x = 0; P.z = 12; P.tx = 0; P.tz = 12; P.ry = Math.PI;
+} else {
+P.x = 0; P.z = -12; P.tx = 0; P.tz = -12; P.ry = 0;
+}
 P.y = 0;
-P.z = 11;
-P.tx = 0;
-P.tz = 11;
-P.vx = P.vy = P.vz = 0;
-P.ry = Math.PI;
 P.pend = null;
-if (P.flying) toggleDrone(false);
-if (afterWarpFn) afterWarpFn();
 hud();
-renderPlayersList();
 pushState(true);
-setTimeout(() => fx.classList.remove('show'), 220);
-say(info.icon + ' Entered ' + info.name + '!', 3200);
+renderPlayersList();
+if (targetDim === 'gameroom') {
+say('🕹️ Welcome to the Game Room! Walk into 🥚 STEAL AN EGG (50–400⭐ Packages)!', 4200);
+} else if (targetDim !== 'detention') {
+say('Entered ' + DIMS[targetDim].name + '!', 2800);
+}
+if (onReady) onReady();
+setTimeout(() => {
+fx.classList.remove('show');
+isWarping = false;
 }, 240);
+}, 260);
 }
 
-function init() {
-R = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
-sc = new THREE.Scene();
-cam = new THREE.PerspectiveCamera(42, 16 / 9, 0.1, 220);
-const fit = () => {
-const w = stg.clientWidth, h = stg.clientHeight;
-R.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
-R.setSize(w, h, false);
-cam.aspect = w / h;
-cam.updateProjectionMatrix();
-};
-addEventListener('resize', fit);
-fit();
+let rebuildLocalAvatar = () => {};
 
-sc.add(new THREE.HemisphereLight(0xffffff, 0x8a9a7a, 0.95));
-const dl = new THREE.DirectionalLight(0xfff1d6, 0.72);
-dl.position.set(-8, 14, 10);
-sc.add(dl);
+function init3D() {
+if (!window.THREE) return;
+R = new THREE.WebGLRenderer({ canvas: cv, antialias: true, preserveDrawingBuffer: true });
+R.setPixelRatio(Math.min(devicePixelRatio, 2));
+sc = new THREE.Scene();
+cam = new THREE.PerspectiveCamera(48, 16 / 9, 0.1, 220);
+sc.add(new THREE.AmbientLight(0xfff8f0, 0.72));
+const sun = new THREE.DirectionalLight(0xfff2d8, 0.85);
+sun.position.set(22, 34, 18);
+sc.add(sun);
+
+const M = c => new THREE.MeshLambertMaterial({ color: c });
+
+function buildDroneMesh(droneId = 0) {
+const spec = DRONES[droneId] || DRONES[0];
+const d = new THREE.Group();
+const bodyMat = new THREE.MeshLambertMaterial({ color: 0x1e293b });
+const accentMat = new THREE.MeshBasicMaterial({ color: spec.accent });
+const body = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.16, 0.82), bodyMat);
+d.add(body);
+const visor = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.12, 0.16), accentMat);
+visor.position.set(0, 0.02, 0.42);
+d.add(visor);
+
+if (droneId >= 3) {
+const halo = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.04, 8, 28), accentMat);
+halo.rotation.x = Math.PI / 2;
+d.add(halo);
+}
+
+const rotors = [];
+const arms = [[-0.58, 0.58], [0.58, 0.58], [-0.58, -0.58], [0.58, -0.58]];
+arms.forEach(([ax, az]) => {
+const arm = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.05, 0.07), bodyMat);
+arm.position.set(ax * 0.5, 0.02, az * 0.5);
+arm.rotation.y = Math.atan2(ax, az);
+d.add(arm);
+
+const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.12, 8), accentMat);
+hub.position.set(ax, 0.08, az);
+d.add(hub);
+
+const blade = new THREE.Mesh(
+new THREE.BoxGeometry(0.56, 0.015, 0.06),
+new THREE.MeshBasicMaterial({ color: spec.rotorCol, transparent: true, opacity: 0.88 })
+);
+blade.position.set(ax, 0.15, az);
+d.add(blade);
+rotors.push(blade);
+});
+d.userData.rotors = rotors;
+return d;
+}
+
+const char = (hair, shirt, pants, s = 1, isRoyal = false) => {
+const g = new THREE.Group();
+const bx = (w, h, d, c, x, y, z) => {
+const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), M(c));
+m.position.set(x, y, z);
+g.add(m);
+return m;
+};
+const torsoColor = isRoyal ? 0xfbbf24 : shirt;
+const torso = bx(0.92, 1.0, 0.52, torsoColor, 0, 1.38, 0);
+bx(0.92, 0.88, 0.88, 0xf5cd30, 0, 2.38, 0);
+bx(0.98, 0.34, 0.94, isRoyal ? 0xffffff : hair, 0, 2.75, 0);
+bx(0.11, 0.18, 0.05, 0x1a1a1a, -0.2, 2.38, 0.45);
+bx(0.11, 0.18, 0.05, 0x1a1a1a, 0.2, 2.38, 0.45);
+if (isRoyal) {
+const crownGroup = new THREE.Group();
+crownGroup.position.set(0, 3.12, 0);
+const band = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.34, 0.2, 12), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
+crownGroup.add(band);
+for (let k = 0; k < 5; k++) {
+const ang = (k / 5) * Math.PI * 2;
+const spike = new THREE.Mesh(new THREE.ConeGeometry(0.09, 0.24, 6), new THREE.MeshBasicMaterial({ color: 0xfef08a }));
+spike.position.set(Math.cos(ang) * 0.32, 0.18, Math.sin(ang) * 0.32);
+crownGroup.add(spike);
+}
+g.add(crownGroup);
+g.userData.crown = crownGroup;
+
+const aura = new THREE.Mesh(
+new THREE.RingGeometry(0.85, 1.15, 28),
+new THREE.MeshBasicMaterial({ color: 0xfde047, side: THREE.DoubleSide, transparent: true, opacity: 0.75 })
+);
+aura.rotation.x = -Math.PI / 2;
+aura.position.y = 0.06;
+g.add(aura);
+g.userData.aura = aura;
+}
+const L = bx(0.38, 0.88, 0.46, pants, -0.24, 0.44, 0);
+const Rg = bx(0.38, 0.88, 0.46, pants, 0.24, 0.44, 0);
+const al = bx(0.32, 0.9, 0.38, 0xf5cd30, -0.64, 1.38, 0);
+const ar = bx(0.32, 0.9, 0.38, 0xf5cd30, 0.64, 1.38, 0);
+g.scale.setScalar(s);
+g.userData = Object.assign(g.userData, { L, R: Rg, al, ar, torso });
+return g;
+};
+buildCharacterFn = char;
 
 worldGroup = new THREE.Group();
 sc.add(worldGroup);
 
-const M = c => new THREE.MeshLambertMaterial({ color: c });
-
-const buildDroneRig = (accentHex, droneIdx = 0) => {
-const dSpec = DRONES[droneIdx] || DRONES[0];
-const dCol = dSpec.accent || accentHex || 0x38bdf8;
-const rCol = dSpec.rotorCol || 0x38bdf8;
-const dGroup = new THREE.Group();
-dGroup.position.set(0, 3.35, 0);
-const tether = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.75, 6), M(0x94a3b8));
-tether.position.y = -0.35;
-dGroup.add(tether);
-const body = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.24, 0.94), M(droneIdx === 3 ? 0x1e1b4b : 0x1e293b));
-dGroup.add(body);
-const canopy = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.15, 0.58), new THREE.MeshBasicMaterial({ color: dCol }));
-canopy.position.set(0, 0.15, 0.08);
-dGroup.add(canopy);
-if (droneIdx >= 2) {
-const wing = new THREE.Mesh(new THREE.BoxGeometry(1.65, 0.05, 0.25), new THREE.MeshBasicMaterial({ color: dCol }));
-wing.position.set(0, 0.05, -0.1);
-dGroup.add(wing);
-}
-const frontLed = new THREE.Mesh(new THREE.BoxGeometry(0.48, 0.09, 0.08), new THREE.MeshBasicMaterial({ color: rCol }));
-frontLed.position.set(0, 0, 0.48);
-dGroup.add(frontLed);
-const rotors = [];
-[[-0.78, 0.78], [0.78, 0.78], [-0.78, -0.78], [0.78, -0.78]].forEach(([ax, az]) => {
-const arm = new THREE.Mesh(new THREE.BoxGeometry(0.98, 0.07, 0.1), M(0x475569));
-arm.position.set(ax * 0.5, 0, az * 0.5);
-arm.rotation.y = Math.atan2(ax, az);
-dGroup.add(arm);
-const motor = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.14, 10), M(0x0f172a));
-motor.position.set(ax, 0.08, az);
-dGroup.add(motor);
-const blade = new THREE.Mesh(new THREE.BoxGeometry(0.76, 0.02, 0.09), new THREE.MeshBasicMaterial({ color: 0xffffff }));
-blade.position.set(ax, 0.17, az);
-dGroup.add(blade);
-rotors.push(blade);
-const blurDisc = new THREE.Mesh(
-new THREE.RingGeometry(0.12, 0.42, 18),
-new THREE.MeshBasicMaterial({ color: rCol, transparent: true, opacity: 0.34, side: THREE.DoubleSide })
-);
-blurDisc.rotation.x = -Math.PI / 2;
-blurDisc.position.set(ax, 0.17, az);
-dGroup.add(blurDisc);
-});
-dGroup.userData.rotors = rotors;
-dGroup.visible = false;
-return dGroup;
-};
-
-buildCharacterFn = (shirt, pants, hair, ringColor, opts = {}) => {
-const g = new THREE.Group(), Y = 0xf5cd30;
-const fc = document.createElement('canvas');
-fc.width = fc.height = 64;
-const f = fc.getContext('2d');
-f.fillStyle = '#f5cd30';
-f.fillRect(0, 0, 64, 64);
-f.fillStyle = '#1a1a1a';
-f.fillRect(18, 20, 6, 10);
-f.fillRect(40, 20, 6, 10);
-f.lineWidth = 4;
-f.strokeStyle = '#1a1a1a';
-f.beginPath();
-f.arc(32, 34, 14, 0.3, Math.PI - 0.3);
-f.stroke();
-const hd = new THREE.Mesh(
-new THREE.BoxGeometry(0.72, 0.72, 0.72),
-[M(Y), M(Y), M(Y), M(Y), new THREE.MeshLambertMaterial({ map: new THREE.CanvasTexture(fc) }), M(Y)]
-);
-hd.position.y = 2.42;
-g.add(hd);
-const hr = new THREE.Mesh(new THREE.BoxGeometry(0.78, 0.22, 0.78), M(hair));
-hr.position.y = 2.76;
-g.add(hr);
-const tr = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.5), M(shirt));
-tr.position.y = 1.5;
-g.add(tr);
-const limb = (x, y, c1, c2, h1) => {
-const p = new THREE.Group();
-p.position.set(x, y, 0);
-const a = new THREE.Mesh(new THREE.BoxGeometry(0.48, h1, 0.48), M(c1));
-a.position.y = -h1 / 2;
-p.add(a);
-if (c2 != null) {
-const b = new THREE.Mesh(new THREE.BoxGeometry(0.48, 1 - h1, 0.48), M(c2));
-b.position.y = -h1 - (1 - h1) / 2;
-p.add(b);
-}
-g.add(p);
-return p;
-};
-// Level 100 Royal Fashion Crown, Cape & Golden Halo!
-if (opts.isRoyal || opts.lv >= 100) {
-const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.34, 0.28, 8), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
-crown.position.y = 3.04;
-g.add(crown);
-const gem = new THREE.Mesh(new THREE.OctahedronGeometry(0.14, 0), new THREE.MeshBasicMaterial({ color: 0xec4899 }));
-gem.position.set(0, 3.06, 0.38);
-g.add(gem);
-const cape = new THREE.Mesh(new THREE.BoxGeometry(1.05, 1.35, 0.08), new THREE.MeshBasicMaterial({ color: 0x7c3aed }));
-cape.position.set(0, 1.35, -0.32);
-cape.rotation.x = 0.14;
-g.add(cape);
-const aura = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.05, 8, 32), new THREE.MeshBasicMaterial({ color: 0xfde047 }));
-aura.rotation.x = Math.PI / 2;
-aura.position.y = 0.25;
-g.add(aura);
-}
-
-const droneRig = buildDroneRig(shirt, opts.droneIdx || 0);
-g.add(droneRig);
-g.userData = {
-la: limb(-0.75, 2, shirt, Y, 0.65),
-ra: limb(0.75, 2, shirt, Y, 0.65),
-ll: limb(-0.25, 1, pants, null, 1),
-rl: limb(0.25, 1, pants, null, 1),
-drone: droneRig
-};
-if (ringColor) {
-const r = new THREE.Mesh(
-new THREE.RingGeometry(1.05, 1.28, 36),
-new THREE.MeshBasicMaterial({ color: (opts.isRoyal || opts.lv >= 100) ? 0xfde047 : ringColor, side: THREE.DoubleSide })
-);
-r.rotation.x = -Math.PI / 2;
-r.position.y = 0.05;
-g.add(r);
-g.userData.ring = r;
-}
-return g;
-};
-
-const anim = (g, ph, a, isFlying) => {
-const u = g.userData;
-if (isFlying) {
-u.la.rotation.x = -2.65;
-u.ra.rotation.x = -2.65;
-const sway = Math.sin(ph * 0.65) * 0.25;
-u.ll.rotation.x = sway;
-u.rl.rotation.x = -sway;
-if (u.drone) {
-u.drone.visible = true;
-u.drone.userData.rotors.forEach((rot, idx) => {
-rot.rotation.y += (idx % 2 === 0 ? 0.65 : -0.65);
-});
-}
-if (u.ring) u.ring.visible = false;
-} else {
-const s = Math.sin(ph) * a;
-u.la.rotation.x = s;
-u.ra.rotation.x = -s;
-u.ll.rotation.x = -s;
-u.rl.rotation.x = s;
-if (u.drone) u.drone.visible = false;
-if (u.ring) u.ring.visible = true;
-}
-};
-
-function rebuildLocalAvatar() {
-if (!sc || !buildCharacterFn) return;
+rebuildLocalAvatar = () => {
 if (pl) sc.remove(pl);
-const myOut = OUTFITS[S.outfit] || OUTFITS[0];
-pl = buildCharacterFn(myOut.shirt, myOut.pants, myOut.hair, 0x8bf05a, {
-isRoyal: !!myOut.royal,
-lv: lvl(),
-droneIdx: S.droneModel || 0
-});
+const o = OUTFITS[S.outfit] || OUTFITS[0];
+const isRoyal = o.id === 6 || lvl() >= 100;
+pl = char(o.hair, o.shirt, o.pants, 1, isRoyal);
+const localDrone = buildDroneMesh(S.droneModel);
+localDrone.position.set(0, 1.9, 0);
+localDrone.visible = P.flying;
+pl.add(localDrone);
+pl.userData.drone = localDrone;
 sc.add(pl);
-pl.position.set(P.x, P.y, P.z);
-pl.rotation.y = P.ry;
-}
+};
 rebuildLocalAvatar();
+
+buildWorldForDimension('hub');
 
 myTagEl = document.createElement('div');
 myTagEl.className = 'player-tag';
-myTagEl.innerHTML = '<div class="chat-bubble" style="display:none"></div>';
 stg.appendChild(myTagEl);
 
-// Build initial Main Plaza hub world
-buildWorldForDimension('hub');
-
-const RC = new THREE.Raycaster(), PL = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
-cv.addEventListener('pointerdown', e => {
-if (cs || $('#intro').style.display == 'flex') return;
-$('#players-drawer').classList.remove('open');
+const rc = new THREE.Raycaster(), pt = new THREE.Vector2(), gpl = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+let dn = null;
+cv.addEventListener('pointerdown', e => { dn = { x: e.clientX, y: e.clientY }; });
+cv.addEventListener('pointerup', e => {
+if (!dn || Math.hypot(e.clientX - dn.x, e.clientY - dn.y) > 9 || cs) return;
 const r = cv.getBoundingClientRect();
-const nx = (e.clientX - r.left) / r.width * 2 - 1;
-const ny = -((e.clientY - r.top) / r.height) * 2 + 1;
-
-// Check if user clicked on an active Quest NPC in current dimension
-const qHit = activeQuests.find(q => {
-const v = new THREE.Vector3(q.p[0], 1.4, q.p[1]).project(cam);
-return Math.hypot((v.x - nx) * r.width / 2, (v.y - ny) * r.height / 2) < r.width * 0.06;
-});
-if (qHit) return goNpc(qHit);
-
-// Check if user clicked on a PVP Station
-const stHit = activePvpStations.find(st => {
-const v = new THREE.Vector3(st.p[0], 2.0, st.p[1]).project(cam);
-return Math.hypot((v.x - nx) * r.width / 2, (v.y - ny) * r.height / 2) < r.width * 0.075;
-});
-if (stHit) return goPvpStation(stHit);
-
-// Check if user clicked on a Dimension Portal
-const pHit = activePortals.find(pt => {
-const v = new THREE.Vector3(pt.p[0], 2.2, pt.p[1]).project(cam);
-return Math.hypot((v.x - nx) * r.width / 2, (v.y - ny) * r.height / 2) < r.width * 0.075;
-});
-if (pHit) return goPortal(pHit);
-
-RC.setFromCamera({ x: nx, y: ny }, cam);
-const pt = new THREE.Vector3();
-if (RC.ray.intersectPlane(PL, pt)) {
-P.tx = Math.max(-47, Math.min(47, pt.x));
-P.tz = Math.max(-45, Math.min(45, pt.z));
+pt.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1);
+rc.setFromCamera(pt, cam);
+const hit = rc.intersectObjects(npcs, true)[0];
+if (hit) {
+let o = hit.object;
+while (o.parent && !npcs.includes(o)) o = o.parent;
+const idx = npcs.indexOf(o);
+if (idx >= 0 && activeQuests[idx]) {
+goNpc(activeQuests[idx]);
+return;
+}
+}
+const v = new THREE.Vector3();
+if (rc.ray.intersectPlane(gpl, v)) {
+if (P.flying) {
+P.tx = Math.max(-52, Math.min(52, v.x));
+P.tz = Math.max(-52, Math.min(52, v.z));
+P.pend = null;
+} else {
+P.tx = Math.max(-38, Math.min(38, v.x));
+P.tz = Math.max(-36, Math.min(36, v.z));
 P.pend = null;
 }
+}
 });
 
-const mm = $('#mm').getContext('2d');
-function drawMM() {
-mm.fillStyle = currentDim === 'math' ? '#0b1f3a' : currentDim === 'science' ? '#16213e' : currentDim === 'english' ? '#361d32' : currentDim === 'thai' ? '#133836' : currentDim === 'ict' ? '#09152b' : currentDim === 'makerspace' ? '#29150a' : currentDim === 'arts' ? '#270e33' : currentDim === 'design' ? '#082621' : currentDim === 'pvp' ? '#2b2007' : '#1e3a2f';
-mm.fillRect(0, 0, 140, 140);
-mm.strokeStyle = 'rgba(255,255,255,0.14)';
-mm.lineWidth = 1;
-mm.beginPath();
-mm.arc(70, 70, 35, 0, 7);
-mm.stroke();
+const rs = () => {
+const w = stg.clientWidth, h = stg.clientHeight;
+R.setSize(w, h, false);
+cam.aspect = w / h;
+cam.updateProjectionMatrix();
+};
+addEventListener('resize', rs);
+rs();
 
-// Portals on Radar
-activePortals.forEach(pt => {
-mm.fillStyle = pt.color;
-mm.strokeStyle = '#fff';
-mm.lineWidth = 1.5;
-mm.beginPath();
-mm.arc((pt.p[0] + 48) * 1.45, (pt.p[1] + 46) * 1.45, 5.2, 0, 7);
-mm.fill();
-mm.stroke();
-});
+const mctx = $('#mm').getContext('2d');
+const v3 = new THREE.Vector3();
+const remoteAvatars = {};
 
-// PVP Stations on Radar
-activePvpStations.forEach(st => {
-mm.fillStyle = st.color;
-mm.beginPath();
-mm.arc((st.p[0] + 48) * 1.45, (st.p[1] + 46) * 1.45, 4.6, 0, 7);
-mm.fill();
-});
+function syncRemoteAvatars(now) {
+for (const [uid, data] of Object.entries(remotePlayers)) {
+const active = data && (now - (data.ts || 0) < 20000);
+if (!active) {
+if (remoteAvatars[uid]) {
+sc.remove(remoteAvatars[uid].mesh);
+remoteAvatars[uid].tag.remove();
+delete remoteAvatars[uid];
+}
+continue;
+}
+const rDim = data.dim || 'hub';
+const sameDim = (rDim === currentDim);
 
-// Active Quests on Radar
-activeQuests.forEach(q => {
-mm.fillStyle = S.stars[q.idx] > 0 ? '#34d399' : '#fbbf24';
-mm.beginPath();
-mm.arc((q.p[0] + 48) * 1.45, (q.p[1] + 46) * 1.45, 4.2, 0, 7);
-mm.fill();
-});
-
-// Remote Players in same dimension
-const now = Date.now();
-Object.values(remotePlayers).forEach(rp => {
-if (!rp || now - (rp.ts || 0) > 20000 || (rp.dim || 'hub') !== currentDim) return;
-mm.fillStyle = '#38bdf8';
-mm.strokeStyle = '#fff';
-mm.lineWidth = 1.5;
-mm.beginPath();
-mm.arc((rp.x + 48) * 1.45, (rp.z + 46) * 1.45, 4.2, 0, 7);
-mm.fill();
-mm.stroke();
-});
-
-// Local Player
-mm.fillStyle = '#fff';
-mm.strokeStyle = '#8b5cf6';
-mm.lineWidth = 2.5;
-mm.beginPath();
-mm.arc((P.x + 48) * 1.45, (P.z + 46) * 1.45, 4.5, 0, 7);
-mm.fill();
-mm.stroke();
+let av = remoteAvatars[uid];
+const colIdx = (data.color || 0) % OUTFITS.length;
+const isRemRoyal = colIdx === 6 || (data.lv || 1) >= 100;
+const dModel = (data.droneModel || 0) % DRONES.length;
+if (!av) {
+const outfit = OUTFITS[colIdx];
+const mesh = char(outfit.hair, outfit.shirt, outfit.pants, 1, isRemRoyal);
+const rDrone = buildDroneMesh(dModel);
+rDrone.position.set(0, 1.9, 0);
+rDrone.visible = false;
+mesh.add(rDrone);
+mesh.userData.drone = rDrone;
+sc.add(mesh);
+const tag = document.createElement('div');
+tag.className = 'player-tag';
+stg.appendChild(tag);
+av = remoteAvatars[uid] = {
+mesh, tag, colIdx, isRemRoyal, dModel,
+x: data.x || 0, y: data.y || 0, z: data.z || 10, ry: data.ry || 0, amp: 0
+};
+} else if (av.colIdx !== colIdx || av.isRemRoyal !== isRemRoyal || av.dModel !== dModel) {
+sc.remove(av.mesh);
+const outfit = OUTFITS[colIdx];
+const mesh = char(outfit.hair, outfit.shirt, outfit.pants, 1, isRemRoyal);
+const rDrone = buildDroneMesh(dModel);
+rDrone.position.set(0, 1.9, 0);
+rDrone.visible = Boolean(data.flying);
+mesh.add(rDrone);
+mesh.userData.drone = rDrone;
+sc.add(mesh);
+av.mesh = mesh;
+av.colIdx = colIdx;
+av.isRemRoyal = isRemRoyal;
+av.dModel = dModel;
 }
 
-let last = performance.now();
-const cp = new THREE.Vector3(0, 9, 22), V = new THREE.Vector3();
+av.mesh.visible = sameDim;
+if (!sameDim) {
+av.tag.style.display = 'none';
+continue;
+}
+
+const tx = Number(data.x) || 0;
+const ty = Number(data.y) || 0;
+const tz = Number(data.z) || 0;
+const dist = Math.hypot(tx - av.x, tz - av.z);
+av.x += (tx - av.x) * 0.18;
+av.y += (ty - av.y) * 0.18;
+av.z += (tz - av.z) * 0.18;
+av.ry = Number(data.ry) || 0;
+av.amp = dist > 0.04 ? Math.min(1, av.amp + 0.15) : av.amp * 0.85;
+
+const isFly = Boolean(data.flying);
+if (av.mesh.userData.drone) {
+av.mesh.userData.drone.visible = isFly;
+if (isFly) {
+av.mesh.userData.drone.userData.rotors.forEach((rt, idx) => {
+rt.rotation.y += (idx % 2 === 0 ? 0.65 : -0.65);
+});
+}
+}
+
+av.mesh.position.set(av.x, av.y, av.z);
+av.mesh.rotation.y = av.ry;
+if (av.mesh.userData.crown) av.mesh.userData.crown.rotation.y += 0.03;
+if (av.mesh.userData.aura) av.mesh.userData.aura.rotation.z -= 0.02;
+const sw = isFly ? 0.15 : Math.sin(now * 0.012) * 0.55 * av.amp;
+av.mesh.userData.L.rotation.x = sw;
+av.mesh.userData.R.rotation.x = -sw;
+av.mesh.userData.al.rotation.x = isFly ? -0.4 : -sw * 0.7;
+av.mesh.userData.ar.rotation.x = isFly ? -0.4 : sw * 0.7;
+
+v3.set(av.x, av.y + (isFly ? 3.5 : 3.25), av.z).project(cam);
+if (v3.z < 1) {
+av.tag.style.display = 'flex';
+av.tag.style.left = (v3.x * 0.5 + 0.5) * stg.clientWidth + 'px';
+av.tag.style.top = (-v3.y * 0.5 + 0.5) * stg.clientHeight + 'px';
+const showBubble = data.emote && (now - (data.emoteAt || 0) < 6500);
+av.tag.innerHTML = (showBubble ? '<div class="chat-bubble">' + esc(data.emote) + '</div>' : '') +
+'<div class="name-pill">' + (isFly ? '🚁 ' : '') + '<b>Lv.' + (data.lv || 1) + '</b> ' + esc(data.name || 'Explorer') + '</div>';
+} else {
+av.tag.style.display = 'none';
+}
+}
+}
+
+let lt = performance.now();
 function loop(t) {
-const d = Math.min(0.05, (t - last) / 1000);
-last = t;
-const detBanner = $('#detention-banner');
-if (isInDetention()) {
-const remSec = Math.max(1, Math.ceil((S.detentionUntil - Date.now()) / 1000));
-$('#det-timer').textContent = remSec + 's';
-detBanner.classList.add('show');
-} else if (detBanner.classList.contains('show')) {
-detBanner.classList.remove('show');
+requestAnimationFrame(loop);
+const dt = Math.min(0.05, (t - lt) / 1000);
+lt = t;
+const now = Date.now();
+
+if (currentDim === 'detention') {
+const remMs = (S.detentionUntil || 0) - now;
+if (remMs <= 0) {
+$('#detention-banner').classList.remove('show');
 S.detentionUntil = 0;
 save();
-if (currentDim === 'detention') {
-say('✅ Detention finished! Returning to Main Plaza...', 3500);
+say('✅ Detention time complete! Returning to Main Plaza.', 3500);
 enterDimension('hub');
+} else {
+$('#detention-banner').classList.add('show');
+$('#det-timer').textContent = Math.ceil(remMs / 1000) + 's';
 }
+} else {
+$('#detention-banner').classList.remove('show');
 }
-const busy = cs || $('#intro').style.display == 'flex' ||
-(document.activeElement && document.activeElement.id === 'chat-in');
-let ix = (K.d || K.arrowright ? 1 : 0) - (K.a || K.arrowleft ? 1 : 0);
-let iz = (K.s || K.arrowdown ? 1 : 0) - (K.w || K.arrowup ? 1 : 0);
-if (Math.hypot(J.x, J.z) > 0.15) { ix = J.x; iz = J.z; }
-let mv = false;
+
+// Background session expiration check even if dialog was closed (Priority 3)
+if (S.activeGameSession && S.activeGameSession.expiresAt <= now) {
+  finalizeExpiredOrCompletedSession(S.activeGameSession, true, currentDim === 'gameroom');
+}
+
+let mx = J.x + (K.d || K.arrowright ? 1 : 0) - (K.a || K.arrowleft ? 1 : 0);
+let mz = J.z + (K.s || K.arrowdown ? 1 : 0) - (K.w || K.arrowup ? 1 : 0);
 
 if (P.flying) {
+if (pl && pl.userData.drone) {
+pl.userData.drone.visible = true;
+pl.userData.drone.userData.rotors.forEach((rt, idx) => {
+rt.rotation.y += (idx % 2 === 0 ? 0.72 : -0.72);
+});
+}
 const yawIn = (K.q || holdKeys.yawL ? 1 : 0) - (K.e || holdKeys.yawR ? 1 : 0);
-if (!busy && yawIn !== 0) P.ry += yawIn * 2.2 * d;
-const climbIn = (!busy && (K[' '] || holdKeys.up) ? 1 : 0) - (!busy && (K.shift || holdKeys.down) ? 1 : 0);
-if (climbIn > 0) P.vy += 24 * d;
-else if (climbIn < 0) P.vy -= 24 * d;
-else P.vy *= Math.pow(0.06, d);
+P.ry += yawIn * 2.1 * dt;
 
-let ax = 0, az = 0;
-if (!busy && Math.hypot(ix, iz) > 0.1) {
-const m = Math.hypot(ix, iz), k = Math.min(1, m);
-const nx = ix / m * k, nz = iz / m * k;
-if (P.fpv) {
-const sinY = Math.sin(P.ry), cosY = Math.cos(P.ry);
-ax = -nz * sinY + nx * cosY;
-az = -nz * cosY - nx * sinY;
+let climbIn = 0;
+if (K[' '] || holdKeys.up) climbIn += 1;
+if (K.shift || K.c || holdKeys.down) climbIn -= 1;
+
+const droneSpec = DRONES[S.droneModel] || DRONES[0];
+const maxSpd = 15.5 * (droneSpec.speedMul || 1.0);
+const accel = 34.0 * (droneSpec.speedMul || 1.0);
+let fwd = -mz;
+let strafe = mx;
+if (Math.hypot(fwd, strafe) > 1) {
+const m = Math.hypot(fwd, strafe);
+fwd /= m;
+strafe /= m;
+}
+if (!fwd && !strafe && Math.hypot(P.tx - P.x, P.tz - P.z) > 0.4) {
+const dx = P.tx - P.x, dz = P.tz - P.z, d = Math.hypot(dx, dz);
+P.vx += (dx / d) * accel * dt;
+P.vz += (dz / d) * accel * dt;
+P.ry = Math.atan2(dx, dz);
 } else {
-ax = nx;
-az = nz;
-P.ry = Math.atan2(ax, az);
+P.tx = P.x;
+P.tz = P.z;
+const sinY = Math.sin(P.ry), cosY = Math.cos(P.ry);
+const wishX = sinY * fwd - cosY * strafe;
+const wishZ = cosY * fwd + sinY * strafe;
+P.vx += wishX * accel * dt;
+P.vz += wishZ * accel * dt;
 }
-mv = true;
-}
-const dMul = (DRONES[S.droneModel] || DRONES[0]).speedMul || 1.0;
-P.vx += ax * 36 * dMul * d;
-P.vz += az * 36 * dMul * d;
-const drag = Math.pow(0.14, d);
-P.vx *= drag;
-P.vz *= drag;
-P.x += P.vx * d;
-P.y += P.vy * d;
-P.z += P.vz * d;
 
-if (P.y > 42) { P.y = 42; P.vy = 0; }
-if (P.y <= 0.15 && climbIn < 0) {
-P.y = 0;
+P.vy += climbIn * 26.0 * dt;
+P.vx *= Math.pow(0.14, dt);
+P.vz *= Math.pow(0.14, dt);
+P.vy *= Math.pow(0.08, dt);
+
+const hSpd = Math.hypot(P.vx, P.vz);
+if (hSpd > maxSpd) {
+P.vx *= maxSpd / hSpd;
+P.vz *= maxSpd / hSpd;
+}
+
+P.x = Math.max(-52, Math.min(52, P.x + P.vx * dt));
+P.z = Math.max(-52, Math.min(52, P.z + P.vz * dt));
+P.y = Math.max(0.2, Math.min(36, P.y + P.vy * dt));
+
+const localFwd = P.vx * Math.sin(P.ry) + P.vz * Math.cos(P.ry);
+const localRight = P.vx * Math.cos(P.ry) - P.vz * Math.sin(P.ry);
+P.rx += ((localFwd / maxSpd) * 0.34 - P.rx) * 10 * dt;
+P.rz += ((localRight / maxSpd) * 0.38 - P.rz) * 10 * dt;
+
+if (P.y <= 0.32 && climbIn < 0) {
 toggleDrone(false);
-} else if (P.y < 0.8) {
-P.y = 0.8;
-if (P.vy < 0) P.vy = 0;
+P.y = 0;
 }
 
-const targetPitch = Math.max(-0.45, Math.min(0.45, (P.vz * Math.cos(P.ry) + P.vx * Math.sin(P.ry)) * 0.035));
-const targetRoll = Math.max(-0.45, Math.min(0.45, (-P.vx * Math.cos(P.ry) + P.vz * Math.sin(P.ry)) * 0.035));
-P.rx += (targetPitch - P.rx) * 0.16;
-P.rz += (targetRoll - P.rz) * 0.16;
-
-pl.rotation.set(P.rx, P.ry, P.rz, 'YXZ');
-pl.position.set(P.x, P.y + Math.sin(t / 180) * 0.06, P.z);
-
-const spdKmh = Math.hypot(P.vx, P.vy, P.vz) * 3.6;
-const thrPct = Math.min(100, Math.max(0, Math.round(50 + climbIn * 45 + Math.hypot(P.vx, P.vz) * 1.8)));
-$('#osd-spd').textContent = spdKmh.toFixed(1) + ' km/h';
+const spdKmh = (Math.hypot(P.vx, P.vy, P.vz) * 3.6).toFixed(1);
+const thrPct = Math.min(100, Math.round((Math.hypot(P.vx, P.vz) / maxSpd * 75) + (climbIn > 0 ? 25 : 15)));
+const elapsed = Math.floor((now - P.flightStart) / 1000);
+const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
+const ss = String(elapsed % 60).padStart(2, '0');
+$('#osd-spd').textContent = spdKmh + ' km/h';
 $('#osd-alt').textContent = P.y.toFixed(1) + ' m';
 $('#osd-thr').textContent = thrPct + '%';
-$('#osd-hbar').style.transform = `translateY(${P.rx * 28}px) rotate(${-P.rz * 57.3}deg)`;
-const fltSec = Math.floor((Date.now() - P.flightStart) / 1000);
-$('#osd-tmr').textContent = String(Math.floor(fltSec / 60)).padStart(2, '0') + ':' + String(fltSec % 60).padStart(2, '0');
+$('#osd-tmr').textContent = mm + ':' + ss;
+$('#osd-hbar').style.transform = 'rotate(' + (-P.rz * 57.3).toFixed(1) + 'deg) translateY(' + (P.rx * 35).toFixed(1) + 'px)';
 } else {
+if (pl && pl.userData.drone) pl.userData.drone.visible = false;
 P.y = 0;
 P.rx = 0;
 P.rz = 0;
-if (!busy && Math.hypot(ix, iz) > 0.1) {
-const m = Math.hypot(ix, iz), k = Math.min(1, m);
-P.x += ix / m * k * d * 8.5;
-P.z += iz / m * k * d * 8.5;
+let vx = 0, vz = 0;
+if (Math.hypot(mx, mz) > 0.12) {
+const m = Math.max(1, Math.hypot(mx, mz));
+vx = mx / m;
+vz = mz / m;
 P.tx = P.x;
 P.tz = P.z;
 P.pend = null;
-P.ry = Math.atan2(ix, iz);
-mv = true;
-} else if (!busy) {
-const dx = P.tx - P.x, dz = P.tz - P.z, di = Math.hypot(dx, dz);
-if (di > 0.35) {
-const s = Math.min(di, d * 8.5);
-P.x += dx / di * s;
-P.z += dz / di * s;
-P.ry = Math.atan2(dx, dz);
-mv = true;
-}
-if (P.pend) {
-const targetPos = P.pend.item.p;
-const nd = Math.hypot(targetPos[0] - P.x, targetPos[1] - P.z);
-if (di <= 0.35 || nd < 3.2) {
-const act = P.pend;
+} else if (Math.hypot(P.tx - P.x, P.tz - P.z) > 0.25) {
+const dx = P.tx - P.x, dz = P.tz - P.z, d = Math.hypot(dx, dz);
+vx = dx / d;
+vz = dz / d;
+} else if (P.pend) {
+const pItem = P.pend;
 P.pend = null;
-P.ry = Math.atan2(targetPos[0] - P.x, targetPos[1] - P.z);
-P.tx = P.x;
-P.tz = P.z;
-mv = false;
-if (act.type === 'quest') openCase(act.item);
-else if (act.type === 'pvp') openPvpGame(act.item.id);
-else if (act.type === 'portal') enterDimension(act.item.target);
+if (pItem.type === 'quest') openCase(pItem.item);
+else if (pItem.type === 'pvp') openPvpGame(pItem.item.id);
+else if (pItem.type === 'portal') enterDimension(pItem.item.target);
 }
-}
-}
-
-// Auto-trigger portal when walking directly into its ring center
-if (!busy && !P.pend) {
-const hitPortal = activePortals.find(pt => Math.hypot(pt.p[0] - P.x, pt.p[1] - P.z) < 1.85);
-if (hitPortal) {
-enterDimension(hitPortal.target);
-}
-}
-
-OB.forEach(o => {
-const x0 = o[0] - 0.6, x1 = o[1] + 0.6, z0 = o[2] - 0.6, z1 = o[3] + 0.6;
-if (P.x > x0 && P.x < x1 && P.z > z0 && P.z < z1) {
-const a = [P.x - x0, x1 - P.x, P.z - z0, z1 - P.z], m = Math.min(...a), k = a.indexOf(m);
-if (k == 0) P.x = x0;
-else if (k == 1) P.x = x1;
-else if (k == 2) P.z = z0;
-else P.z = z1;
-}
-});
-pl.rotation.set(0, P.ry, 0);
-pl.position.set(P.x, mv ? Math.abs(Math.sin(t / 95)) * 0.08 : 0, P.z);
-}
-
-P.x = Math.max(-47, Math.min(47, P.x));
-P.z = Math.max(-45, Math.min(45, P.z));
-P.amp += ((mv ? 0.9 : 0) - P.amp) * 0.2;
-anim(pl, t / 95, P.amp, P.flying);
-
-if (P.flying && P.fpv) {
-pl.visible = false;
-const fpvPos = V.set(P.x + Math.sin(P.ry) * 0.55, P.y + 3.45, P.z + Math.cos(P.ry) * 0.55);
-cp.lerp(fpvPos, 0.45);
-cam.position.copy(cp);
-cam.lookAt(
-P.x + Math.sin(P.ry) * 14,
-P.y + 3.1 - P.rx * 12,
-P.z + Math.cos(P.ry) * 14
-);
+const sp = 6.6;
+if (vx || vz) {
+const nx = Math.max(-38, Math.min(38, P.x + vx * sp * dt));
+const nz = Math.max(-36, Math.min(36, P.z + vz * sp * dt));
+const blk = (x, z) => OB.some(o => x > o[0] - 0.55 && x < o[1] + 0.55 && z > o[2] - 0.55 && z < o[3] + 0.55);
+if (!blk(nx, P.z)) P.x = nx;
+if (!blk(P.x, nz)) P.z = nz;
+P.ry = Math.atan2(vx, vz);
+P.amp = Math.min(1, P.amp + dt * 6);
 } else {
-pl.visible = true;
-const camH = P.flying ? P.y + 8.5 : 8.2;
-const camZ = P.flying ? P.z + 12.5 : P.z + 11.2;
-cp.lerp(V.set(P.x * 0.88, camH, camZ), 0.09);
-cam.position.copy(cp);
-cam.lookAt(P.x * 0.88, P.y + 1.4, P.z - 2);
-}
-
-if (myTagEl) {
-const bub = myTagEl.querySelector('.chat-bubble');
-if (myEmote && Date.now() - myEmoteAt < 5000 && !(P.flying && P.fpv)) {
-const vp = V.set(P.x, P.y + (P.flying ? 4.3 : 3.3), P.z).project(cam);
-if (vp.z <= 1) {
-myTagEl.style.left = (vp.x * 0.5 + 0.5) * 100 + '%';
-myTagEl.style.top = (-vp.y * 0.5 + 0.5) * 100 + '%';
-bub.textContent = myEmote;
-bub.style.display = 'block';
-} else {
-bub.style.display = 'none';
-}
-} else {
-bub.style.display = 'none';
+P.amp *= Math.pow(0.05, dt);
 }
 }
 
-const now = Date.now();
-Object.entries(remotePlayers).forEach(([uid, rp]) => {
-if (!rp) return;
-const stale = now - (rp.ts || 0) > 20000;
-const sameDim = (rp.dim || 'hub') === currentDim;
-if (stale || !sameDim) {
-if (rp.mesh) { sc.remove(rp.mesh); rp.mesh = null; }
-if (rp.tag) { rp.tag.remove(); rp.tag = null; }
-if (stale) {
-delete remotePlayers[uid];
-renderPlayersList();
+activePortals.forEach(pt => {
+if (!isWarping && Math.hypot(P.x - pt.p[0], P.z - pt.p[1]) < 2.05) {
+enterDimension(pt.target);
 }
-return;
-}
-if (rp.mesh && (rp.renderedColor !== rp.color || rp.renderedDrone !== rp.droneModel || rp.renderedLv100 !== ((rp.lv || 1) >= 100))) {
-sc.remove(rp.mesh);
-rp.mesh = null;
-}
-if (!rp.mesh) {
-const out = OUTFITS[(rp.color || 0) % OUTFITS.length];
-rp.renderedColor = rp.color;
-rp.renderedDrone = rp.droneModel;
-rp.renderedLv100 = (rp.lv || 1) >= 100;
-rp.mesh = buildCharacterFn(out.shirt, out.pants, out.hair, 0x38bdf8, {
-isRoyal: !!out.royal,
-lv: rp.lv || 1,
-droneIdx: rp.droneModel || 0
-});
-sc.add(rp.mesh);
-rp.cx = rp.x;
-rp.cy = rp.y || 0;
-rp.cz = rp.z;
-rp.cry = rp.ry || 0;
-rp.crx = rp.rx || 0;
-rp.crz = rp.rz || 0;
-rp.amp = 0;
-const tag = document.createElement('div');
-tag.className = 'player-tag';
-tag.innerHTML = '<div class="chat-bubble" style="display:none"></div>' +
-'<div class="name-pill"><b>Lv.1</b><span>Explorer</span></div>';
-stg.appendChild(tag);
-rp.tag = tag;
-}
-const dx = rp.x - rp.cx, dy = (rp.y || 0) - rp.cy, dz = rp.z - rp.cz;
-const stepDist = Math.hypot(dx, dz);
-rp.cx += dx * 0.22;
-rp.cy += dy * 0.22;
-rp.cz += dz * 0.22;
-let diffRy = (rp.ry || 0) - rp.cry;
-while (diffRy > Math.PI) diffRy -= Math.PI * 2;
-while (diffRy < -Math.PI) diffRy += Math.PI * 2;
-rp.cry += diffRy * 0.22;
-rp.crx += ((rp.rx || 0) - rp.crx) * 0.22;
-rp.crz += ((rp.rz || 0) - rp.crz) * 0.22;
-const remoteMoving = stepDist > 0.04;
-rp.amp += ((remoteMoving ? 0.9 : 0) - rp.amp) * 0.2;
-anim(rp.mesh, t / 95, rp.amp, !!rp.flying);
-rp.mesh.rotation.set(rp.crx, rp.cry, rp.crz, 'YXZ');
-rp.mesh.position.set(
-rp.cx,
-rp.flying ? rp.cy + Math.sin(t / 180) * 0.06 : (remoteMoving ? Math.abs(Math.sin(t / 95)) * 0.08 : 0),
-rp.cz
-);
-
-if (rp.tag) {
-const vp = V.set(rp.cx, rp.cy + (rp.flying ? 4.35 : 3.25), rp.cz).project(cam);
-const dist = Math.hypot(rp.cx - P.x, rp.cz - P.z);
-if (vp.z > 1 || dist > 60) {
-rp.tag.style.display = 'none';
-} else {
-rp.tag.style.display = 'flex';
-rp.tag.style.left = (vp.x * 0.5 + 0.5) * 100 + '%';
-rp.tag.style.top = (-vp.y * 0.5 + 0.5) * 100 + '%';
-rp.tag.querySelector('b').textContent = 'Lv.' + (rp.lv || 1);
-rp.tag.querySelector('span').textContent = (rp.flying ? '🚁 ' : '') + (rp.name || 'Explorer');
-const bub = rp.tag.querySelector('.chat-bubble');
-if (rp.emote && now - (rp.emoteAt || 0) < 5500) {
-bub.textContent = rp.emote;
-bub.style.display = 'block';
-} else {
-bub.style.display = 'none';
-}
-}
-}
-});
-
-// Animate dimension props, playground & signs
-porings.forEach((p, i) => p.position.y = p.userData.y + Math.sin(t / 400 + i * 2) * 0.15);
-playgroundProps.forEach(pg => {
-if (pg.type === 'swing') pg.mesh.rotation.x = Math.sin(t / 520 + pg.phase) * 0.48;
-else if (pg.type === 'spin') pg.mesh.rotation.y += 0.022;
-else if (pg.type === 'seesaw') pg.mesh.rotation.z = Math.sin(t / 650) * 0.24;
-});
-floaters.forEach((fl, i) => {
-fl.mesh.position.y = fl.baseY + Math.sin(t / 550 * fl.spd + i) * 0.35;
-if (fl.rot) {
-fl.mesh.rotation.y += 0.012 * fl.spd;
-fl.mesh.rotation.x += 0.005 * fl.spd;
-}
-});
-portalRings.forEach((pr, i) => {
-pr.torus.rotation.z = t / 700 + i;
-pr.vortex.scale.setScalar(0.95 + Math.sin(t / 300 + i) * 0.05);
-});
-npcs.forEach((n, i) => anim(n, t / 500 + i, 0.12, false));
-
-activeQuests.forEach((q, i) => {
-const v = V.set(q.p[0], 3.4, q.p[1]).project(cam), s = questSigns[i], dist = Math.hypot(q.p[0] - P.x, q.p[1] - P.z);
-if (!s) return;
-s.style.left = (v.x * 0.5 + 0.5) * 100 + '%';
-s.style.top = (-v.y * 0.5 + 0.5) * 100 + '%';
-s.style.display = (v.z > 1 || dist > 48) ? 'none' : 'flex';
-const m = s.querySelector('.mk'), ok = S.stars[q.idx] > 0;
-m.textContent = ok ? '✓' : '!';
-m.className = 'mk' + (ok ? ' ok' : '');
-});
-
-activePortals.forEach((pt, i) => {
-const v = V.set(pt.p[0], 4.6, pt.p[1]).project(cam), s = portalSigns[i], dist = Math.hypot(pt.p[0] - P.x, pt.p[1] - P.z);
-if (!s) return;
-s.style.left = (v.x * 0.5 + 0.5) * 100 + '%';
-s.style.top = (-v.y * 0.5 + 0.5) * 100 + '%';
-s.style.display = (v.z > 1 || dist > 55) ? 'none' : 'flex';
-});
-
-activePvpStations.forEach((st, i) => {
-const v = V.set(st.p[0], 3.8, st.p[1]).project(cam), s = pvpSigns[i], dist = Math.hypot(st.p[0] - P.x, st.p[1] - P.z);
-if (!s) return;
-s.style.left = (v.x * 0.5 + 0.5) * 100 + '%';
-s.style.top = (-v.y * 0.5 + 0.5) * 100 + '%';
-s.style.display = (v.z > 1 || dist > 55) ? 'none' : 'flex';
 });
 
 if (droneRace.active && currentDim === 'pvp' && droneRace.rings.length > 0) {
-const elapsed = (performance.now() - droneRace.startTime) / 1000;
-$('#race-tm').textContent = elapsed.toFixed(1) + 's';
+const elSec = (performance.now() - droneRace.startTime) / 1000;
+$('#race-tm').textContent = elSec.toFixed(1) + 's';
 const targetRing = droneRace.rings[droneRace.ringIdx];
-if (targetRing) {
-targetRing.mesh.rotation.z += 0.05;
-const dist3d = Math.hypot(P.x - targetRing.x, (P.y + 1.5) - targetRing.y, P.z - targetRing.z);
-if (dist3d < 4.3) {
+if (targetRing && Math.hypot(P.x - targetRing.x, P.y - targetRing.y, P.z - targetRing.z) < 3.4) {
 targetRing.mesh.material.color.setHex(0x34d399);
 droneRace.ringIdx++;
 if (droneRace.ringIdx >= droneRace.rings.length) {
 droneRace.active = false;
 $('#drone-race-hud').classList.remove('active');
-droneRace.rings.forEach((rg, idx) => rg.mesh.material.color.setHex(idx === 0 ? 0xfde047 : 0xf472b6));
-if (elapsed <= 28.0) {
-recordPvpWin('dronerace', 'Drone Racing (' + elapsed.toFixed(1) + 's)');
+droneRace.rings.forEach((rg, i) => rg.mesh.material.color.setHex(i === 0 ? 0xfde047 : 0xf472b6));
+if (elSec <= 28.0) {
+recordPvpWin('dronerace', 'Drone Racing (' + elSec.toFixed(1) + 's)');
 } else {
-say('⏱️ Finished in ' + elapsed.toFixed(1) + 's! Beat 28.0s to earn a PVP Win!', 4500);
+say('⏱️ Finished in ' + elSec.toFixed(1) + 's! Beat 28.0s to earn a PVP Win!', 4200);
 }
 } else {
-droneRace.rings[droneRace.ringIdx].mesh.material.color.setHex(0xfde047);
 $('#race-cp').textContent = 'Ring ' + (droneRace.ringIdx + 1) + '/' + droneRace.rings.length;
-say('✅ Ring ' + droneRace.ringIdx + '/' + droneRace.rings.length + ' cleared!', 1200);
-}
+droneRace.rings[droneRace.ringIdx].mesh.material.color.setHex(0xfde047);
 }
 }
 }
 
-if (!window._lastExploreXpAt) window._lastExploreXpAt = now;
-if ((mv || P.flying) && !busy && !isInDetention() && now - window._lastExploreXpAt >= 45000) {
-window._lastExploreXpAt = now;
-if (lvl() < 100) {
-S.xp += P.flying ? 30 : 20;
-hud();
-save();
+if (pl) {
+pl.visible = !(P.flying && P.fpv);
+pl.position.set(P.x, P.y, P.z);
+pl.rotation.set(P.rx, P.ry, P.rz, 'YXZ');
+if (pl.userData.crown) pl.userData.crown.rotation.y += 0.03;
+if (pl.userData.aura) pl.userData.aura.rotation.z -= 0.02;
+const sw = P.flying ? 0.18 : Math.sin(t * 0.012) * 0.55 * P.amp;
+pl.userData.L.rotation.x = sw;
+pl.userData.R.rotation.x = -sw;
+pl.userData.al.rotation.x = P.flying ? -0.45 : -sw * 0.7;
+pl.userData.ar.rotation.x = P.flying ? -0.45 : sw * 0.7;
+}
+
+if (P.flying && P.fpv) {
+const noseY = P.y + 1.9;
+cam.position.set(P.x + Math.sin(P.ry) * 0.45, noseY, P.z + Math.cos(P.ry) * 0.45);
+const lookX = P.x + Math.sin(P.ry) * 20;
+const lookZ = P.z + Math.cos(P.ry) * 20;
+const lookY = noseY - P.rx * 18;
+cam.lookAt(lookX, lookY, lookZ);
+} else if (P.flying) {
+const distBack = 9.5;
+const camX = P.x - Math.sin(P.ry) * distBack;
+const camZ = P.z - Math.cos(P.ry) * distBack;
+const camY = P.y + 4.8;
+cam.position.lerp(new THREE.Vector3(camX, camY, camZ), 0.14);
+cam.lookAt(P.x + Math.sin(P.ry) * 3, P.y + 1.5, P.z + Math.cos(P.ry) * 3);
+} else {
+cam.position.lerp(new THREE.Vector3(P.x, 12.2, P.z + 15.8), 0.12);
+cam.lookAt(P.x, 1.3, P.z - 1.2);
+}
+
+porings.forEach((p, i) => {
+p.position.y = p.userData.y + Math.sin(t * 0.003 + i) * 0.18;
+p.rotation.y += 0.01;
+});
+portalRings.forEach((pr, i) => {
+pr.torus.rotation.z += 0.025;
+pr.vortex.rotation.z -= 0.03;
+pr.torus.position.y = pr.baseY + Math.sin(t * 0.003 + i) * 0.15;
+pr.vortex.position.y = pr.torus.position.y;
+});
+floaters.forEach((fl, i) => {
+fl.mesh.position.y = fl.baseY + Math.sin(t * 0.002 * fl.spd + i) * 0.35;
+if (fl.rot) fl.mesh.rotation.y += 0.012 * fl.spd;
+});
+playgroundProps.forEach(pg => {
+if (pg.type === 'swing') {
+pg.mesh.rotation.x = Math.sin(t * 0.0032 + pg.phase) * 0.42;
+} else if (pg.type === 'spin') {
+pg.mesh.rotation.y += 0.022;
+} else if (pg.type === 'seesaw') {
+pg.mesh.rotation.z = Math.sin(t * 0.0026) * 0.24;
+}
+});
+
+activeQuests.forEach((c, i) => {
+const s = questSigns[i];
+if (!s) return;
+v3.set(c.p[0], 3.7, c.p[1]).project(cam);
+s.style.display = v3.z < 1 ? 'flex' : 'none';
+s.style.left = (v3.x * 0.5 + 0.5) * stg.clientWidth + 'px';
+s.style.top = (-v3.y * 0.5 + 0.5) * stg.clientHeight + 'px';
+const mk = s.querySelector('.mk');
+mk.textContent = S.stars[c.idx] ? '★' : '!';
+mk.classList.toggle('ok', S.stars[c.idx] > 0);
+});
+
+activePortals.forEach((pt, i) => {
+const s = portalSigns[i];
+if (!s) return;
+v3.set(pt.p[0], 4.8, pt.p[1]).project(cam);
+s.style.display = v3.z < 1 ? 'flex' : 'none';
+s.style.left = (v3.x * 0.5 + 0.5) * stg.clientWidth + 'px';
+s.style.top = (-v3.y * 0.5 + 0.5) * stg.clientHeight + 'px';
+});
+
+activePvpStations.forEach((st, i) => {
+const s = pvpSigns[i];
+if (!s) return;
+v3.set(st.p[0], 4.4, st.p[1]).project(cam);
+s.style.display = v3.z < 1 ? 'flex' : 'none';
+s.style.left = (v3.x * 0.5 + 0.5) * stg.clientWidth + 'px';
+s.style.top = (-v3.y * 0.5 + 0.5) * stg.clientHeight + 'px';
+});
+
+if (myTagEl) {
+const showMyBubble = myEmote && (now - myEmoteAt < 6500);
+if (showMyBubble && !(P.flying && P.fpv)) {
+v3.set(P.x, P.y + (P.flying ? 3.5 : 3.25), P.z).project(cam);
+myTagEl.style.display = v3.z < 1 ? 'flex' : 'none';
+myTagEl.style.left = (v3.x * 0.5 + 0.5) * stg.clientWidth + 'px';
+myTagEl.style.top = (-v3.y * 0.5 + 0.5) * stg.clientHeight + 'px';
+myTagEl.innerHTML = '<div class="chat-bubble">' + esc(myEmote) + '</div>';
+} else {
+myTagEl.style.display = 'none';
 }
 }
-const interval = (mv || P.flying) ? 150 : 2000;
-if (now - lastPushTime > interval) {
+
+syncRemoteAvatars(now);
+
+if (now - lastPushTime > 1200) {
+lastPushTime = now;
 pushState(false);
 }
-drawMM();
+
+mctx.clearRect(0, 0, 140, 140);
+mctx.fillStyle = currentDim === 'hub' ? '#2c4a3e' : (currentDim === 'pvp' ? '#292008' : (currentDim === 'gameroom' ? '#260e3d' : '#131b3a'));
+mctx.fillRect(0, 0, 140, 140);
+mctx.strokeStyle = 'rgba(255,255,255,0.12)';
+mctx.lineWidth = 1;
+mctx.beginPath(); mctx.arc(70, 70, 48, 0, 7); mctx.stroke();
+mctx.beginPath(); mctx.arc(70, 70, 24, 0, 7); mctx.stroke();
+
+activePortals.forEach(pt => {
+mctx.fillStyle = pt.color;
+mctx.beginPath();
+mctx.arc(70 + pt.p[0] * 1.4, 70 + pt.p[1] * 1.4, 4.5, 0, 7);
+mctx.fill();
+});
+activeQuests.forEach(c => {
+mctx.fillStyle = S.stars[c.idx] ? '#34d399' : '#fbbf24';
+mctx.beginPath();
+mctx.arc(70 + c.p[0] * 1.4, 70 + c.p[1] * 1.4, 4, 0, 7);
+mctx.fill();
+});
+activePvpStations.forEach(st => {
+mctx.fillStyle = st.color;
+mctx.beginPath();
+mctx.arc(70 + st.p[0] * 1.4, 70 + st.p[1] * 1.4, 4.5, 0, 7);
+mctx.fill();
+});
+for (const d of Object.values(remotePlayers)) {
+if (d && (d.dim || 'hub') === currentDim && now - (d.ts || 0) < 20000) {
+mctx.fillStyle = d.flying ? '#a855f7' : '#38bdf8';
+mctx.beginPath();
+mctx.arc(70 + (d.x || 0) * 1.4, 70 + (d.z || 0) * 1.4, 4.2, 0, 7);
+mctx.fill();
+}
+}
+mctx.fillStyle = P.flying ? '#f472b6' : '#ffffff';
+mctx.beginPath();
+mctx.arc(70 + P.x * 1.4, 70 + P.z * 1.4, 5, 0, 7);
+mctx.fill();
+mctx.strokeStyle = '#8b5cf6';
+mctx.lineWidth = 2;
+mctx.stroke();
+
 R.render(sc, cam);
-requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
 }
 
-function pushState(force = false) {
+function pushState(force) {
 if (!S.name) return;
 const now = Date.now();
-if (!force && now - lastPushTime < 140) return;
-lastPushTime = now;
-const payload = {
-name: S.name,
-dim: currentDim,
-x: Math.round(P.x * 100) / 100,
-y: Math.round(P.y * 100) / 100,
-z: Math.round(P.z * 100) / 100,
-ry: Math.round(P.ry * 100) / 100,
-rx: Math.round(P.rx * 100) / 100,
-rz: Math.round(P.rz * 100) / 100,
-flying: P.flying ? 1 : 0,
-lv: lvl(),
-color: S.outfit,
-droneModel: S.droneModel || 0,
-emote: myEmote,
-emoteAt: myEmoteAt,
-ts: now
-};
 fetch(RTDB_URL + '/players/' + myId + '.json', {
 method: 'PUT',
 headers: { 'Content-Type': 'application/json' },
-body: JSON.stringify(payload)
+body: JSON.stringify({
+name: S.name,
+dim: currentDim,
+x: Number(P.x.toFixed(2)),
+y: Number(P.y.toFixed(2)),
+z: Number(P.z.toFixed(2)),
+ry: Number(P.ry.toFixed(2)),
+lv: lvl(),
+stars: totalStars(),
+color: S.outfit,
+droneModel: S.droneModel,
+flying: P.flying,
+emote: (now - myEmoteAt < 6500) ? myEmote : '',
+emoteAt: myEmoteAt,
+ts: now
+})
 }).then(r => {
-if (r.ok) setSyncBadge('Live DB', true);
-}).catch(() => {});
+if (r.ok) setSyncBadge('Live', true);
+}).catch(() => {
+setSyncBadge('Offline', false);
+});
 }
 
-function applyPlayerSnapshot(uid, data) {
-if (!uid || uid === myId) return;
-if (!data) {
-if (remotePlayers[uid]) {
-if (remotePlayers[uid].mesh) sc.remove(remotePlayers[uid].mesh);
-if (remotePlayers[uid].tag) remotePlayers[uid].tag.remove();
+let initialChatLoaded = false;
+async function pollWorld() {
+try {
+const [pRes, cRes] = await Promise.all([
+fetch(RTDB_URL + '/players.json'),
+fetch(RTDB_URL + '/chat.json?orderBy="$key"&limitToLast=20')
+]);
+if (pRes.ok) {
+const pData = await pRes.json() || {};
+const now = Date.now();
+for (const k of Object.keys(remotePlayers)) {
+if (!pData[k]) delete remotePlayers[k];
+}
+for (const [uid, val] of Object.entries(pData)) {
+if (uid === myId) continue;
+if (val && now - (val.ts || 0) < 25000) {
+remotePlayers[uid] = val;
+} else {
 delete remotePlayers[uid];
 }
-return;
 }
-if (!remotePlayers[uid]) remotePlayers[uid] = {};
-Object.assign(remotePlayers[uid], data);
+setSyncBadge('Live', true);
+renderPlayersList();
 }
-
-function startRealtimeSync() {
-pushState(true);
-const cleanup = () => {
-try {
-fetch(RTDB_URL + '/players/' + myId + '.json', { method: 'DELETE', keepalive: true });
-} catch (e) {}
-};
-addEventListener('beforeunload', cleanup);
-addEventListener('pagehide', cleanup);
-
-let playerSseOk = false;
-try {
-const esPlayers = new EventSource(RTDB_URL + '/players.json');
-esPlayers.onopen = () => {
-playerSseOk = true;
-setSyncBadge('Live DB', true);
-};
-const handlePlayerEvent = e => {
-if (!e.data || e.data === 'null') return;
-try {
-const msg = JSON.parse(e.data);
-const path = msg.path || '/';
-const data = msg.data;
-if (path === '/') {
-const seen = new Set();
-if (data && typeof data === 'object') {
-Object.entries(data).forEach(([uid, pData]) => {
-seen.add(uid);
-applyPlayerSnapshot(uid, pData);
-});
-}
-Object.keys(remotePlayers).forEach(uid => {
-if (!seen.has(uid)) applyPlayerSnapshot(uid, null);
-});
+if (cRes.ok) {
+const cData = await cRes.json() || {};
+const keys = Object.keys(cData).sort();
+keys.forEach(k => {
+const m = cData[k];
+if (!m || !m.text) return;
+if (!initialChatLoaded) {
+seenMsgs.add(k);
 } else {
-const parts = path.split('/').filter(Boolean);
-const uid = parts[0];
-if (uid && uid !== myId) {
-if (parts.length === 1) {
-applyPlayerSnapshot(uid, data);
-} else if (remotePlayers[uid]) {
-remotePlayers[uid][parts[1]] = data;
-}
-}
-}
-renderPlayersList();
-} catch (err) {}
-};
-esPlayers.addEventListener('put', handlePlayerEvent);
-esPlayers.addEventListener('patch', handlePlayerEvent);
-} catch (e) {}
-
-setInterval(() => {
-if (playerSseOk && Object.keys(remotePlayers).length > 0) return;
-fetch(RTDB_URL + '/players.json')
-.then(r => r.json())
-.then(data => {
-if (!data || typeof data !== 'object') return;
-setSyncBadge('Live DB', true);
-Object.entries(data).forEach(([uid, pData]) => applyPlayerSnapshot(uid, pData));
-renderPlayersList();
-})
-.catch(() => {});
-}, 1200);
-
-try {
-const esChat = new EventSource(RTDB_URL + '/chat.json?orderBy=%22ts%22&limitToLast=20');
-const handleChatEvent = e => {
-if (!e.data || e.data === 'null') return;
-try {
-const msg = JSON.parse(e.data);
-const path = msg.path || '/';
-const data = msg.data;
-const now = Date.now();
-if (path === '/' && data && typeof data === 'object') {
-Object.entries(data)
-.sort((a, b) => (a[1]?.ts || 0) - (b[1]?.ts || 0))
-.forEach(([id, c]) => {
-if (c && now - (c.ts || 0) < 300000) {
-appendChatLine(id, c.name || 'Explorer', c.text || '', c.uid === myId, false);
+appendChatLine(k, m.name || 'Explorer', m.text, m.uid === myId, false);
 }
 });
-} else if (data && typeof data === 'object' && data.text) {
-const id = path.replace(/\//g, '');
-if (now - (data.ts || 0) < 300000) {
-appendChatLine(id, data.name || 'Explorer', data.text, data.uid === myId, false);
+initialChatLoaded = true;
 }
+} catch (e) {
+setSyncBadge('Reconnecting', false);
 }
-} catch (err) {}
-};
-esChat.addEventListener('put', handleChatEvent);
-esChat.addEventListener('patch', handleChatEvent);
-} catch (e) {}
 }
 
-function begin() {
+addEventListener('beforeunload', () => {
+try {
+navigator.sendBeacon(
+RTDB_URL + '/players/' + myId + '.json',
+new Blob([JSON.stringify(null)], { type: 'application/json' })
+);
+} catch (e) {}
+});
+
+function start() {
 hud();
-renderPlayersList();
-startRealtimeSync();
-say('Sawàtdii ' + S.name + '! Explore 8 Subject Dimensions (96 ⭐) & reach Lv.100 to unlock the PVP Arena!', 5500);
+init3D();
+if (isInDetention()) {
+currentDim = 'detention';
+buildWorldForDimension('detention');
+P.x = 0; P.z = 0; P.tx = 0; P.tz = 0;
+hud();
+}
+// Priority 3: Automatically resume active Steal an Egg session across page refresh!
+const activeSess = getActiveGameSession();
+if (activeSess && activeSess.expiresAt > Date.now() && !isInDetention()) {
+  currentDim = 'gameroom';
+  buildWorldForDimension('gameroom');
+  P.x = 0; P.z = 0; P.tx = 0; P.tz = 0;
+  hud();
+  setTimeout(() => {
+    say('⏳ Resuming your active Steal an Egg session!', 3500);
+    launchStealAnEggGame(activeSess);
+  }, 400);
+}
+pushState(true);
+pollWorld();
+setInterval(pollWorld, 1500);
+if (S.name && !activeSess) {
+sendChat('entered Inquiry World!', true);
+say('Welcome back, ' + S.name + '! Step into any glowing Portal or visit the 🕹️ Game Room!', 4500);
+}
 }
 
-// --- iPadOS & Mobile Anti-Zoom Lock + Auto-Fullscreen ---
-function requestGameFullscreen() {
+$('#fs-btn').onclick = () => {
 const el = document.documentElement;
-try {
 if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-if (el.requestFullscreen) el.requestFullscreen({ navigationUI: 'hide' }).catch(() => {});
-else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-}
-} catch (e) {}
-updateFsIcon();
-}
-
-function toggleGameFullscreen() {
-try {
-if (document.fullscreenElement || document.webkitFullscreenElement) {
-if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
-else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+(el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen)?.call(el);
 } else {
-requestGameFullscreen();
+(document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen)?.call(document);
 }
-} catch (e) {}
-setTimeout(updateFsIcon, 150);
-}
-
-function updateFsIcon() {
-const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement || window.navigator.standalone);
-const btn = $('#fs-btn');
-if (btn) {
-btn.textContent = isFs ? '🗗 Exit Full' : '⛶ Fullscreen';
-btn.style.borderColor = isFs ? '#34d399' : 'var(--glass-border)';
-}
-}
-
-document.addEventListener('fullscreenchange', updateFsIcon);
-document.addEventListener('webkitfullscreenchange', updateFsIcon);
-if ($('#fs-btn')) $('#fs-btn').onclick = toggleGameFullscreen;
-
-// Block iPad Safari pinch-to-zoom (gesturestart/change/end)
-['gesturestart', 'gesturechange', 'gestureend'].forEach(evt => {
-document.addEventListener(evt, e => e.preventDefault(), { passive: false });
-});
-
-// Block multi-touch pinch zoom on canvas/HUD while still allowing multi-finger joystick + action buttons
-document.addEventListener('touchmove', e => {
-if (e.touches && e.touches.length > 1) {
-e.preventDefault();
-}
-}, { passive: false });
-
-// Block double-tap zoom on iPadOS
-let lastTouchEnd = 0;
-document.addEventListener('touchend', e => {
-const now = Date.now();
-if (now - lastTouchEnd <= 300) {
-e.preventDefault();
-}
-lastTouchEnd = now;
-}, { passive: false });
-
-// Auto-trigger fullscreen on first user tap anywhere (required by browser security policy)
-const autoFsOnce = () => {
-requestGameFullscreen();
-document.removeEventListener('pointerdown', autoFsOnce);
-document.removeEventListener('touchstart', autoFsOnce);
 };
-document.addEventListener('pointerdown', autoFsOnce, { passive: true });
-document.addEventListener('touchstart', autoFsOnce, { passive: true });
+const syncFsBtn = () => {
+const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+$('#fs-btn').textContent = isFs ? '✕ Exit Fullscreen' : '⛶ Fullscreen';
+};
+document.addEventListener('fullscreenchange', syncFsBtn);
+document.addEventListener('webkitfullscreenchange', syncFsBtn);
 
-if (window.THREE) {
-init();
-updateFsIcon();
 if (S.name) {
-begin();
+start();
 } else {
 $('#intro').style.display = 'flex';
 $('#go').onclick = () => {
-requestGameFullscreen();
-const rawName = $('#ni').value.trim() || 'Explorer';
-S.name = containsBadWord(rawName) ? 'Explorer' : rawName;
+const rawName = ($('#ni').value.trim() || 'Explorer').slice(0, 14);
+if (containsBadWord(rawName)) {
+say('⚠️ Please choose a respectful Explorer Nickname without profanity!', 4000);
+$('#ni').value = '';
+return;
+}
+S.name = rawName;
 save();
 $('#intro').style.display = 'none';
-begin();
+start();
 };
-}
 }
 </script>
 </body>
