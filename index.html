@@ -3938,22 +3938,39 @@ function openAdmin() {
   });
 }
 const loadedAtMs = Date.now();
+function unlockAdmin() {
+  isAdmin = true;
+  if (document.getElementById('adm-btn')) return;
+  const b = document.createElement('button');
+  b.id = 'adm-btn'; b.textContent = '🛡️'; b.title = 'Admin';
+  b.style.cssText = 'position:absolute;left:1.2em;top:8.5em;z-index:30;width:2.8em;height:2.8em;border-radius:50%;border:2px solid #f43f5e;background:rgba(15,12,35,.95);color:#fff;font-size:1.2em';
+  b.onclick = openAdmin;
+  document.getElementById('stage').appendChild(b);
+  say('🛡️ Admin unlocked', 3000);
+}
+function askAdminPin() {
+  if (isAdmin || document.getElementById('adm-pin')) return;
+  const m = document.createElement('div'); m.id = 'adm-pin';
+  m.style.cssText = 'position:absolute;inset:0;z-index:40;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center';
+  m.innerHTML = '<div style="background:#1f1a3d;border:2px solid #f43f5e;border-radius:1em;padding:1em;color:#fff;text-align:center;width:16em"><b>🛡️ Admin PIN</b><input id="adm-pi" type="password" inputmode="numeric" autocomplete="off" style="display:block;width:100%;margin:.6em 0;padding:.5em;border-radius:.5em;border:0;font-size:1.1em;text-align:center;user-select:text;-webkit-user-select:text"><div style="display:flex;gap:.5em"><button id="adm-ok" style="flex:1;padding:.5em;background:#f43f5e;border:0;color:#fff;border-radius:.5em">OK</button><button id="adm-no" style="flex:1;padding:.5em;background:#475569;border:0;color:#fff;border-radius:.5em">Cancel</button></div><div id="adm-er" style="color:#fca5a5;font-size:.85em;margin-top:.4em"></div></div>';
+  document.getElementById('stage').appendChild(m);
+  m.addEventListener('pointerdown', e => e.stopPropagation());
+  const inp = m.querySelector('#adm-pi'); setTimeout(() => inp.focus(), 50);
+  const go = () => { if (inp.value === ADMIN_PIN) { m.remove(); unlockAdmin(); } else { m.querySelector('#adm-er').textContent = 'Wrong PIN'; inp.value = ''; } };
+  m.querySelector('#adm-ok').onclick = go;
+  inp.onkeydown = e => { if (e.key === 'Enter') go(); };
+  m.querySelector('#adm-no').onclick = () => m.remove();
+}
 setInterval(() => {
-  if (isAdmin || admAsked || !S.name || S.name.toLowerCase() !== ADMIN_NAME || document.getElementById('intro').style.display === 'flex') return;
-  admAsked = true;
-  const pin = prompt('Admin PIN:');
-  if (pin === ADMIN_PIN) {
-    isAdmin = true;
-    const b = document.createElement('button');
-    b.textContent = '🛡️'; b.title = 'Admin';
-    b.style.cssText = 'position:absolute;right:1.2em;top:4.3em;z-index:30;width:2.4em;height:2.4em;border-radius:50%;border:2px solid #f43f5e;background:rgba(15,12,35,.9);color:#fff;font-size:1.1em';
-    b.onclick = openAdmin;
-    document.getElementById('stage').appendChild(b);
-    say('🛡️ Admin unlocked', 3000);
-  } else if (pin !== null) {
-    S.name = 'Explorer'; save(); hud(); say('Wrong PIN. Nickname reset.', 3500);
-  }
+  if (isAdmin || admAsked || !S.name || S.name.trim().toLowerCase() !== ADMIN_NAME || document.getElementById('intro').style.display === 'flex') return;
+  admAsked = true; askAdminPin();
 }, 2000);
+// Backup: tap your avatar/name 5x to re-open the PIN box
+let admTaps = 0, admTapT = 0;
+document.getElementById('me').addEventListener('click', () => {
+  const n = Date.now(); admTaps = n - admTapT < 1500 ? admTaps + 1 : 1; admTapT = n;
+  if (admTaps >= 5 && S.name && S.name.trim().toLowerCase() === ADMIN_NAME) { admTaps = 0; askAdminPin(); }
+});
 </script>
 </body>
 </html>
