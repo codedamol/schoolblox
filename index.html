@@ -162,7 +162,7 @@ button:active{transform:scale(0.92);}
 .star.on{color:var(--accent-gold);text-shadow:0 0 14px rgba(251, 191, 36, 0.7);}
 #intro input{font:inherit;padding:0.65em 0.85em;border-radius:0.8em;border:1.5px solid rgba(167, 139, 250, 0.5);background:rgba(0, 0, 0, 0.4);color:#fff;width:100%;margin-top:0.45em;outline:none;user-select:text;-webkit-user-select:text;}
 #err{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:#fff;font-size:1.5em;text-align:center;padding:2em;background:#0d0a1c;z-index:20;}
-@media (max-width: 768px) { #chat-box { width: 16.5em; bottom: 13.8em; } #chat-feed { height: 5.2em; } #skills { display: none; } #joy { bottom: 4.8em; left: 1.8em; } }
+@media (max-width: 768px) { #chat-box { width: 16.5em; bottom: 13.8em; } #chat-feed { height: 5.2em; } #skills { bottom: 0.6em; gap: 0.35em; padding: 0.3em 0.45em; } .sk { width: 3em; height: 3em; } #joy { bottom: 4.8em; left: 1.8em; } }
 
 #dim-pill{background:linear-gradient(135deg, rgba(139, 92, 246, 0.35), rgba(19, 16, 38, 0.85));border-color:rgba(196, 181, 253, 0.55);cursor:pointer;}
 #dim-pill:hover{background:linear-gradient(135deg, rgba(139, 92, 246, 0.55), rgba(19, 16, 38, 0.95));}
@@ -537,9 +537,6 @@ button:active{transform:scale(0.92);}
 <div class="hud glass-card" id="skills"></div>
 <div id="actions-right">
 <button class="act-orb" id="drone-btn" aria-label="Toggle Drone Flight"><span>🚁</span><em>Drone</em></button>
-<button class="act-orb" id="auto" aria-label="Auto-Guide"><span>⚔️</span><em>Auto</em></button>
-<button class="act-orb" id="tg" aria-label="Nearest NPC"><span>🎯</span><em>Target</em></button>
-<button class="act-orb" id="rf" aria-label="Stop"><span>🛑</span><em>Stop</em></button>
 <button id="atk" aria-label="Talk"><span>💬</span><em>Talk</em></button>
 </div>
 <div id="dlg"><div class="panel" id="pn"></div></div>
@@ -1840,7 +1837,7 @@ function setupObby(dimKey) {
   buildCourse();
   if (!document.getElementById('ob-css')) {
     const st = document.createElement('style'); st.id = 'ob-css';
-    st.textContent = '#ob-jump{position:absolute;right:.8em;bottom:12em;width:5em;height:5em;border-radius:50%;border:2.5px solid #fff;background:radial-gradient(circle at 35% 30%,#22d3ee,#0369a1);color:#fff;font-size:1em;font-weight:800;z-index:5;pointer-events:auto;box-shadow:0 0 16px rgba(34,211,238,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;touch-action:none}#ob-jump em{font-style:normal;font-size:.62em;letter-spacing:.05em}#ob-info{position:absolute;left:50%;bottom:.6em;transform:translateX(-50%);display:flex;gap:.6em;align-items:center;padding:.35em .8em;border-radius:99px;background:rgba(15,23,42,.82);border:1.5px solid rgba(34,211,238,.6);color:#fff;font-size:.82em;font-weight:700;z-index:5;pointer-events:auto;white-space:nowrap}#ob-mode{border:0;border-radius:99px;padding:.25em .7em;font-weight:800;color:#fff}.ob-r{border:0;background:rgba(255,255,255,.18);color:#fff;border-radius:50%;width:2em;height:2em;font-size:1em;touch-action:none}';
+    st.textContent = '#ob-jump{position:absolute;right:.8em;bottom:12em;width:5em;height:5em;border-radius:50%;border:2.5px solid #fff;background:radial-gradient(circle at 35% 30%,#22d3ee,#0369a1);color:#fff;font-size:1em;font-weight:800;z-index:5;pointer-events:auto;box-shadow:0 0 16px rgba(34,211,238,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;touch-action:none}#ob-jump em{font-style:normal;font-size:.62em;letter-spacing:.05em}#ob-info{position:absolute;left:50%;bottom:6.6em;transform:translateX(-50%);display:flex;gap:.6em;align-items:center;padding:.35em .8em;border-radius:99px;background:rgba(15,23,42,.82);border:1.5px solid rgba(34,211,238,.6);color:#fff;font-size:.82em;font-weight:700;z-index:5;pointer-events:auto;white-space:nowrap}#ob-mode{border:0;border-radius:99px;padding:.25em .7em;font-weight:800;color:#fff}.ob-r{border:0;background:rgba(255,255,255,.18);color:#fff;border-radius:50%;width:2em;height:2em;font-size:1em;touch-action:none}';
     document.head.appendChild(st);
   }
   const ui = document.createElement('div'); ui.id = 'ob-ui';
@@ -1871,6 +1868,82 @@ function setupObby(dimKey) {
   }
   obbyHud();
   say('🏃 Math Obby! Jump across the platforms. Each NPC is a checkpoint.', 4500);
+}
+
+// ===== BAG / WEAPON / ATTACK + drone rule =====
+const NO_DRONE_DIMS = ['math', 'science', 'english', 'thai', 'ict', 'makerspace', 'arts', 'design', 'detention'];
+const WEAPONS = [
+  { id: 'bat', n: 'Wooden Bat', ic: '🏏', lv: 1 },
+  { id: 'sword', n: 'Foam Sword', ic: '🗡️', lv: 5 },
+  { id: 'wand', n: 'Star Wand', ic: '🪄', lv: 10 },
+  { id: 'hammer', n: 'Math Mallet', ic: '🔨', lv: 15 }
+];
+let atkT = 0, atkFx = [];
+function applyDroneRule(dimKey) {
+  const off = NO_DRONE_DIMS.includes(dimKey), b = document.getElementById('drone-btn');
+  if (b) b.style.display = off ? 'none' : '';
+  if (off && P.flying) toggleDrone(false);
+}
+function buildWeaponMesh(id) {
+  const g = new THREE.Group(), mat = c => new THREE.MeshLambertMaterial({ color: c });
+  const cyl = (r1, r2, h, c, y) => { const m = new THREE.Mesh(new THREE.CylinderGeometry(r1, r2, h, 8), mat(c)); m.position.y = y; g.add(m); return m; };
+  const bx = (w, h, d, c, y) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(c)); m.position.y = y; g.add(m); return m; };
+  if (id === 'bat') cyl(0.09, 0.05, 1.1, 0xb45309, 0.5);
+  else if (id === 'sword') { cyl(0.04, 0.04, 0.3, 0x7c2d12, 0.05); bx(0.4, 0.06, 0.08, 0xf59e0b, 0.22); bx(0.1, 0.85, 0.04, 0x38bdf8, 0.68); }
+  else if (id === 'wand') { cyl(0.03, 0.03, 1.0, 0x7c3aed, 0.5); const s = new THREE.Mesh(new THREE.OctahedronGeometry(0.16), new THREE.MeshBasicMaterial({ color: 0xfde047 })); s.position.y = 1.08; g.add(s); }
+  else if (id === 'hammer') { cyl(0.04, 0.04, 1.0, 0x92400e, 0.5); bx(0.5, 0.3, 0.3, 0x94a3b8, 1.0); }
+  else return null;
+  return g;
+}
+function applyWeapon() {
+  if (!pl || !pl.userData || !pl.userData.ar) return;
+  const ar = pl.userData.ar;
+  if (ar.userData.wm) { ar.remove(ar.userData.wm); ar.userData.wm = null; }
+  if (!S.weapon) return;
+  const w = buildWeaponMesh(S.weapon); if (!w) return;
+  w.position.set(0, -0.45, 0.18); w.rotation.x = Math.PI / 2 - 0.5;
+  ar.add(w); ar.userData.wm = w;
+}
+function setWeapon(id) {
+  const w = WEAPONS.find(x => x.id === id); if (!w) return;
+  if (lvl() < w.lv) { say('🔒 ' + w.n + ' unlocks at Level ' + w.lv + '!', 2500); return; }
+  S.weapon = S.weapon === id ? '' : id;
+  save(); applyWeapon();
+  say(S.weapon ? '⚔️ Equipped ' + w.n + '!' : 'Weapon put away.', 2000);
+  openWeapons();
+}
+function openWeapons() {
+  const cur = lvl();
+  infoPanel('<h2>⚔️ Weapons</h2><div style="display:flex;flex-direction:column;gap:0.45em;text-align:left">' + WEAPONS.map(w => {
+    const lock = cur < w.lv, on = S.weapon === w.id;
+    return '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.6em;background:rgba(255,255,255,0.07);border:1px solid ' + (on ? '#34d399' : 'rgba(196,181,253,0.3)') + ';border-radius:0.8em;padding:0.5em 0.7em"><span style="font-weight:800">' + w.ic + ' ' + w.n + '<br><small style="color:#a5b4fc">' + (lock ? '🔒 Unlocks at Lv.' + w.lv : 'Unlocked') + '</small></span>' +
+      '<button class="btn" data-w="' + w.id + '" ' + (lock ? 'disabled style="opacity:0.45"' : '') + '>' + (on ? 'Unequip' : 'Equip') + '</button></div>';
+  }).join('') + '</div>');
+  $('#pn').querySelectorAll('[data-w]').forEach(b => b.onclick = () => setWeapon(b.dataset.w));
+}
+function openBag() {
+  const cell = (ic, t, v) => '<div style="background:rgba(255,255,255,0.07);border:1px solid rgba(196,181,253,0.3);border-radius:0.8em;padding:0.45em 0.7em;text-align:left"><div style="font-size:0.7em;color:#a5b4fc;font-weight:700">' + ic + ' ' + t + '</div><div style="font-weight:800">' + v + '</div></div>';
+  const dr = (typeof DRONES !== 'undefined' && DRONES[S.droneModel]) ? DRONES[S.droneModel].name : 'Basic';
+  const wp = WEAPONS.find(w => w.id === S.weapon);
+  const ee = S.eggStats || {}, ob = S.obbyStats || {}, pf = (S.quizBookStats && S.quizBookStats.perfectBooks) || [];
+  const badges = [];
+  if (ob.math_easy) badges.push('🌱 Math Obby (Easy)');
+  if (ob.math_hard) badges.push('🔥 Math Obby (Normal)');
+  pf.forEach(k => badges.push('🏆 Perfect: ' + k.replace('map_', 'MAP ')));
+  infoPanel('<h2>🎒 My Bag</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5em">' +
+    cell('⭐', 'Stars Available', availStars()) + cell('🏅', 'Level', lvl() + ' (' + S.xp + ' XP)') +
+    cell('⚔️', 'Weapon', wp ? wp.ic + ' ' + wp.n : 'None') + cell('🚁', 'Drone', dr) +
+    cell('🥚', 'Best Egg', ee.bestEgg || 'None') + cell('🏃', 'Egg Speed', ee.speed || 0) + '</div>' +
+    '<div style="margin-top:0.6em;text-align:left"><b style="font-size:0.8em;color:#a5b4fc">BADGES</b><div style="margin-top:0.3em;font-size:0.85em">' + (badges.length ? badges.join('<br>') : 'None yet. Finish the Math Obby or ace a MAP Practice!') + '</div></div>');
+}
+function doAttack() {
+  if (P.flying) { say('🚁 Land your drone first!', 1800); return; }
+  if (atkT > 0 || !pl) return;
+  atkT = 0.4;
+  const m = new THREE.Mesh(new THREE.RingGeometry(0.7, 1.0, 20, 1, -0.9, 1.8), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.9, side: THREE.DoubleSide }));
+  m.position.set(P.x + Math.sin(P.ry) * 1.3, P.y + 1.4, P.z + Math.cos(P.ry) * 1.3);
+  m.rotation.y = P.ry; m.rotation.z = -0.35;
+  sc.add(m); atkFx.push({ m, t: 0.3 });
 }
 
 let activePvpStations = [];
@@ -2092,11 +2165,11 @@ $('#cl').onclick = () => $('#dlg').style.display = 'none';
 }
 const star = n => [1, 2, 3].map(k => '<span class="star ' + (k <= n ? 'on' : '') + '">★</span>').join('');
 
-['👁️', '❓', '💡', '🧪', '✅'].forEach((ic, k) => {
+[['🎒', 'Bag', openBag], ['⚔️', 'Weapon', openWeapons], ['💥', 'Attack', doAttack]].forEach(([ic, nm, fn], k) => {
 const b = document.createElement('button');
 b.className = 'sk';
-b.innerHTML = '<b>' + (k + 1) + '</b><span>' + ic + '</span><small>' + ST[k].slice(0, 4) + '</small>';
-b.onclick = () => say(DEF[k], 5000);
+b.innerHTML = '<b>' + (k + 1) + '</b><span>' + ic + '</span><small>' + nm + '</small>';
+b.onclick = fn;
 $('#skills').appendChild(b);
 });
 
@@ -2312,7 +2385,6 @@ $('#dlg').style.display = 'none';
 };
 };
 
-$('#rf').onclick = () => { P.tx = P.x; P.tz = P.z; P.pend = null; };
 
 const nearestInteractable = () => {
 let best = null, bd = 1e9;
@@ -2329,25 +2401,6 @@ const d = Math.hypot(pt.p[0] - P.x, pt.p[1] - P.z);
 if (d < bd) { bd = d; best = { type: 'portal', item: pt, dist: d }; }
 });
 return best;
-};
-
-$('#tg').onclick = () => {
-const near = nearestInteractable();
-if (!near) return;
-if (near.type === 'quest') goNpc(near.item);
-else if (near.type === 'pvp') goPvpStation(near.item);
-else goPortal(near.item);
-};
-
-$('#auto').onclick = () => {
-const unDoneInDim = activeQuests.find(q => S.stars[q.idx] === 0);
-if (unDoneInDim) return goNpc(unDoneInDim);
-const nextAny = C.find(q => S.stars[q.idx] === 0);
-if (nextAny && nextAny.dim !== currentDim) {
-const portal = activePortals.find(pt => pt.target === nextAny.dim) || activePortals[0];
-if (portal) return goPortal(portal);
-}
-if (activeQuests.length > 0) goNpc(activeQuests[0]);
 };
 
 $('#atk').onclick = () => {
@@ -3677,6 +3730,7 @@ say('Drone Race cancelled.', 2000);
 };
 
 function toggleDrone(forceState) {
+if (forceState !== false && NO_DRONE_DIMS.includes(currentDim)) { say('🚁 Drones are only for the Main Plaza and Game Room!', 2800); return; }
 const next = typeof forceState === 'boolean' ? forceState : !P.flying;
 if (P.flying === next) return;
 P.flying = next;
@@ -4792,6 +4846,7 @@ localDrone.visible = P.flying;
 pl.add(localDrone);
 pl.userData.drone = localDrone;
 sc.add(pl);
+if (typeof applyWeapon === 'function') applyWeapon();
 };
 rebuildLocalAvatar();
 
@@ -5131,6 +5186,10 @@ droneRace.rings[droneRace.ringIdx].mesh.material.color.setHex(0xfde047);
 }
 }
 
+atkT = Math.max(0, atkT - dt);
+atkFx.forEach(f => { f.t -= dt; f.m.material.opacity = Math.max(0, f.t / 0.3 * 0.9); f.m.scale.setScalar(1 + (0.3 - f.t) * 2); });
+atkFx = atkFx.filter(f => { if (f.t <= 0) { sc.remove(f.m); return false; } return true; });
+
 if (pl) {
 pl.visible = !(P.flying && P.fpv);
 pl.position.set(P.x, P.y, P.z);
@@ -5141,7 +5200,7 @@ const sw = P.flying ? 0.18 : Math.sin(t * 0.012) * 0.55 * P.amp;
 pl.userData.L.rotation.x = sw;
 pl.userData.R.rotation.x = -sw;
 pl.userData.al.rotation.x = P.flying ? -0.45 : -sw * 0.7;
-pl.userData.ar.rotation.x = P.flying ? -0.45 : sw * 0.7;
+pl.userData.ar.rotation.x = atkT > 0 ? -Math.PI * 0.85 * Math.sin((1 - atkT / 0.4) * Math.PI) : (P.flying ? -0.45 : sw * 0.7);
 }
 
 if (P.flying && P.fpv) {
@@ -5410,6 +5469,7 @@ const el = document.documentElement;
 if (!document.fullscreenElement && !document.webkitFullscreenElement) {
 (el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen)?.call(el);
 } else {
+wantFs = false;
 (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen)?.call(document);
 }
 };
@@ -5417,6 +5477,21 @@ const syncFsBtn = () => {
 const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
 $('#fs-btn').textContent = isFs ? '✕ Exit Fullscreen' : '⛶ Fullscreen';
 };
+// ---- iPad: stop swipe/drag from scrolling or bouncing the page, and quickly re-enter fullscreen after an accidental exit ----
+let wantFs = false;
+document.addEventListener('touchmove', e => {
+  const t = e.target;
+  if (t && t.closest && t.closest('#players-list, #chat-feed, .panel, #sx-pn, textarea, input')) return;
+  if (e.cancelable) e.preventDefault();
+}, { passive: false });
+['gesturestart', 'gesturechange', 'gestureend'].forEach(ev => document.addEventListener(ev, e => e.preventDefault()));
+document.addEventListener('fullscreenchange', () => { if (document.fullscreenElement) wantFs = true; });
+document.addEventListener('webkitfullscreenchange', () => { if (document.webkitFullscreenElement) wantFs = true; });
+document.addEventListener('pointerup', () => {
+  if (!wantFs || document.fullscreenElement || document.webkitFullscreenElement) return;
+  const el = document.documentElement;
+  try { const r = (el.requestFullscreen || el.webkitRequestFullscreen)?.call(el); if (r && r.catch) r.catch(() => {}); } catch (e) {}
+});
 document.addEventListener('fullscreenchange', syncFsBtn);
 document.addEventListener('webkitfullscreenchange', syncFsBtn);
 
@@ -5607,6 +5682,7 @@ document.getElementById('me').addEventListener('click', () => {
       origBuildWorld.apply(this, arguments);
       try { addMapStation(dimKey); } catch (e) { console.warn('MAP station failed', e); }
       try { setupObby(dimKey); } catch (e) { console.warn('Obby setup failed', e); }
+      try { applyDroneRule(dimKey); } catch (e) { console.warn(e); }
       const homeBtn = document.getElementById('home-btn');
       if (homeBtn) homeBtn.classList.toggle('show', dimKey !== 'hub' && dimKey !== 'detention');
     };
