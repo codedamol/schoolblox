@@ -434,10 +434,12 @@ button:active{transform:scale(0.92);}
 <svg viewBox="0 0 60 60">
 <rect width="60" height="60" fill="#cfe3ff"/>
 <rect x="14" y="14" width="32" height="32" fill="#f5cd30"/>
-<rect x="12" y="8" width="36" height="9" fill="#dfe3ee"/>
-<rect x="21" y="26" width="4" height="7" fill="#1a1a1a"/>
-<rect x="35" y="26" width="4" height="7" fill="#1a1a1a"/>
-<path d="M22 37Q30 46 38 37" stroke="#1a1a1a" stroke-width="2.5" fill="none"/>
+<rect id="av-hair" x="12" y="8" width="36" height="9" fill="#dfe3ee"/>
+<g id="av-face">
+  <rect x="21" y="26" width="4" height="7" fill="#1a1a1a"/>
+  <rect x="35" y="26" width="4" height="7" fill="#1a1a1a"/>
+  <path d="M22 37Q30 46 38 37" stroke="#1a1a1a" stroke-width="2.5" fill="none"/>
+</g>
 <rect id="av-shirt" x="6" y="48" width="48" height="14" fill="#7b4fd0"/>
 </svg>
 </div>
@@ -583,6 +585,44 @@ const GAME_PACKAGES = [
   { id: 'pkg_30m', stars: 400, minutes: 30, label: '30 Minutes' }
 ];
 
+const AVATAR_PARTS = {
+  face: [
+    { id: 'classic', name: 'Classic Smile', icon: '😊', cost: 0 },
+    { id: 'cool',    name: 'Cool Shades',   icon: '😎', cost: 6 },
+    { id: 'wink',    name: 'Cheeky Wink',   icon: '😜', cost: 5 },
+    { id: 'star',    name: 'Star Eyes',     icon: '🤩', cost: 8 },
+    { id: 'cyber',   name: 'Cyber Visor',   icon: '🤖', cost: 10 }
+  ],
+  hair: [
+    { id: 'silver',  name: 'Silver Crop',   icon: '🤍', color: 0xdfe3ee, hex: '#dfe3ee', cost: 0 },
+    { id: 'gold',    name: 'Golden Spikes', icon: '💛', color: 0xfde047, hex: '#fde047', cost: 5 },
+    { id: 'crimson', name: 'Crimson Flame', icon: '❤️', color: 0xef4444, hex: '#ef4444', cost: 7 },
+    { id: 'cyan',    name: 'Neon Cyan',     icon: '🩵', color: 0x38bdf8, hex: '#38bdf8', cost: 8 },
+    { id: 'sakura',  name: 'Sakura Pink',   icon: '🩷', color: 0xf472b6, hex: '#f472b6', cost: 9 }
+  ],
+  shirt: [
+    { id: 'violet',  name: 'Violet Cadet',  icon: '💜', color: 0x7b4fd0, hex: '#7b4fd0', cost: 0 },
+    { id: 'sky',     name: 'Sky Jacket',    icon: '🩵', color: 0x0ea5e9, hex: '#0ea5e9', cost: 6 },
+    { id: 'emerald', name: 'Emerald Tunic', icon: '💚', color: 0x10b981, hex: '#10b981', cost: 7 },
+    { id: 'amber',   name: 'Solar Hoodie',  icon: '🧡', color: 0xf59e0b, hex: '#f59e0b', cost: 8 },
+    { id: 'crimson', name: 'Crimson Armor', icon: '❤️', color: 0xdc2626, hex: '#dc2626', cost: 10 }
+  ],
+  pants: [
+    { id: 'navy',    name: 'Cadet Navy',    icon: '👖', color: 0x2c2f4a, hex: '#2c2f4a', cost: 0 },
+    { id: 'slate',   name: 'Dark Cargo',    icon: '🖤', color: 0x1e293b, hex: '#1e293b', cost: 5 },
+    { id: 'indigo',  name: 'Royal Indigo',  icon: '💙', color: 0x312e81, hex: '#312e81', cost: 6 },
+    { id: 'forest',  name: 'Ranger Olive',  icon: '💚', color: 0x14532d, hex: '#14532d', cost: 7 },
+    { id: 'white',   name: 'Cloud White',   icon: '🤍', color: 0xe2e8f0, hex: '#e2e8f0', cost: 9 }
+  ],
+  shoes: [
+    { id: 'starter', name: 'Scout Boots',   icon: '🥾', color: 0x475569, hex: '#475569', cost: 0 },
+    { id: 'gold',    name: 'Gold Kicks',    icon: '👟', color: 0xfbbf24, hex: '#fbbf24', cost: 6 },
+    { id: 'neon',    name: 'Cyber Runners', icon: '⚡', color: 0x38bdf8, hex: '#38bdf8', cost: 8 },
+    { id: 'ruby',    name: 'Ruby Sneakers', icon: '🔥', color: 0xf43f5e, hex: '#f43f5e', cost: 8 },
+    { id: 'emerald', name: 'Dash Cleats',   icon: '🍃', color: 0x34d399, hex: '#34d399', cost: 10 }
+  ]
+};
+
 const OUTFITS = [
 { id: 0, name: 'Violet Cadet', icon: '👕', cost: 0, minLv: 1, shirt: 0x7b4fd0, pants: 0x2c2f4a, hair: 0xdfe3ee, hex: '#8b5cf6', desc: 'Classic Inquiry Explorer tunic.' },
 { id: 1, name: 'Sky Aviator', icon: '🧥', cost: 4, minLv: 1, shirt: 0x0ea5e9, pants: 0x1e293b, hair: 0xfde047, hex: '#38bdf8', desc: 'Aerodynamic flight jacket with golden hair.' },
@@ -632,12 +672,16 @@ ownedDrones: [0],
 droneModel: 0,
 detentionUntil: 0,
 hp: 100,
-outfit: 0
+outfit: 0,
+avatar: { face: 'classic', hair: 'silver', shirt: 'violet', pants: 'navy', shoes: 'starter' },
+ownedParts: { face: ['classic'], hair: ['silver'], shirt: ['violet'], pants: ['navy'], shoes: ['starter'] }
 };
 try {
 Object.assign(S, JSON.parse(localStorage.getItem('iw1') || '{}'));
 } catch (e) {}
 while (S.stars.length < 32) S.stars.push(0);
+if (!S.avatar) S.avatar = { face: 'classic', hair: 'silver', shirt: 'violet', pants: 'navy', shoes: 'starter' };
+if (!S.ownedParts) S.ownedParts = { face: ['classic'], hair: ['silver'], shirt: ['violet'], pants: ['navy'], shoes: ['starter'] };
 if (typeof S.bonusStars !== 'number' || S.bonusStars < 0) S.bonusStars = 0;
 if (!S.pvpWins || typeof S.pvpWins !== 'object') S.pvpWins = { graphwars: 0, football: 0, basketball: 0, dronerace: 0 };
 if (!S.eggStats || typeof S.eggStats !== 'object') S.eggStats = { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' };
@@ -714,7 +758,21 @@ $('#xp i').style.width = (lInfo.lv >= 1000 ? 100 : Math.min(100, (lInfo.cur / lI
 $('#xp-txt').textContent = lInfo.lv >= 1000 ? 'MAX' : (lInfo.cur + '/' + lInfo.req);
 $('#tot').textContent = availStars();
 $('#badge').textContent = S.stars.filter(x => x > 0).length;
-$('#av-shirt').setAttribute('fill', OUTFITS[S.outfit].hex);
+const av = S.avatar || { face: 'classic', hair: 'silver', shirt: 'violet', pants: 'navy', shoes: 'starter' };
+const shItem = AVATAR_PARTS.shirt.find(x => x.id === av.shirt) || AVATAR_PARTS.shirt[0];
+const hrItem = AVATAR_PARTS.hair.find(x => x.id === av.hair) || AVATAR_PARTS.hair[0];
+$('#av-shirt').setAttribute('fill', shItem.hex);
+if ($('#av-hair')) $('#av-hair').setAttribute('fill', hrItem.hex);
+if ($('#av-face')) {
+  const faces = {
+    classic: '<rect x="21" y="26" width="4" height="7" fill="#1a1a1a"/><rect x="35" y="26" width="4" height="7" fill="#1a1a1a"/><path d="M22 37Q30 46 38 37" stroke="#1a1a1a" stroke-width="2.5" fill="none"/>',
+    cool: '<rect x="17" y="24" width="11" height="7" rx="1.5" fill="#0f172a"/><rect x="32" y="24" width="11" height="7" rx="1.5" fill="#0f172a"/><rect x="28" y="26" width="4" height="2" fill="#0f172a"/><path d="M23 38Q30 43 37 38" stroke="#1a1a1a" stroke-width="2.5" fill="none"/>',
+    wink: '<rect x="21" y="26" width="4" height="7" fill="#1a1a1a"/><rect x="34" y="29" width="6" height="2.5" fill="#1a1a1a"/><path d="M22 37Q30 45 38 37" stroke="#1a1a1a" stroke-width="2.5" fill="none"/><ellipse cx="32" cy="41" rx="3" ry="2.5" fill="#f43f5e"/>',
+    star: '<circle cx="23" cy="29" r="4" fill="#fbbf24"/><circle cx="37" cy="29" r="4" fill="#fbbf24"/><path d="M21 37Q30 47 39 37" stroke="#1a1a1a" stroke-width="2.5" fill="none"/>',
+    cyber: '<rect x="17" y="24" width="26" height="7" rx="2" fill="#38bdf8"/><rect x="22" y="38" width="16" height="3" fill="#1a1a1a"/>'
+  };
+  $('#av-face').innerHTML = faces[av.face] || faces.classic;
+}
 const dm = DIMS[currentDim] || DIMS.hub;
 $('#dim-name').textContent = dm.icon + ' ' + dm.name;
 $('#dim-pill').style.borderColor = dm.color;
@@ -2165,13 +2223,73 @@ $('#cl').onclick = () => $('#dlg').style.display = 'none';
 }
 const star = n => [1, 2, 3].map(k => '<span class="star ' + (k <= n ? 'on' : '') + '">★</span>').join('');
 
-[['🎒', 'Bag', openBag], ['⚔️', 'Weapon', openWeapons], ['💥', 'Attack', doAttack]].forEach(([ic, nm, fn], k) => {
+[['🎒', 'Bag', openBag], ['🧍', 'Avatar', openAvatarCustomizer], ['⚔️', 'Weapon', openWeapons], ['💥', 'Attack', doAttack]].forEach(([ic, nm, fn], k) => {
 const b = document.createElement('button');
 b.className = 'sk';
 b.innerHTML = '<b>' + (k + 1) + '</b><span>' + ic + '</span><small>' + nm + '</small>';
 b.onclick = fn;
 $('#skills').appendChild(b);
 });
+
+let avTab = 'face';
+function openAvatarCustomizer() {
+  const wallet = availStars();
+  const tabs = [
+    ['face', '😊 Face'],
+    ['hair', '💇 Hair'],
+    ['shirt', '👕 Shirt'],
+    ['pants', '👖 Pants'],
+    ['shoes', '👟 Shoes']
+  ];
+  const items = AVATAR_PARTS[avTab] || [];
+  let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5em">' +
+    '<h2 style="margin:0">🧍 Avatar Customizer</h2>' +
+    '<span style="background:rgba(251,191,36,0.2);border:1px solid #fbbf24;padding:0.25em 0.75em;border-radius:99px;font-weight:800;color:#fde047">⭐ ' + wallet + ' Stars</span></div>' +
+    '<div class="shop-tabs" style="flex-wrap:wrap">' +
+    tabs.map(([k, lbl]) => '<button class="shop-tab ' + (avTab === k ? 'active' : '') + '" data-avtab="' + k + '">' + lbl + '</button>').join('') +
+    '</div><div class="shop-grid">';
+
+  items.forEach(it => {
+    const owned = (S.ownedParts[avTab] || []).includes(it.id) || it.cost === 0;
+    const equipped = (S.avatar && S.avatar[avTab]) === it.id;
+    let btn = '';
+    if (equipped) btn = '<button class="shop-buy done" disabled>✓ Equipped</button>';
+    else if (owned) btn = '<button class="shop-buy equip" data-aveq="' + it.id + '">Equip</button>';
+    else btn = '<button class="shop-buy" data-avbuy="' + it.id + '" ' + (wallet < it.cost ? 'disabled' : '') + '>⭐ Buy (' + it.cost + ' Stars)</button>';
+
+    const swatch = it.hex ? '<span style="display:inline-block;width:0.9em;height:0.9em;border-radius:50%;background:' + it.hex + ';border:1px solid #fff"></span> ' : '';
+    html += '<div class="shop-card ' + (equipped ? 'equipped' : '') + '">' +
+      '<div><h4>' + swatch + it.icon + ' ' + it.name + '</h4>' +
+      '<p style="margin-top:0.25em">' + (it.cost === 0 ? 'Starter item' : 'Custom ' + avTab + ' (' + it.cost + ' ⭐)') + '</p></div>' + btn + '</div>';
+  });
+  html += '</div>';
+  infoPanel(html);
+
+  $('#pn').querySelectorAll('[data-avtab]').forEach(b => {
+    b.onclick = () => { avTab = b.dataset.avtab; openAvatarCustomizer(); };
+  });
+  $('#pn').querySelectorAll('[data-avbuy]').forEach(b => {
+    b.onclick = () => {
+      const it = items.find(x => x.id === b.dataset.avbuy);
+      if (!it || availStars() < it.cost) return;
+      S.spentStars = (S.spentStars || 0) + it.cost;
+      if (!S.ownedParts[avTab]) S.ownedParts[avTab] = [];
+      S.ownedParts[avTab].push(it.id);
+      S.avatar[avTab] = it.id;
+      save(); hud(); rebuildLocalAvatar(); pushState(true);
+      say('✨ Bought & equipped ' + it.name + '!', 2500);
+      openAvatarCustomizer();
+    };
+  });
+  $('#pn').querySelectorAll('[data-aveq]').forEach(b => {
+    b.onclick = () => {
+      S.avatar[avTab] = b.dataset.aveq;
+      save(); hud(); rebuildLocalAvatar(); pushState(true);
+      say('🧍 Equipped ' + b.dataset.aveq + '!', 2000);
+      openAvatarCustomizer();
+    };
+  });
+}
 
 // Star Shop Modal (Fashions & Drones)
 let shopTab = 'fashion';
@@ -2376,7 +2494,7 @@ $('#i5').onclick = () => {
 infoPanel('<h2>Reset progress?</h2><p>This erases your stars, XP, and Game Room stats on this device.</p><button class="btn" id="rs" style="background:#ef4444">Yes, reset</button>');
 $('#rs').onclick = () => {
 stopPvpLoop();
-S = { name: S.name, xp: 0, stars: Array(32).fill(0), bonusStars: 0, questLastXpAt: {}, pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 }, eggStats: { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' }, quizBookStats: { booksRead: [], perfectBooks: [], attempts: 0, lastXpAt: {} }, spentStars: 0, starTransactions: [], activeGameSession: null, completedSessionIds: [], ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0 };
+S = { name: S.name, xp: 0, stars: Array(32).fill(0), bonusStars: 0, questLastXpAt: {}, pvpWins: { graphwars: 0, football: 0, basketball: 0, dronerace: 0 }, eggStats: { cash: 100, rebirths: 0, steals: 0, bestEgg: 'None' }, quizBookStats: { booksRead: [], perfectBooks: [], attempts: 0, lastXpAt: {} }, spentStars: 0, starTransactions: [], activeGameSession: null, completedSessionIds: [], ownedOutfits: [0], ownedDrones: [0], droneModel: 0, detentionUntil: 0, hp: 100, outfit: 0, avatar: { face: 'classic', hair: 'silver', shirt: 'violet', pants: 'navy', shoes: 'starter' }, ownedParts: { face: ['classic'], hair: ['silver'], shirt: ['violet'], pants: ['navy'], shoes: ['starter'] } };
 rebuildLocalAvatar();
 save();
 hud();
@@ -4785,7 +4903,7 @@ d.userData.rotors = rotors;
 return d;
 }
 
-const char = (hair, shirt, pants, s = 1, isRoyal = false) => {
+const char = (hair, shirt, pants, s = 1, isRoyal = false, custom = null) => {
 const g = new THREE.Group();
 const bx = (w, h, d, c, x, y, z) => {
 const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), M(c));
@@ -4793,12 +4911,34 @@ m.position.set(x, y, z);
 g.add(m);
 return m;
 };
-const torsoColor = isRoyal ? 0xfbbf24 : shirt;
+const cHair  = custom ? (AVATAR_PARTS.hair.find(x => x.id === custom.hair)?.color ?? hair) : hair;
+const cShirt = custom ? (AVATAR_PARTS.shirt.find(x => x.id === custom.shirt)?.color ?? shirt) : shirt;
+const cPants = custom ? (AVATAR_PARTS.pants.find(x => x.id === custom.pants)?.color ?? pants) : pants;
+const cShoes = custom ? (AVATAR_PARTS.shoes.find(x => x.id === custom.shoes)?.color ?? 0x475569) : 0x475569;
+const faceId = custom?.face || 'classic';
+
+const torsoColor = isRoyal ? 0xfbbf24 : cShirt;
 const torso = bx(0.92, 1.0, 0.52, torsoColor, 0, 1.38, 0);
 bx(0.92, 0.88, 0.88, 0xf5cd30, 0, 2.38, 0);
-bx(0.98, 0.34, 0.94, isRoyal ? 0xffffff : hair, 0, 2.75, 0);
+bx(0.98, 0.34, 0.94, isRoyal ? 0xffffff : cHair, 0, 2.75, 0);
+
+if (faceId === 'cool') {
+bx(0.32, 0.2, 0.08, 0x0f172a, -0.2, 2.4, 0.45);
+bx(0.32, 0.2, 0.08, 0x0f172a, 0.2, 2.4, 0.45);
+bx(0.14, 0.06, 0.08, 0x0f172a, 0, 2.42, 0.45);
+} else if (faceId === 'cyber') {
+bx(0.76, 0.22, 0.09, 0x38bdf8, 0, 2.4, 0.45);
+} else if (faceId === 'star') {
+bx(0.16, 0.16, 0.06, 0xfbbf24, -0.2, 2.4, 0.45);
+bx(0.16, 0.16, 0.06, 0xfbbf24, 0.2, 2.4, 0.45);
+} else if (faceId === 'wink') {
+bx(0.11, 0.18, 0.05, 0x1a1a1a, -0.2, 2.4, 0.45);
+bx(0.18, 0.06, 0.05, 0x1a1a1a, 0.2, 2.38, 0.45);
+} else {
 bx(0.11, 0.18, 0.05, 0x1a1a1a, -0.2, 2.38, 0.45);
 bx(0.11, 0.18, 0.05, 0x1a1a1a, 0.2, 2.38, 0.45);
+}
+
 if (isRoyal) {
 const crownGroup = new THREE.Group();
 crownGroup.position.set(0, 3.12, 0);
@@ -4822,8 +4962,16 @@ aura.position.y = 0.06;
 g.add(aura);
 g.userData.aura = aura;
 }
-const L = bx(0.38, 0.88, 0.46, pants, -0.24, 0.44, 0);
-const Rg = bx(0.38, 0.88, 0.46, pants, 0.24, 0.44, 0);
+
+const L = bx(0.38, 0.72, 0.46, cPants, -0.24, 0.52, 0);
+const Rg = bx(0.38, 0.72, 0.46, cPants, 0.24, 0.52, 0);
+const shoeL = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.22, 0.56), M(cShoes));
+shoeL.position.set(0, -0.42, 0.05);
+L.add(shoeL);
+const shoeR = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.22, 0.56), M(cShoes));
+shoeR.position.set(0, -0.42, 0.05);
+Rg.add(shoeR);
+
 const al = bx(0.32, 0.9, 0.38, 0xf5cd30, -0.64, 1.38, 0);
 const ar = bx(0.32, 0.9, 0.38, 0xf5cd30, 0.64, 1.38, 0);
 g.scale.setScalar(s);
@@ -4839,7 +4987,7 @@ rebuildLocalAvatar = () => {
 if (pl) sc.remove(pl);
 const o = OUTFITS[S.outfit] || OUTFITS[0];
 const isRoyal = o.id === 6 || lvl() >= 100;
-pl = char(o.hair, o.shirt, o.pants, 1, isRoyal);
+pl = char(o.hair, o.shirt, o.pants, 1, isRoyal, S.avatar);
 const localDrone = buildDroneMesh(S.droneModel);
 localDrone.position.set(0, 1.9, 0);
 localDrone.visible = P.flying;
@@ -4925,9 +5073,10 @@ let av = remoteAvatars[uid];
 const colIdx = (data.color || 0) % OUTFITS.length;
 const isRemRoyal = colIdx === 6 || (data.lv || 1) >= 100;
 const dModel = (data.droneModel || 0) % DRONES.length;
+const avKey = JSON.stringify(data.avatar || {});
 if (!av) {
 const outfit = OUTFITS[colIdx];
-const mesh = char(outfit.hair, outfit.shirt, outfit.pants, 1, isRemRoyal);
+const mesh = char(outfit.hair, outfit.shirt, outfit.pants, 1, isRemRoyal, data.avatar || null);
 const rDrone = buildDroneMesh(dModel);
 rDrone.position.set(0, 1.9, 0);
 rDrone.visible = false;
@@ -4938,13 +5087,13 @@ const tag = document.createElement('div');
 tag.className = 'player-tag';
 stg.appendChild(tag);
 av = remoteAvatars[uid] = {
-mesh, tag, colIdx, isRemRoyal, dModel,
+mesh, tag, colIdx, isRemRoyal, dModel, avKey,
 x: data.x || 0, y: data.y || 0, z: data.z || 10, ry: data.ry || 0, amp: 0
 };
-} else if (av.colIdx !== colIdx || av.isRemRoyal !== isRemRoyal || av.dModel !== dModel) {
+} else if (av.colIdx !== colIdx || av.isRemRoyal !== isRemRoyal || av.dModel !== dModel || av.avKey !== avKey) {
 sc.remove(av.mesh);
 const outfit = OUTFITS[colIdx];
-const mesh = char(outfit.hair, outfit.shirt, outfit.pants, 1, isRemRoyal);
+const mesh = char(outfit.hair, outfit.shirt, outfit.pants, 1, isRemRoyal, data.avatar || null);
 const rDrone = buildDroneMesh(dModel);
 rDrone.position.set(0, 1.9, 0);
 rDrone.visible = Boolean(data.flying);
@@ -4955,6 +5104,7 @@ av.mesh = mesh;
 av.colIdx = colIdx;
 av.isRemRoyal = isRemRoyal;
 av.dModel = dModel;
+av.avKey = avKey;
 }
 
 av.mesh.visible = sameDim;
@@ -5368,6 +5518,7 @@ ry: Number(P.ry.toFixed(2)),
 lv: lvl(),
 stars: totalStars(),
 color: S.outfit,
+avatar: S.avatar,
 droneModel: S.droneModel,
 flying: P.flying,
 emote: (now - myEmoteAt < 6500) ? myEmote : '',
